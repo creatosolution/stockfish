@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, InputNumber, Select } from 'antd';
 import { connect } from 'react-redux';
 import { 
@@ -8,23 +8,31 @@ import {
 const { Option } = Select;
 export const CreditDashboard = props => {
 const { getAccountList, loading, accountList } = props;
+const [accountListState, setAccountListState] = useState([]);
 
 const initialCredential = {
-  loginId: 'Cloths',
-  creditTtype: 'Nike',
+  loginId: '',
+  creditTtype: 'Credit In',
   amount: null
 }
 
-const categories = ['Cloths', 'Bags', 'Shoes', 'Watches', 'Devices']
-const tags = ['Cotton', 'Nike', 'Sales', 'Sports', 'Outdoor', 'Toys', 'Hobbies' ]
+const tags = ['Credit In', 'Credir Out']
 
 const onSubmit = values => {
   console.log(values,'values<<<')
 };
 
   useEffect(()=>{
-    getAccountList()
+    if(accountList?.length === 0){
+      getAccountList()
+    }
   },[])
+
+  useEffect(()=>{
+    if(accountList?.length > 0){
+      setAccountListState(accountList)
+    }
+  },[accountList])
 
 
   return (
@@ -46,11 +54,12 @@ const onSubmit = values => {
               ]}>
               <Select className="w-100" placeholder="Select Login Id">
                 {
-                  categories.map(elm => (
+                  accountListState && accountListState.length > 0 && accountListState.map(elm => (
                     <Option key={elm} value={elm}>{elm}</Option>
                   ))
                 }
               </Select>
+              <Button type="secondary" htmlType="submit" block loading={loading}></Button>
             </Form.Item>
             <Form.Item name="creditTtype" label="Credit Type" rules={[
                 { 
@@ -87,13 +96,7 @@ const onSubmit = values => {
   )
 }
 
-// CreditDashboard.defaultProps = {
-// 	getAccountList: [],
-// 	loading: false
-// };
-
 const mapStateToProps = ({credit}) => {
-  console.log(credit,'credit<<<')
 	const { loading, accountList } = credit;
   return { loading, accountList }
 }
@@ -102,4 +105,4 @@ const mapDispatchToProps = {
 	getAccountList
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(CreditDashboard)
+export default connect(mapStateToProps,mapDispatchToProps)(React.memo(CreditDashboard))

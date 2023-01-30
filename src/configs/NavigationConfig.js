@@ -25,6 +25,14 @@ const dashBoardNavTree = [{
       icon: DashboardOutlined,
       breadcrumb: false,
       submenu: []
+    },
+    {
+      key: 'dashboards-equityAndBalance',
+      path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
+      title: 'sidenav.dashboard.equityAndBalance',
+      icon: DashboardOutlined,
+      breadcrumb: false,
+      submenu: []
     }
   ]
 }]

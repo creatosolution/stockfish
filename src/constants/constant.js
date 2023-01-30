@@ -198,6 +198,25 @@ export const dealsTableColumns = [
     }
 ];
 
+export const userEquityTableColumns = [
+    {
+        title: 'Credit',
+        dataIndex: 'user_credit'
+    },
+    {
+        title: 'Equity',
+        dataIndex: 'user_equity'
+    },
+    {
+        title: 'Balance',
+        dataIndex: 'user_balance'
+    },
+    {
+        title: 'M2M',
+        dataIndex: 'm2m'
+    }
+]
+
 export const creditTypes = [
     {
         label: 'Credit In',

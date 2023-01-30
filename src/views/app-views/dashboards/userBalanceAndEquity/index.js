@@ -4,15 +4,13 @@ import { connect } from 'react-redux';
 import { getAccountList } from 'store/slices/creditSlice';
 import { getUserBalanceAndEquity } from 'store/slices/dealsSlice';
 import { LoadingOutlined } from '@ant-design/icons';
-import { dealsTableColumns } from 'constants/constant';
+import { userEquityTableColumns } from 'constants/constant';
 
 const { Option } = Select;
 export const UserBalanceAndEquity = props => {
 const { getAccountList, loading, accountList, getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity} = props;
 const [accountListState, setAccountListState] = useState([]);
-const [dealsListState, setDealsListState] = useState([]);
-const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-const [selectedRows, setSelectedRows] = useState([])
+const [balanceAndEquity, setBalanceAndEquity] = useState([]);
 
 const initialCredential = {
   account_id: ''
@@ -36,7 +34,12 @@ const onSubmit = values => {
   },[accountList])
 
   useEffect(()=>{
-    console.log(userBalanceAndEquity,'userBalanceAndEquity<<')
+
+    if(userBalanceAndEquity?.status && userBalanceAndEquity?.status === "success")
+      setBalanceAndEquity([userBalanceAndEquity])
+    else
+      setBalanceAndEquity({})
+
   },[userBalanceAndEquity])
 
 
@@ -45,7 +48,7 @@ const onSubmit = values => {
     {!loading ? <div>
     <Row gutter={16}>
         <Col xs={10} sm={24} md={25}>
-          <Card title="Get Deals Info">
+          <Card title="Get user Equity and Balance">
           <Form 
             layout="inline" 
             name="deals-form" 
@@ -75,19 +78,19 @@ const onSubmit = values => {
           </Card>
         </Col>
       </Row>
-      {Array.isArray(dealsListState) && dealsListState.length > 0 && <Row gutter={16}>
+      {Array.isArray(balanceAndEquity) && balanceAndEquity.length > 0 && <Row gutter={16}>
         <Col xs={10} sm={24} md={25}>
           <div className="table-responsive">
           <Table 
-            columns={dealsTableColumns} 
-            dataSource={dealsListState} 
+            columns={userEquityTableColumns} 
+            dataSource={balanceAndEquity} 
             rowKey='id'
             scroll={{x:1200}}
           />
         </div>
         </Col>
       </Row>}
-      {!Array.isArray(dealsListState) && <Row gutter={16}>
+      {!Array.isArray(balanceAndEquity) && <Row gutter={16}>
         <Col xs={10} sm={24} md={25}>
           <Button type="dashed" block>No data found</Button>
         </Col>

@@ -11,8 +11,6 @@ export const DealsDashboard = props => {
 const { getAccountList, loading, accountList, loadingDeals, dealsList, getDealsList } = props;
 const [accountListState, setAccountListState] = useState([]);
 const [dealsListState, setDealsListState] = useState([]);
-const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-const [selectedRows, setSelectedRows] = useState([])
 
 const initialCredential = {
   account_id: '',
@@ -54,13 +52,6 @@ const onSubmit = values => {
       setDealsListState({});
     }
   },[dealsList])
-
-  const rowSelection = {
-		onChange: (key, rows) => {
-			setSelectedRows(rows)
-			setSelectedRowKeys(key)
-		}
-	};
 
 
   return (

@@ -37445,3 +37445,9 @@ a.text-dark:focus,a.text-dark:hover {
     font-size: 27px;
     color: #e2e2e2;
 }
+
+.ant-form-inline .ant-col.ant-form-item-label {
+    display: block;
+    width: 100%;
+    text-align: left;
+}

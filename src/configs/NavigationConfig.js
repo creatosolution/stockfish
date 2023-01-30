@@ -17,14 +17,6 @@ const dashBoardNavTree = [{
       icon: DashboardOutlined,
       breadcrumb: false,
       submenu: []
-    },
-    {
-      key: 'dashboards-deals',
-      path: `${APP_PREFIX_PATH}/dashboards/deals`,
-      title: 'sidenav.dashboard.deals',
-      icon: DashboardOutlined,
-      breadcrumb: false,
-      submenu: []
     }
   ]
 }]

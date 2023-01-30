@@ -10,14 +10,6 @@ AuthService.login = function (data) {
 	})
 }
 
-AuthService.getdealsList = function (data) {
-	return fetch({
-		url: '/dealslist_post',
-		method: 'post',
-		data: data
-	})
-}
-
 AuthService.getAccountList = function () {
 	return fetch({
 		url: '/accountList',

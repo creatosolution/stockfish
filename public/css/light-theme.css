@@ -37451,3 +37451,10 @@ a.text-dark:focus,a.text-dark:hover {
     width: 100%;
     text-align: left;
 }
+
+
+
+.ant-form-inline .ant-btn.ant-btn-primary{
+        margin-top: 40px !important;
+
+}

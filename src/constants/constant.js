@@ -197,3 +197,14 @@ export const dealsTableColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceTP')
     }
 ];
+
+export const creditTypes = [
+    {
+        label: 'Credit In',
+        value: 'deposit'
+    }, 
+    {
+        label: 'Credir Out',
+        value: 'withdrawal'
+    }
+]

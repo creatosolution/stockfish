@@ -1,25 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, InputNumber, Select } from 'antd';
 import { connect } from 'react-redux';
+import { LoadingOutlined } from '@ant-design/icons';
 import { 
-	getAccountList
+	getAccountList,
+  depositWithdrawal
 } from 'store/slices/creditSlice';
+import { creditTypes } from 'constants/constant';
 
 const { Option } = Select;
 export const CreditDashboard = props => {
-const { getAccountList, loading, accountList } = props;
+const { getAccountList, loading, accountList, depositWithdrawal, creditLoading } = props;
 const [accountListState, setAccountListState] = useState([]);
 
 const initialCredential = {
-  loginId: '',
-  creditTtype: 'Credit In',
+  account_id: '',
+  type: 'Credit In',
   amount: null
 }
 
-const tags = ['Credit In', 'Credir Out']
-
 const onSubmit = values => {
-  console.log(values,'values<<<')
+  console.log(values,'values<<<');
+  depositWithdrawal(values)
 };
 
   useEffect(()=>{
@@ -37,7 +39,8 @@ const onSubmit = values => {
 
   return (
 		<>
-      <Row gutter={16}>
+      {!loading ? <div>
+        <Row gutter={16}>
         <Col xs={10} sm={24} md={25}>
           <Card title="Get Credit Info">
           <Form 
@@ -46,7 +49,7 @@ const onSubmit = values => {
             initialValues={initialCredential}
             onFinish={onSubmit}
           >
-            <Form.Item name="loginId" label="Select Login Id" rules={[
+            <Form.Item name="account_id" label="Select Login Id" rules={[
                 { 
                   required: true,
                   message: 'Please input your amount',
@@ -59,9 +62,8 @@ const onSubmit = values => {
                   ))
                 }
               </Select>
-              <Button type="secondary" htmlType="submit" block loading={loading}></Button>
             </Form.Item>
-            <Form.Item name="creditTtype" label="Credit Type" rules={[
+            <Form.Item name="type" label="Credit Type" rules={[
                 { 
                   required: true,
                   message: 'Please input your amount',
@@ -69,8 +71,8 @@ const onSubmit = values => {
               ]}>
               <Select className="w-70" placeholder="Credit Type">
                 {
-                  tags.map(elm => (
-                    <Option key={elm} value={elm}>{elm}</Option>
+                  creditTypes.map(elm => (
+                    <Option key={elm.value} value={elm.value}>{elm.label}</Option>
                   ))
                 }
               </Select>
@@ -84,7 +86,7 @@ const onSubmit = values => {
               <InputNumber className="w-100" placeholder="Enter Amount"/>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" >
+              <Button type="primary" htmlType="submit" block loading={creditLoading}>
                 Submit
               </Button>
             </Form.Item>
@@ -92,17 +94,19 @@ const onSubmit = values => {
           </Card>
         </Col>
       </Row>
+      </div> : <LoadingOutlined />}
   </>
   )
 }
 
 const mapStateToProps = ({credit}) => {
-	const { loading, accountList } = credit;
-  return { loading, accountList }
+	const { loading, accountList, creditLoading } = credit;
+  return { loading, accountList, creditLoading }
 }
 
 const mapDispatchToProps = {
-	getAccountList
+	getAccountList,
+  depositWithdrawal
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(React.memo(CreditDashboard))

@@ -25,6 +25,14 @@ AuthService.register = function (data) {
 	})
 }
 
+AuthService.postRequest = function (url,data) {
+	return fetch({
+		url: url,
+		method: 'post',
+		data: data
+	})
+}
+
 AuthService.logout = function () {
 	return fetch({
 		url: '/auth/logout',

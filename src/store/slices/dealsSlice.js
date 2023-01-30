@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AuthService from 'services/AuthService';
+import { notification } from 'antd';
 
 export const initialState = {
 	loadingDeals: false,
@@ -10,7 +11,8 @@ export const initialState = {
 
 export const getDealsList = createAsyncThunk('/api/dealsList',async (data, { rejectWithValue }) => {
 	try {
-		const response = await AuthService.getdealsList(data);
+		let url = '/dealslist_post';
+		const response = await AuthService.postRequest(url,data);
 		return response ? response : {};
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -39,7 +41,10 @@ export const dealsSlice = createSlice({
 			})
 			.addCase(getDealsList.fulfilled, (state, action) => {
 				state.dealsList = action.payload
-				state.loadingDeals = false
+				state.loadingDeals = false;
+				if(Object.keys(action.payload)?.length === 0){
+					notification.error({message: 'No record found!'})
+				}
 			})
 			.addCase(getDealsList.rejected, (state, action) => {
 				state.dealsList = action.payload

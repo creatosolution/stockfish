@@ -1,13 +1,13 @@
-import React from 'react'
+// import React from 'react'
 import LoginForm from '../../components/LoginForm'
 import { Row, Col } from "antd";
 import { useSelector } from 'react-redux';
 
 const backgroundURL = '/img/others/img-17.jpg'
 const backgroundStyle = {
-	backgroundImage: `url(${backgroundURL})`,
-	backgroundRepeat: 'no-repeat',
-	backgroundSize: 'cover'
+	// backgroundImage: `url(${backgroundURL})`,
+	// backgroundRepeat: 'no-repeat',
+	// backgroundSize: 'cover'
 }
 
 const Login = props => {
@@ -37,15 +37,15 @@ const Login = props => {
 						<Row justify="center">
 							<Col xs={0} sm={0} md={0} lg={20}>
 								<img className="img-fluid mb-5" src="/img/others/img-18.png" alt=""/>
-								<h1 className="text-white">Welcome to emilus</h1>
+								<h1 className="text-white">Welcome to Stock Fish</h1>
 								<p className="text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper nisl erat, vel convallis elit fermentum pellentesque.</p>
 							</Col>
 						</Row>
 						<div className="d-flex justify-content-end pb-4">
 							<div>
-								<a className="text-white" href="/#" onClick={e => e.preventDefault()}>Term & Conditions</a>
+								{/* <a className="text-white" href="/#" onClick={e => e.preventDefault()}>Term & Conditions</a>
 								<span className="mx-2 text-white"> | </span>
-								<a className="text-white" href="/#" onClick={e => e.preventDefault()}>Privacy & Policy</a>
+								<a className="text-white" href="/#" onClick={e => e.preventDefault()}>Privacy & Policy</a> */}
 							</div>
 						</div>
 					</div>

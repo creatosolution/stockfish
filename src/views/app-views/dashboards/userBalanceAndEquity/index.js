@@ -1,25 +1,75 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
+import { Button, Row, Col, Card, Form, Input, Select, Table } from 'antd';
 import { connect } from 'react-redux';
-import { getAccountList } from 'store/slices/creditSlice';
 import { getUserBalanceAndEquity } from 'store/slices/dealsSlice';
+import { 
+	getAccountList,
+  depositWithdrawal
+} from 'store/slices/creditSlice';
 import { LoadingOutlined } from '@ant-design/icons';
-import { userEquityTableColumns } from 'constants/constant';
+import { userEquityTableColumns, accountColumns } from 'constants/constant';
 
-const { Option } = Select;
+import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
+
 export const UserBalanceAndEquity = props => {
-const { getAccountList, loading, accountList, getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity} = props;
+const { getAccountList, loading, accountList, getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity, depositWithdrawal} = props;
 const [accountListState, setAccountListState] = useState([]);
 const [balanceAndEquity, setBalanceAndEquity] = useState([]);
+const [submitAmountMap, setSubmitAmountMap] = useState({});
+let accountTableColumns = [...accountColumns]
 
-const initialCredential = {
-  account_id: ''
+// const initialCredential = {
+//   account_id: ''
+// }
+
+accountTableColumns.push({
+  title: 'Credit In / Credit Out',
+  dataIndex: 'clientId',
+  render: (_, elm) => (
+    <div className="d-flex">
+       <Input
+        placeholder="Amount"
+        onChange={(e)=>handleChangeAmount(e, elm.clientId)}
+        maxLength={16}
+        value={submitAmountMap[elm.clientId]}
+        style={{ width: 90 }}
+      />
+
+<Button default className="ant-btn-theme text-white rounded-6px ml-3" icon={<PlusCircleOutlined />} size="small" onClick={() => {
+              submitCreditData(elm.clientId)
+            }} >Save</Button>
+    </div>
+  )
+})
+
+const handleChangeAmount =(e, accountId)=>{
+  console.log(e.target.value, accountId);
+  submitAmountMap[accountId] = e.target.value;
+
+  setSubmitAmountMap(submitAmountMap)
+  
+
 }
 
+const submitCreditData=(accountId)=>{
+  let req = {
+    account_id: accountId,
+    type: submitAmountMap[accountId].toString().indexOf('-') > -1 ? "withdrawal" : 'deposit',
+    amount: submitAmountMap[accountId]
+  }
+  depositWithdrawal(req).then((res)=>{
+    delete submitAmountMap[accountId]
+    getAccountList()
+  })
+
+  console.log('req', submitAmountMap[accountId].toString().indexOf('-'), req);
+}
 const onSubmit = values => {
   
   getUserBalanceAndEquity(values)
 };
+
+
 
   useEffect(()=>{
     if(accountList?.length === 0){
@@ -43,13 +93,15 @@ const onSubmit = values => {
   },[userBalanceAndEquity])
 
 
+
   return (
-		<>
-    {!loading ? <div>
-    <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
-          <Card title="Get user Equity and Balance">
-          <Form 
+    <>
+      {!loading ? (
+        <div>
+          <Row gutter={16}>
+            <Col xs={10} sm={24} md={25}>
+              <Card title="Accounts">
+                {/* <Form 
             layout="inline" 
             name="deals-form" 
             initialValues={initialCredential}
@@ -74,31 +126,41 @@ const onSubmit = values => {
                 Submit
               </Button>
             </Form.Item>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
-      {Array.isArray(balanceAndEquity) && balanceAndEquity.length > 0 && <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
-          <div className="table-responsive">
-          <Table 
-            columns={userEquityTableColumns} 
-            dataSource={balanceAndEquity} 
-            rowKey='id'
-            scroll={{x:1200}}
-          />
+            </Form> */}
+                {Array.isArray(accountListState) &&
+                  accountListState.length > 0 && (
+                    <Row gutter={16}>
+                      <Col xs={10} sm={24} md={25}>
+                        <div className="table-responsive">
+                          <Table
+                            columns={accountTableColumns}
+                            dataSource={accountListState}
+                            rowKey="id"
+                            scroll={{ x: 1200 }}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
+              </Card>
+            </Col>
+          </Row>
+
+          {/* {!Array.isArray(accountListState) && (
+            <Row gutter={16}>
+              <Col xs={10} sm={24} md={25}>
+                <Button type="dashed" block>
+                  No data found
+                </Button>
+              </Col>
+            </Row>
+          )} */}
         </div>
-        </Col>
-      </Row>}
-      {!Array.isArray(balanceAndEquity) && <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
-          <Button type="dashed" block>No data found</Button>
-        </Col>
-      </Row>}
-    </div> : <LoadingOutlined />}
-     
-  </>
-  )
+      ) : (
+        <LoadingOutlined />
+      )}
+    </>
+  );
 }
 
 const mapStateToProps = ({credit, deals}) => {
@@ -109,7 +171,8 @@ const mapStateToProps = ({credit, deals}) => {
 
 const mapDispatchToProps = {
 	getAccountList,
-  getUserBalanceAndEquity
+  getUserBalanceAndEquity,
+  depositWithdrawal
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(React.memo(UserBalanceAndEquity))

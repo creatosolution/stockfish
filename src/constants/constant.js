@@ -241,3 +241,42 @@ export const creditTypes = [
         value: 'withdrawal'
     }
 ]
+
+
+export const accountColumns = [
+    {
+        title: 'Client id',
+        dataIndex: 'clientId',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'clientId')
+    },
+    {
+        title: 'Client Name',
+        dataIndex: 'clientName',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'clientName')
+    },
+    // {
+    //     title: 'Group Name',
+    //     dataIndex: 'groupName',
+    //     sorter: (a, b) => utils.antdTableSorter(a, b, 'groupName')
+    // },
+    {
+        title: 'Credit',
+        dataIndex: 'credit',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'credit')
+    },
+    {
+        title: 'Balance',
+        dataIndex: 'balance',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'balance')
+    },
+    {
+        title: 'Equity',
+        dataIndex: 'equity',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'equity')
+    },
+    {
+        title: 'M2M',
+        dataIndex: 'm2m',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'm2m')
+    }
+]

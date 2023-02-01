@@ -44,7 +44,7 @@ export const LoginForm = props => {
 	}
 
 	const onLogin = values => {
-		console.log(values,'values<<<')
+		// console.log(values,'values<<<')
 		showLoading()
 		signIn(values);
 	};

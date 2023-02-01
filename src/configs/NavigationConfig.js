@@ -1,4 +1,6 @@
 import { DashboardOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined } from '@ant-design/icons';
+
 import { APP_PREFIX_PATH } from 'configs/AppConfig'
 
 
@@ -10,6 +12,15 @@ const dashBoardNavTree = [{
   breadcrumb: false,
   isGroupTitle: true,
   submenu: [
+    
+    {
+      key: 'dashboards-equityAndBalance',
+      path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
+      title: 'sidenav.dashboard.equityAndBalance',
+      icon: DashboardOutlined,
+      breadcrumb: false,
+      submenu: []
+    },
     {
       key: 'dashboards-credits',
       path: `${APP_PREFIX_PATH}/dashboards/credit`,
@@ -22,14 +33,6 @@ const dashBoardNavTree = [{
       key: 'dashboards-deals',
       path: `${APP_PREFIX_PATH}/dashboards/deals`,
       title: 'sidenav.dashboard.deals',
-      icon: DashboardOutlined,
-      breadcrumb: false,
-      submenu: []
-    },
-    {
-      key: 'dashboards-equityAndBalance',
-      path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
-      title: 'sidenav.dashboard.equityAndBalance',
       icon: DashboardOutlined,
       breadcrumb: false,
       submenu: []

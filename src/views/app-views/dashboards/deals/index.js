@@ -41,7 +41,12 @@ const onSubmit = values => {
 
   useEffect(()=>{
     if(accountList?.length > 0){
-      setAccountListState(accountList)
+      let accounts = [...accountList]
+      let accountIds =  accounts.map((e)=>e.clientId)
+      accountIds.sort(function(a, b) {
+        return a - b;
+      });
+      setAccountListState(accountIds)
     }
   },[accountList])
 
@@ -51,13 +56,25 @@ const onSubmit = values => {
         for (let anObject in dealsList) { 
           // console.log('dealsList[anObject]', dealsList[anObject].Time);
           let dealObj = {... dealsList[anObject]}
-          let time = moment(new Date(dealObj.Time), 'YYYYMMDD').toString()
+          // let time = moment(new Date(dealObj.Time), 'YYYYMMDD').toString()
 
-          let getOffset = moment(time).utcOffset();
+          // let getOffset = moment(time).utcOffset();
        
-          time = `${moment(time).utcOffset(getOffset).format("MMMM") }, ${moment(time).utcOffset(getOffset).format( "DD") }, ${moment(time).utcOffset(getOffset).format("(hh.mm a)") }`;
-          dealObj.Time = time
+          // time = `${moment(time).utcOffset(getOffset).format("MMMM") }, ${moment(time).utcOffset(getOffset).format( "DD") }, ${moment(time).utcOffset(getOffset).format("(hh.mm a)") }`;
+          // dealObj.Time = time
         
+
+          const timestamp = dealObj.Time;
+          const date = new Date(timestamp * 1000);
+          const year = date.getFullYear();
+          const month = `0${date.getMonth() + 1}`.slice(-2);
+          const day = `0${date.getDate()}`.slice(-2);
+          const hours = `0${date.getHours()}`.slice(-2);
+          const minutes = `0${date.getMinutes()}`.slice(-2);
+          const seconds = `0${date.getSeconds()}`.slice(-2);
+          const result = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+          console.log(result);
+          dealObj.Time = result
           dealsArr.push(dealObj)
       }
       setDealsListState(dealsArr)
@@ -81,8 +98,9 @@ const onSubmit = values => {
   }
 
   return (
-		<>
+    <>
     {!loading ? <div>
+      
     <Row gutter={16}>
         <Col xs={10} sm={24} md={25}>
           <Card title="Get Deals Info">
@@ -118,7 +136,7 @@ const onSubmit = values => {
                   message: 'Please input your Login Id',
                 }
               ]}>
-              <Select name="account_id" className="w-250" placeholder="Select Login Id"
+              <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
               onChange={handleChange}
               >
                 {

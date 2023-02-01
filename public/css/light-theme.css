@@ -24697,7 +24697,7 @@ span.ant-radio+* {
 
 .ant-table tfoot>tr>td,.ant-table tfoot>tr>th,.ant-table-tbody>tr>td,.ant-table-thead>tr>th {
     position: relative;
-    padding: 6px 15px;
+    padding: 13px 19px;
     overflow-wrap: break-word;
     line-height: 21px;
 }
@@ -29832,7 +29832,8 @@ tr>.ant-picker-cell-in-view.ant-picker-cell-range-hover-end:first-child::after,t
 }
 
 .ant-card-meta-title,.ant-table-thead>tr>th {
-    font-weight: 700
+    font-weight: 700;
+    background: whitesmoke;
 }
 
 .ant-card-type-inner .ant-card-head,.ant-table-fixed-header .ant-table-thead>tr>th {

@@ -76,6 +76,7 @@ export const dealsTableColumns = [
     {
         title: 'Time',
         dataIndex: 'Time',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Time')
         // render: ((date) => getFullDate(date)) ,
         // sorter: (a, b) => utils.antdTableSorter(a, b, 'Time')
     },
@@ -254,20 +255,20 @@ export const accountColumns = [
         dataIndex: 'clientName',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'clientName')
     },
-    // {
-    //     title: 'Group Name',
-    //     dataIndex: 'groupName',
-    //     sorter: (a, b) => utils.antdTableSorter(a, b, 'groupName')
-    // },
     {
-        title: 'Credit',
-        dataIndex: 'credit',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'credit')
+        title: 'Group Name',
+        dataIndex: 'groupName',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'groupName')
     },
     {
         title: 'Balance',
         dataIndex: 'balance',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'balance')
+    },
+    {
+        title: 'Credit',
+        dataIndex: 'credit',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'credit')
     },
     {
         title: 'Equity',

@@ -6,7 +6,7 @@ export const API_BASE_URL = "https://stockfish.stockfishfx.com/api"
 export const APP_PREFIX_PATH = '/app';
 export const AUTH_PREFIX_PATH = '/auth';
 export const REDIRECT_URL_KEY = 'redirect'
-export const AUTHENTICATED_ENTRY = `${APP_PREFIX_PATH}/dashboards/credit`;
+export const AUTHENTICATED_ENTRY = `${APP_PREFIX_PATH}/dashboards/equityAndBalance`;
 export const UNAUTHENTICATED_ENTRY = '/login'
 
 export const THEME_CONFIG = {

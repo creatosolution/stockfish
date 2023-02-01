@@ -117,7 +117,7 @@ const submitCreditData=(accountId)=>{
   let req = {
     account_id: accountId,
     type: submitAmountMap[accountId].toString().indexOf('-') > -1 ? "withdrawal" : 'deposit',
-    amount: submitAmountMap[accountId]
+    amount: submitAmountMap[accountId].toString().indexOf('-') > -1 ? submitAmountMap[accountId] * -1 : submitAmountMap[accountId]
   }
   depositWithdrawal(req).then((res)=>{
     delete submitAmountMap[accountId]

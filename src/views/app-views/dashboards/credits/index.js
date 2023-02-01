@@ -32,7 +32,13 @@ const onSubmit = values => {
 
   useEffect(()=>{
     if(accountList?.length > 0){
-      setAccountListState(accountList)
+      console.log('accountLit', accountList)
+      let accountIds =  accountList.map((e)=>e.clientId)
+      accountIds.sort(function(a, b) {
+        return a - b;
+      });
+      
+      setAccountListState(accountIds)
     }
   },[accountList])
 
@@ -55,7 +61,8 @@ const onSubmit = values => {
                   message: 'Please input your amount',
                 }
               ]}>
-              <Select className="w-100" placeholder="Select Login Id">
+              <Select className="w-100" placeholder="Select Login Id" showSearch
+              >
                 {
                   accountListState && accountListState.length > 0 && accountListState.map(elm => (
                     <Option key={elm} value={elm}>{elm}</Option>

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect } from 'react-redux';
+import { notification } from 'antd';
 import { getAccountList } from 'store/slices/creditSlice';
 import { getDealsList } from 'store/slices/dealsSlice';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -8,6 +9,8 @@ import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
 import moment from "moment";
 const { Option } = Select;
+
+
 export const DealsDashboard = props => {
   
  const [form] = Form.useForm();
@@ -89,11 +92,22 @@ const onSubmit = values => {
     let timefrom = new Date(form.getFieldValue('timefrom'))
     let timeto = new Date(form.getFieldValue('timeto'))
     let account_id  =  form.getFieldValue('account_id')
+
+    if(!timefrom || !timeto  || !account_id){
+      notification.error({
+        message: 'Please select all fields'
+      })
+      return;
+    }
+
+
     let getDealsObj = {
       account_id: account_id,
       timefrom: timefrom.toLocaleDateString().replace("/",'-').replace("/",'-'),
       timeto: timeto.toLocaleDateString().replace("/",'-').replace("/",'-')
     }
+
+    
     getDealsList(getDealsObj)
   }
 

@@ -6,6 +6,7 @@ import { AUTH_TOKEN } from 'constants/AuthConstant';
 import { notification } from 'antd';
 
 const unauthorizedCode = [400, 401, 403]
+const unauthorizedMessage = ["Invalid Login Details"]
 
 const service = axios.create({
   baseURL: API_BASE_URL,
@@ -35,6 +36,23 @@ service.interceptors.request.use(config => {
 // API respone interceptor
 service.interceptors.response.use( (response) => {
 	console.log(response,'responseInter')
+
+	if (unauthorizedCode.includes(response.data.status) || unauthorizedMessage.includes(response.data.msg)) {
+		let notificationParam = {
+			message: 'Something went wrong !'
+		}
+		notificationParam.message = 'Authentication Fail'
+		notificationParam.description = 'Please login again'
+		localStorage.removeItem(AUTH_TOKEN)
+
+		store.dispatch(signOutSuccess())
+
+		notification.error(notificationParam)
+
+	return Promise.reject(response);
+	}
+
+
 	return response.data
 }, (error) => {
 
@@ -43,7 +61,7 @@ service.interceptors.response.use( (response) => {
 	}
 
 	// Remove token and redirect 
-	if (unauthorizedCode.includes(error.response.status)) {
+	if (unauthorizedCode.includes(error.response.status) || unauthorizedMessage.includes(error.response.msg)) {
 		notificationParam.message = 'Authentication Fail'
 		notificationParam.description = 'Please login again'
 		localStorage.removeItem(AUTH_TOKEN)

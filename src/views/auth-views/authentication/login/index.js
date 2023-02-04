@@ -16,12 +16,12 @@ const Login = props => {
 	return (
 		<div className={`h-100 ${theme === 'light' ? 'bg-white' : ''}`}>
 			<Row justify="center" className="align-items-stretch h-100">
-				<Col xs={20} sm={20} md={24} lg={16}>
+				<Col xs={20} sm={20} md={24} lg={12}>
 					<div className="container d-flex flex-column justify-content-center h-100">
 						<Row justify="center">
 							<Col xs={24} sm={24} md={20} lg={12} xl={8}>
-								<h1>Sign In</h1>
-								<p>Don't have an account yet? <a href="/auth/register-2">Sign Up</a></p>
+								<h1>StockFish | Sign In</h1>
+								{/* <p>Don't have an account yet? <a href="/auth/register-2">Sign Up</a></p> */}
 								<div className="mt-4">
 									<LoginForm {...props}/>
 								</div>
@@ -29,7 +29,7 @@ const Login = props => {
 						</Row>
 					</div>
 				</Col>
-				<Col xs={0} sm={0} md={0} lg={8}>
+				<Col xs={0} sm={0} md={0} lg={12}>
 					<div className="d-flex flex-column justify-content-between h-100 px-4" style={backgroundStyle}>
 						<div className="text-right">
 							<img src="/img/logo-white.png" alt="logo"/>

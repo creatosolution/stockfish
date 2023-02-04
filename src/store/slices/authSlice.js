@@ -36,8 +36,10 @@ export const signUp = createAsyncThunk('auth/register',async (data, { rejectWith
 })
 
 export const signOut = createAsyncThunk('auth/logout',async () => {
-    const response = await FirebaseService.signOutRequest()
-	localStorage.removeItem(AUTH_TOKEN);
+	
+    const response = await AuthService.logout()
+	
+
     return response.data
 })
 

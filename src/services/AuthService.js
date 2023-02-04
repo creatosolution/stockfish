@@ -35,8 +35,8 @@ AuthService.postRequest = function (url,data) {
 
 AuthService.logout = function () {
 	return fetch({
-		url: '/auth/logout',
-		method: 'post'
+		url: '/logout',
+		method: 'get'
 	})
 }
 

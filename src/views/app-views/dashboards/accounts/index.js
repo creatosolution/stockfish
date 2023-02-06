@@ -82,8 +82,9 @@ let accountTableColumns = [
   {
       title: 'M2M',
       dataIndex: 'm2m',
+      className: "bg-gray-lighter",
       render: (_, elm) => (
-        <div className="d-flex">
+        <div className="table-padding-cover">
           {getM2m(elm)}
         </div>
       ),

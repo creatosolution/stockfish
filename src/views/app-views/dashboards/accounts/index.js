@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState,  } from 'react'
 import utils from 'utils'
-import { Button, Row, Col, Card, Form, Input, Select, Table } from 'antd';
+import { Button, Row, Col, Card, Form, Input,InputNumber, Select, Table } from 'antd';
 import {AntTableSearch} from '../../../../components/shared-components/AntTableSearch'
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { getUserBalanceAndEquity } from 'store/slices/dealsSlice';
 import { 
 	getAccountList,
-  depositWithdrawal
+  depositWithdrawal,
+  updateAccountList
 } from 'store/slices/creditSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -16,6 +17,7 @@ import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
 
 let allAccountList = []
 export const UserBalanceAndEquity = props => {
+  const dispatch = useDispatch();
 const { getAccountList, loading, accountList, getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity, depositWithdrawal} = props;
 const [accountListState, setAccountListState] = useState([]);
 const [balanceAndEquity, setBalanceAndEquity] = useState([]);
@@ -81,16 +83,17 @@ let accountTableColumns = [
       sorter: (a, b) => utils.antdTableSorter(a, b, 'm2m')
   },{
     title: 'Credit In / Credit Out',
-    dataIndex: 'clientId',
+    dataIndex: 'clientIdd',
     render: (_, elm) => (
       <div className="d-flex">
-         <Input
+         <input
           placeholder="Amount"
+          type="number"
+          className='ant-input css-ixblex'
+          id={elm.clientId.toString()+"_id"}
           onChange={(e)=>handleChangeAmount(e, elm.clientId)}
-          maxLength={16}
-          value={submitAmountMap[elm.clientId]}
           style={{ width: 90 }}
-        />
+         />
   
   <Button default className="ant-btn-theme text-white rounded-6px ml-3" icon={<PlusCircleOutlined />} size="small" onClick={() => {
                 submitCreditData(elm.clientId)
@@ -105,7 +108,7 @@ const refresh=()=>{
 }
 
 const handleChangeAmount =(e, accountId)=>{
-  console.log(e.target.value, accountId);
+  console.log(e, accountId);
   submitAmountMap[accountId] = e.target.value;
 
   setSubmitAmountMap(submitAmountMap)
@@ -119,12 +122,41 @@ const submitCreditData=(accountId)=>{
     type: submitAmountMap[accountId].toString().indexOf('-') > -1 ? "withdrawal" : 'deposit',
     amount: submitAmountMap[accountId].toString().indexOf('-') > -1 ? submitAmountMap[accountId] * -1 : submitAmountMap[accountId]
   }
+  
+
   depositWithdrawal(req).then((res)=>{
-    delete submitAmountMap[accountId]
+    let accountListData = JSON.parse(JSON.stringify(accountListState));
+    let accountDetailsIndex = accountListState.findIndex((e)=> e.clientId == accountId);
+    if(accountDetailsIndex > -1){
+    
+      
+      const val = submitAmountMap[accountId]
+      const currentVal = accountListData[accountDetailsIndex].credit ? accountListData[accountDetailsIndex].credit.toString() : "0"
+
+      console.log(currentVal);
+      // accountListData[accountDetailsIndex].credit =  accountListData[accountDetailsIndex].credit ?  parseInt(accountListData[accountDetailsIndex].credit) : "0"
+      accountListData[accountDetailsIndex].credit = (parseInt(currentVal.split(",").join("")) + parseInt(val)).toString();
+   
+      let updatedAccount  = JSON.parse(JSON.stringify(submitAmountMap))
+    
+      delete updatedAccount[accountId]
+      
+      const idx = `${accountId}_id`
+      document.getElementById(idx).value = null
+
+      setSubmitAmountMap(updatedAccount) 
+      var s = document.getElementById(idx);
+            s.value = "";
+
+            
+            setAccountListState(accountListData) 
+
+
+        dispatch(updateAccountList(accountListData))
+    }
+
     
   })
-
-  console.log('req', submitAmountMap[accountId].toString().indexOf('-'), req);
 }
 
   useEffect(()=>{
@@ -152,7 +184,7 @@ const submitCreditData=(accountId)=>{
   
         <div>
           <Row gutter={16}>
-            <Col xs={10} sm={24} md={25}>
+            <Col xs={24} sm={24} md={24}>
               <Card title="Accounts">
                 <div className='text-right' >
                 {loading && 
@@ -194,10 +226,10 @@ const submitCreditData=(accountId)=>{
                 {Array.isArray(accountListState) &&
                   accountListState.length > 0 && (
                     <Row gutter={16}>
-                    <Col xs={10} sm={24} md={25} className="justify-content-end d-flex mb-3">
+                    <Col xs={24} sm={24} md={24} className="justify-content-end d-flex mb-3">
                       <AntTableSearch onSearch={handleSearch}/>
                       </Col>
-                      <Col xs={10} sm={24} md={25}>
+                      <Col xs={24} sm={24} md={25}>
 
        
                         <div className="table-responsive">

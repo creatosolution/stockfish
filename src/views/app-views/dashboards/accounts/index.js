@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState,  } from 'react'
+
+import { notification } from 'antd';
 import utils from 'utils'
 import { Button, Row, Col, Card, Form, Input,InputNumber, Select, Table } from 'antd';
 import {AntTableSearch} from '../../../../components/shared-components/AntTableSearch'
@@ -80,6 +82,11 @@ let accountTableColumns = [
   {
       title: 'M2M',
       dataIndex: 'm2m',
+      render: (_, elm) => (
+        <div className="d-flex">
+          {getM2m(elm)}
+        </div>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'm2m')
   },{
     title: 'Credit In / Credit Out',
@@ -110,13 +117,30 @@ const refresh=()=>{
 const handleChangeAmount =(e, accountId)=>{
   console.log(e, accountId);
   submitAmountMap[accountId] = e.target.value;
-
   setSubmitAmountMap(submitAmountMap)
-  
+}
 
+
+const getM2m=(info)=>{
+
+  let equity = info.equity.replaceAll(",", "")
+  let credit = info.credit.replaceAll(",", "")
+
+  let m2m = (parseInt(equity) - parseInt(credit)).toLocaleString('en-IN', { 
+		style: 'currency', 
+		currency: 'INR' ,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+	}); 
+
+  m2m = m2m.replace("₹", "");
+  return m2m
 }
 
 const submitCreditData=(accountId)=>{
+
+  let selectedAccountValue = submitAmountMap[accountId].toString();
+
   let req = {
     account_id: accountId,
     type: submitAmountMap[accountId].toString().indexOf('-') > -1 ? "withdrawal" : 'deposit',

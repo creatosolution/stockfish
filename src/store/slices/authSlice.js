@@ -17,6 +17,7 @@ export const signIn = createAsyncThunk('managerLogin',async (data, { rejectWithV
 		const response = await AuthService.login({username, pwd});
 		const token = response.token;
 		localStorage.setItem(AUTH_TOKEN, token);
+		localStorage.setItem("userId", username);
 		return token;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')

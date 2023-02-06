@@ -96,6 +96,16 @@ export const dealsTableColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Symbol')
     },
     {
+        title: 'Type',
+        dataIndex: 'type',
+        render: (_, elm) => (
+            <div className="d-flex">
+              {elm.Action == 0 ? "Buy" : "Sell"}
+            </div>
+          )
+    },
+    
+    {
         title: 'Price',
         dataIndex: 'Price',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Price')

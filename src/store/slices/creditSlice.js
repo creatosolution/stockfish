@@ -31,7 +31,12 @@ export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async
 export const creditSlice = createSlice({
 	name: 'credit',
 	initialState,
-	reducers: {},
+	reducers: {
+		updateAccountList: (state,action)=>{
+			state.accountList = action.payload
+		}
+
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getAccountList.pending, (state, action) => {
@@ -62,5 +67,5 @@ export const creditSlice = createSlice({
 			})
 	},
 })
-
+export const {updateAccountList} =  creditSlice.actions
 export default creditSlice.reducer

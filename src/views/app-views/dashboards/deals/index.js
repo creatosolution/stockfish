@@ -101,10 +101,14 @@ const onSubmit = values => {
     }
 
 
+    console.log("timefrom",timefrom, form.getFieldValue('timefrom'));
+    console.log("timefrom", timeto, form.getFieldValue('timeto'));
+
+
     let getDealsObj = {
       account_id: account_id,
-      timefrom: timefrom.toLocaleDateString().replace("/",'-').replace("/",'-'),
-      timeto: timeto.toLocaleDateString().replace("/",'-').replace("/",'-')
+      timefrom:  moment(timefrom, 'DD/MM/YYYY').format("DD-MM-YYYY"),
+      timeto:  moment(timeto, 'DD/MM/YYYY').format("DD-MM-YYYY"),
     }
 
     

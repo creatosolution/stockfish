@@ -37459,3 +37459,25 @@ a.text-dark:focus,a.text-dark:hover {
         margin-top: 40px !important;
 
 }
+
+.profile-text {
+    background: #fff;
+    color: #04d182;
+    padding: 3px 9px;
+    border-radius: 18px;
+    position: relative;
+    margin-left: 9px;
+}
+
+.profile-text:before {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-top: solid 9px transparent;
+    border-bottom: solid 9px transparent;
+    border-right: solid 9px #ffff;
+    border-left: solid 9px transparent;
+    position: absolute;
+    left: -15px;
+    top: 5px;
+}

@@ -39,8 +39,8 @@ export const LoginForm = props => {
 	} = props
 
 	const initialCredential = {
-		username: '1460',
-		pwd: 'Asdf1234'
+		username: '',
+		pwd: ''
 	}
 
 	const onLogin = values => {

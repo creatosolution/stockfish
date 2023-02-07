@@ -17,6 +17,19 @@ AuthService.getAccountList = function () {
 	})
 }
 
+
+
+AuthService.getPosition = function (data) {
+	return fetch({
+		url: '/position',
+		method: 'post',
+		data: data
+	})
+}
+
+
+
+
 AuthService.register = function (data) {
 	return fetch({
 		url: '/auth/register',

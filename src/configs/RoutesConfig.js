@@ -35,5 +35,12 @@ export const protectedRoutes = [
         key: 'dashboard.credit',
         path: `${APP_PREFIX_PATH}/dashboards/deals`,
         component: React.lazy(() => import('views/app-views/dashboards/deals')),
+    },
+    {
+        key: 'dashboard.position',
+        path: `${APP_PREFIX_PATH}/dashboards/position`,
+        component: React.lazy(() => import('views/app-views/dashboards/positions')),
     }
+
+    
 ]

@@ -8132,7 +8132,7 @@ textarea.ant-input,textarea.ant-input-affix-wrapper,textarea.ant-input-number,te
     width: 100%;
     height: 100%;
     overflow: auto;
-    background: #fff;
+    background: #303030;
     pointer-events: auto
 }
 
@@ -32073,7 +32073,8 @@ ul.anticons-list li.copied::after {
     padding: .625rem;
     cursor: pointer;
     border-radius: 50%;
-    transition: all .3s ease
+    transition: all .3s ease;
+    color: white;
 }
 
 .nav-close .anticon:hover {
@@ -37475,9 +37476,9 @@ a.text-dark:focus,a.text-dark:hover {
     height: 0px;
     border-top: solid 9px transparent;
     border-bottom: solid 9px transparent;
-    border-right: solid 9px #ffff;
-    border-left: solid 9px transparent;
+    border-right: solid 9px transparent;
+    border-left: solid 9px #ffff;
     position: absolute;
-    left: -15px;
+    right: -13px;
     top: 5px;
 }

@@ -291,3 +291,69 @@ export const accountColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'm2m')
     }
 ]
+
+
+
+export const positionTableColumns = [
+ 
+    {
+        title: 'ID',
+        dataIndex: 'Position',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Position')
+    },
+    
+    {
+        title: 'Login',
+        dataIndex: 'Login',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Login')
+    },
+   
+    
+    {
+        title: 'Symbol',
+        dataIndex: 'Symbol',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Symbol')
+    },
+    {
+        title: 'Action',
+        dataIndex: 'Action',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Action'),
+        render: (_, elm) => (
+            <div className="d-flex">
+              {elm.Action == 0 ? "Buy" : "Sell"}
+            </div>
+          )
+    },
+    {
+        title: 'Open Price',
+        dataIndex: 'PriceOpen',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOpen')
+    },
+    {
+        title: 'Current Price',
+        dataIndex: 'PriceCurrent',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceCurrent')
+    },
+    {
+        title: 'Profit',
+        dataIndex: 'Profit',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Profit')
+    },
+
+
+    
+    {
+        title: 'Volume',
+        dataIndex: 'Volume',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
+        render: (_, elm) => (
+            <div className="d-flex">
+              {elm.Volume / 10000}
+            </div>
+          )
+    },
+
+
+    
+   
+];

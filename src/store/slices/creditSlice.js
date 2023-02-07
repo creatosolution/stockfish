@@ -5,7 +5,8 @@ import { notification } from 'antd';
 export const initialState = {
 	loading: false,
 	creditLoading: false,
-	accountList: []
+	accountList: [],
+	positions: []
 }
 
 export const getAccountList = createAsyncThunk('/api/accountList',async (data, { rejectWithValue }) => {
@@ -17,10 +18,19 @@ export const getAccountList = createAsyncThunk('/api/accountList',async (data, {
 	}
 })
 
+export const getPosition = createAsyncThunk('/api/position',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getPosition(data);
+		return response.positions;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
 export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async (data, { rejectWithValue }) => {
 	try {
 		let url = '/dep_wth'
-		const response = await AuthService.postRequest(url,data);
+		const response = await AuthService.postRequest(url, data);
 		return response;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -50,6 +60,19 @@ export const creditSlice = createSlice({
 				state.accountList = action.payload
 				state.loading = false
 			})
+
+			.addCase(getPosition.pending, (state, action) => {
+				state.loading = true
+			})
+			.addCase(getPosition.fulfilled, (state, action) => {
+				state.positions = action.payload
+				state.loading = false
+			})
+			.addCase(getPosition.rejected, (state, action) => {
+				state.positions = action.payload
+				state.loading = false
+			})
+			
 			.addCase(depositWithdrawal.pending, (state, action) => {
 				state.creditLoading = true
 			})

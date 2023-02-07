@@ -1,5 +1,5 @@
 import { DashboardOutlined } from '@ant-design/icons';
-import { UsergroupAddOutlined , GoldOutlined,RetweetOutlined, SnippetsOutlined} from '@ant-design/icons';
+import { UsergroupAddOutlined , AlignCenterOutlined,RetweetOutlined, SnippetsOutlined} from '@ant-design/icons';
 
 import { APP_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -34,6 +34,14 @@ const dashBoardNavTree = [{
       path: `${APP_PREFIX_PATH}/dashboards/deals`,
       title: 'sidenav.dashboard.deals',
       icon: RetweetOutlined,
+      breadcrumb: false,
+      submenu: []
+    },
+    {
+      key: 'dashboards-position',
+      path: `${APP_PREFIX_PATH}/dashboards/position`,
+      title: 'sidenav.dashboard.position',
+      icon: AlignCenterOutlined,
       breadcrumb: false,
       submenu: []
     }

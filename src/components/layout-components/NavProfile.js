@@ -45,9 +45,9 @@ export const NavProfile = () => {
 	return (
 		<Dropdown placement="bottomRight" overlay={menu} trigger={["click"]}>
 			<div className="nav-item">
-				<div className="d-flex align-items-center">
-					<Avatar src="/img/avatars/thumb-1.jpg" />
-					<div className="pl-2 d-none d-sm-block profile-text">
+				<div className="d-flex align-items-center flex-row-reverse">
+					<Avatar src="/img/avatars/thumb-1.jpg" className='ml-2' />
+					<div className="profile-text">
 						<div className="font-size-base font-weight-bold">Welcome {loggedIn ? loggedIn : ''}</div>
 
 						{/* <span className="opacity-0-8"></span> */}

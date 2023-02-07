@@ -119,8 +119,7 @@ const onSubmit = values => {
     <>
     {!loading ? <div>
       
-    <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
+   
           <Card title="Get Deals Info">
           <Form 
             layout="inline" 
@@ -175,30 +174,24 @@ const onSubmit = values => {
             </Form.Item> */}
             </Form>
           </Card>
-        </Col>
-      </Row>
+       
+     
       
       {loadingDeals &&  <Loading/>}
 
-      {Array.isArray(dealsListState) && dealsListState.length > 0 && !loadingDeals && <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
-        <Card title="Get Deals Info">
-          <div className="table-responsive">
-          <Table 
-            columns={dealsTableColumns} 
-            dataSource={dealsListState} 
-            rowKey='id'
-            scroll={{x:1200}}
-          />
-        </div>
-        </Card>
-        </Col>
-      </Row>}
-      {!Array.isArray(dealsListState) && !loadingDeals && <Row gutter={16}>
-        <Col xs={10} sm={24} md={25}>
-          <Button type="dashed" block>No data found</Button>
-        </Col>
-      </Row>}
+      {Array.isArray(dealsListState) && dealsListState.length > 0 && !loadingDeals &&
+          <Card title="Get Deals Info">
+              <div className="table-responsive">
+              <Table 
+                columns={dealsTableColumns} 
+                dataSource={dealsListState} 
+                rowKey='id'
+                scroll={{x:1200}}
+              />
+            </div>
+            </Card>
+      }
+      {!Array.isArray(dealsListState) && !loadingDeals &&   <Button type="dashed" block>No data found</Button>}
 
 
     </div> : <LoadingOutlined />}

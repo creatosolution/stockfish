@@ -40,8 +40,9 @@ export const dealsSlice = createSlice({
 				state.loadingDeals = true
 			})
 			.addCase(getDealsList.fulfilled, (state, action) => {
-				state.dealsList = action.payload
+				state.dealsList = action.payload;
 				state.loadingDeals = false;
+				
 				if(Object.keys(action.payload)?.length === 0){
 					notification.error({message: 'No record found!'})
 				}

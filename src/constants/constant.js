@@ -113,7 +113,12 @@ export const dealsTableColumns = [
     {
         title: 'Volume',
         dataIndex: 'Volume',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume')
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
+        render: (_, elm) => (
+            <div className="d-flex">
+              {elm.Volume / 10000}
+            </div>
+          )
     },
     // {
     //     title: 'Volume Ext',

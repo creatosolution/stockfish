@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState,  } from 'react'
 
 import { notification } from 'antd';
 import utils from 'utils'
-import { Button, Row, Col, Card, Form, Input,InputNumber, Select, Table } from 'antd';
+import { Button, Row, Col, Card, Form, Input,InputNumber, Select, Table ,Typography} from 'antd';
 import {AntTableSearch} from '../../../../components/shared-components/AntTableSearch'
 import { connect, useDispatch } from 'react-redux';
 import { getUserBalanceAndEquity } from 'store/slices/dealsSlice';
@@ -16,9 +16,15 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { userEquityTableColumns, accountColumns } from 'constants/constant';
 
 import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
+import { useLocation } from 'react-router-dom';
+
+const { Text } = Typography;
+
 
 let allAccountList = []
 export const UserBalanceAndEquity = props => {
+  const location = useLocation();
+  const pathSnippets = location.pathname.split('/').filter(i => i);  
   const dispatch = useDispatch();
 const { getAccountList, loading, accountList, getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity, depositWithdrawal} = props;
 const [accountListState, setAccountListState] = useState([]);
@@ -183,7 +189,10 @@ const submitCreditData=(accountId)=>{
     
   })
 }
-
+  const totalCredit = accountListState.reduce((sum, item) => sum + parseInt(item.balance), 0);
+  const totalBalance = accountListState.reduce((sum, item) => sum + parseInt(item.credit), 0);
+  const totalEquity = accountListState.reduce((sum, item) => sum + parseInt(item.equity), 0);
+  const totalM2m = accountListState.reduce((sum, item) => sum + parseInt(item.m2m), 0);
   useEffect(()=>{
     getAccountList()
   },[])
@@ -254,18 +263,38 @@ const submitCreditData=(accountId)=>{
                     <Col xs={24} sm={24} md={24} className="justify-content-end d-flex mb-3">
                       <AntTableSearch onSearch={handleSearch}/>
                       </Col>
-                      <Col xs={24} sm={24} md={25}>
-
-       
-                        <div className="table-responsive">
-                          <Table
-                            columns={accountTableColumns}
-                            dataSource={accountListState}
-                            rowKey="clientId"
-                            scroll={{ x: 1200 }}
-                          />
-                        </div>
-                      </Col>
+                  <Col xs={24} sm={24} md={25}>
+                    <div className="table-responsive">
+                      <Table
+                        columns={accountTableColumns}
+                        dataSource={accountListState}
+                        rowKey="clientId"
+                        scroll={{ x: 1200 }}
+                        summary={(pageData) => {
+                          return (
+                            <>
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                                <Table.Summary.Cell index={1}></Table.Summary.Cell>
+                                <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                                <Table.Summary.Cell index={3}>
+                                  <Text type="#000000">{totalBalance}</Text></Table.Summary.Cell>
+                                <Table.Summary.Cell index={4}>
+                                  <Text type="#000000">{totalCredit}</Text>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={5}>
+                                  <Text type="#000000">{totalEquity}</Text>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={5}>
+                                  <Text type="#000000">{totalM2m}</Text>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            </>
+                          );
+                        }}
+                      />
+                    </div>
+                  </Col>
                     </Row>
                   )}
               </Card>

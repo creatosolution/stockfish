@@ -8,16 +8,24 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
 import moment from "moment";
+import { useLocation } from 'react-router-dom';
 const { Option } = Select;
 
 
 export const DealsDashboard = props => {
-  
+  const location = useLocation();
+  const pathSnippets = location.pathname.split('/').pop();  
+
  const [form] = Form.useForm();
-const { getAccountList, loading, accountList, loadingDeals, dealsList, getDealsList } = props;
+const { getAccountList, loading, accountList, loadingDeals, dealsList,dealsListWithSearch, getDealsList } = props;
 const [accountListState, setAccountListState] = useState([]);
 const [dealsListState, setDealsListState] = useState([]);
-
+  const [dealsListWitchSearch, setDealsListWitchSearch] = useState(false);
+  useEffect(() => {
+    if (pathSnippets == "search") {
+      setDealsListWitchSearch(true)
+    }
+  }, [])
 const initialCredential = {
   account_id: '',
   timefrom: moment(),
@@ -37,13 +45,13 @@ const onSubmit = values => {
 };
 
   useEffect(()=>{
-    if(accountList?.length === 0){
+    if(dealsListWitchSearch && accountList?.length === 0){
       getAccountList()
     }
-  },[])
+  },[dealsListWitchSearch])
 
   useEffect(()=>{
-    if(accountList?.length > 0){
+    if(dealsListWitchSearch && accountList?.length > 0){
       let accounts = [...accountList]
       let accountIds =  accounts.map((e)=>e.clientId)
       accountIds.sort(function(a, b) {
@@ -121,72 +129,71 @@ const onSubmit = values => {
     <>
     {!loading ? <div>
       
-   
-          <Card title="Get Deals Info">
-          <Form 
-            layout="inline" 
-            name="deals-form" 
-            form={form}
-            initialValues={initialCredential}
-            onFinish={onSubmit}
-          >
-            
-            <Form.Item name="timefrom" label="Start Date" rules={[
-                { 
+        {dealsListWitchSearch &&
+          <Card title="Search Deals">
+            <Form
+              layout="inline"
+              name="deals-form"
+              form={form}
+              initialValues={initialCredential}
+              onFinish={onSubmit}
+            >
+
+              <Form.Item name="timefrom" label="Start Date" rules={[
+                {
                   required: true,
                   message: 'Please input your Time from',
                 }
               ]}>
-              <DatePicker className="w-100"  onChange={handleChange}/>
-            </Form.Item>
-          
-            <Form.Item name="timeto" label="End Date" rules={[
-                { 
+                <DatePicker className="w-100" onChange={handleChange} />
+              </Form.Item>
+
+              <Form.Item name="timeto" label="End Date" rules={[
+                {
                   required: true,
                   message: 'Please input your Time to',
                 }
               ]}>
-              <DatePicker className="w-100"  onChange={handleChange}/>
-            </Form.Item>
-            
-            <Form.Item name="account_id" label="Select Login Id" rules={[
-                { 
+                <DatePicker className="w-100" onChange={handleChange} />
+              </Form.Item>
+
+              <Form.Item name="account_id" label="Select Login Id" rules={[
+                {
                   required: true,
                   message: 'Please input your Login Id',
                 }
               ]}>
-              <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
-              onChange={handleChange}
-              >
-                {
-                  accountListState && accountListState.length > 0 && accountListState.map(elm => (
-                    <Option key={elm} value={elm}>{elm}</Option>
-                  ))
-                }
-              </Select>
-            </Form.Item>  
-            
-                {/* <LoadingOutlined/> */}
+                <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
+                  onChange={handleChange}
+                >
+                  {
+                    accountListState && accountListState.length > 0 && accountListState.map(elm => (
+                      <Option key={elm} value={elm}>{elm}</Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
 
-              
-            {/* <Form.Item>
+              {/* <LoadingOutlined/> */}
+
+
+              {/* <Form.Item>
               <Button type="primary" className='mt-4' htmlType="submit" block loading={loadingDeals}>
                 Submit
               </Button>
             </Form.Item> */}
             </Form>
           </Card>
-       
-     
-      
-      {loadingDeals &&  <Loading/>}
+        }
 
-      {Array.isArray(dealsListState) && dealsListState.length > 0 && !loadingDeals &&
-          <Card title="Get Deals Info">
+        {loadingDeals && <Loading />}
+
+      {((Array.isArray(dealsListState) && dealsListState.length > 0) || (Array.isArray(dealsList) && dealsList.length > 0)) && !loadingDeals &&
+          <Card title="Deals">
               <div className="table-responsive">
               <Table 
                 columns={dealsTableColumns} 
-                dataSource={dealsListState} 
+                dataSource={dealsListWitchSearch ? dealsListState : dealsList} 
                 rowKey='id'
                 scroll={{x:1200}}
               />

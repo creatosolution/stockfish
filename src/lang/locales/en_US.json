@@ -8,6 +8,8 @@
 	"sidenav.dashboard.analytic": "Analytic",
 	"sidenav.dashboard.sales": "Sales",
 	"sidenav.dashboard.position": "Positions",
+	"sidenav.dashboard.dealAll" : "All",
+	"sidenav.dashboard.dealSearch" : "Search",
 
 	"sidenav.apps": "Apps",
 	"sidenav.apps.mail": "Mail",

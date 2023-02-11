@@ -31,11 +31,28 @@ const dashBoardNavTree = [{
     // },
     {
       key: 'dashboards-deals',
-      path: `${APP_PREFIX_PATH}/dashboards/deals`,
+      // path: `${APP_PREFIX_PATH}/dashboards/deals`,
       title: 'sidenav.dashboard.deals',
       icon: RetweetOutlined,
       breadcrumb: false,
-      submenu: []
+      submenu: [
+        {
+          key: 'dashboards-dealAll',
+          path: `${APP_PREFIX_PATH}/dashboards/deals`,
+          title: 'sidenav.dashboard.dealAll',
+          icon: RetweetOutlined,
+          breadcrumb: false,
+          submenu: []
+        },
+        {
+          key: 'dashboards-dealSearch',
+          path: `${APP_PREFIX_PATH}/dashboards/deals/search`,
+          title: 'sidenav.dashboard.dealSearch',
+          icon: RetweetOutlined,
+          breadcrumb: false,
+          submenu: []
+        }
+      ]
     },
     {
       key: 'dashboards-position',

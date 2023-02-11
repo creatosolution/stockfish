@@ -55,7 +55,7 @@ const initialCredential = {
     
     getPosition(getDealsObj)
   }
-
+  let totalProfit = positions.reduce((sum, item) => sum + parseInt(item.Profit), 0);
   return (
     <>
     {!loading ? <div>
@@ -109,6 +109,22 @@ const initialCredential = {
             dataSource={positions} 
             rowKey='id'
             scroll={{x:1200}}
+            summary={(pageData) => {
+              return (
+                <>
+                  <Table.Summary.Row>
+                    <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                    <Table.Summary.Cell index={1}></Table.Summary.Cell>
+                    <Table.Summary.Cell index={2}/>
+                    <Table.Summary.Cell index={3}/>
+                    <Table.Summary.Cell index={4}/>
+                    <Table.Summary.Cell index={5}/>
+                    <Table.Summary.Cell index={6}/>
+                    <Table.Summary.Cell index={7}>{totalProfit}</Table.Summary.Cell >
+                  </Table.Summary.Row>
+                </>
+              );
+            }}
           />
         </div>
         </Card>

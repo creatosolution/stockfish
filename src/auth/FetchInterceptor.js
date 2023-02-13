@@ -6,7 +6,7 @@ import { AUTH_TOKEN } from 'constants/AuthConstant';
 import { notification } from 'antd';
 
 const unauthorizedCode = [400, 401, 403]
-const unauthorizedMessage = ["Invalid Login Details"]
+const unauthorizedMessage = ["Invalid Login Details", 'Sorry, Unauthorized access.']
 
 const service = axios.create({
   baseURL: API_BASE_URL,

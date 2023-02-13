@@ -55,7 +55,7 @@ const initialCredential = {
     
     getPosition(getDealsObj)
   }
-  let totalProfit = positions.reduce((sum, item) => sum + parseInt(item.Profit), 0);
+  let totalProfit = positions && positions.length ? positions.reduce((sum, item) => sum + parseInt(item.Profit), 0) : 0;
   return (
     <>
     {!loading ? <div>

@@ -173,6 +173,26 @@ class Utils {
 		return data
 	}
 
+
+	/**
+	 * Remove object from array by value
+	*/
+	static transFormCurrency(amount, currencyCode) {
+		if(!amount) {
+			return 0
+		}
+		let currency = amount.toLocaleString("en-IN", {
+			style: "currency",
+			currency: "INR",
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0,
+		  });
+		
+		currency.replace("₹", " ");
+		
+		return currency
+	}
+
 	/**
 	 * Wild card search on all property of the object
 	 * @param {Number | String} input - any value to search

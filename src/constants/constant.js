@@ -270,11 +270,11 @@ export const accountColumns = [
         dataIndex: 'clientName',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'clientName')
     },
-    {
-        title: 'Group Name',
-        dataIndex: 'groupName',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'groupName')
-    },
+    // {
+    //     title: 'Group Name',
+    //     dataIndex: 'groupName',
+    //     sorter: (a, b) => utils.antdTableSorter(a, b, 'groupName')
+    // },
     {
         title: 'Balance',
         dataIndex: 'balance',

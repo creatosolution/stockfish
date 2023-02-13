@@ -19,7 +19,24 @@ const dashBoardNavTree = [{
       title: 'sidenav.dashboard.equityAndBalance',
       icon: SnippetsOutlined,
       breadcrumb: false,
-      submenu: []
+      submenu: [
+        {
+          key: 'dashboards-accountall',
+          path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
+          title: 'sidenav.dashboard.accountsAll',
+          icon: SnippetsOutlined,
+          breadcrumb: false,
+          submenu: []
+        },
+        {
+          key: 'dashboards-accountSearch',
+          path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance/search`,
+          title: 'sidenav.dashboard.accountSearch',
+          icon: SnippetsOutlined,
+          breadcrumb: false,
+          submenu: []
+        }
+      ]
     },
     // {
     //   key: 'dashboards-credits',

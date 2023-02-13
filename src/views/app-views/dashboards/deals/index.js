@@ -3,7 +3,7 @@ import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect } from 'react-redux';
 import { notification } from 'antd';
 import { getAccountList } from 'store/slices/creditSlice';
-import { getDealsList } from 'store/slices/dealsSlice';
+import { getDealsList,getDealsListWithSearch } from 'store/slices/dealsSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -15,17 +15,14 @@ const { Option } = Select;
 export const DealsDashboard = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();  
-
+  console.log("pathSnippets", pathSnippets);
  const [form] = Form.useForm();
-const { getAccountList, loading, accountList, loadingDeals, dealsList,dealsListWithSearch, getDealsList } = props;
+const { getAccountList, loading, accountList, loadingDeals, dealsList,dealsListWithSearch, getDealsList, getDealsListWithSearch } = props;
 const [accountListState, setAccountListState] = useState([]);
 const [dealsListState, setDealsListState] = useState([]);
   const [dealsListWitchSearch, setDealsListWitchSearch] = useState(false);
-  useEffect(() => {
-    if (pathSnippets == "search") {
-      setDealsListWitchSearch(true)
-    }
-  }, [])
+
+  
 const initialCredential = {
   account_id: '',
   timefrom: moment(),
@@ -45,20 +42,22 @@ const onSubmit = values => {
 };
 
   useEffect(()=>{
-    if(dealsListWitchSearch && accountList?.length === 0){
+    if(pathSnippets != "search"){
+      getDealsListWithSearch()
+    } else {
       getAccountList()
     }
   },[dealsListWitchSearch])
 
   useEffect(()=>{
-    if(dealsListWitchSearch && accountList?.length > 0){
+    if(pathSnippets != "search" && accountList?.length > 0){
       let accounts = [...accountList]
       let accountIds =  accounts.map((e)=>e.clientId)
       accountIds.sort(function(a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
-    }
+    } 
   },[accountList])
 
   useEffect(()=>{
@@ -217,7 +216,8 @@ const mapStateToProps = ({credit, deals}) => {
 
 const mapDispatchToProps = {
 	getAccountList,
-  getDealsList
+  getDealsList,
+  getDealsListWithSearch
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(React.memo(DealsDashboard))

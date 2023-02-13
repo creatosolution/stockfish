@@ -17,6 +17,22 @@ AuthService.getAccountList = function () {
 	})
 }
 
+AuthService.getAccountListByClient = function (data) {
+	return fetch({
+		url: '/accountInfo',
+		method: 'post',
+		data: data
+	})
+}
+
+
+AuthService.getAllDeals = function (data) {
+	return fetch({
+		url: '/allDeals',
+		method: 'get'
+	})
+}
+
 
 
 AuthService.getPosition = function (data) {

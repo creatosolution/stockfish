@@ -12,8 +12,7 @@ export const initialState = {
 
 export const getDealsListWithSearch = createAsyncThunk('/api/dealsListWithSearch ',async (data, { rejectWithValue }) => {
 	try {
-		let url = '/allDeals';
-		const response = await AuthService.postRequest(url,data);
+		const response = await AuthService.getAllDeals();
 		return response ? response : {};
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')

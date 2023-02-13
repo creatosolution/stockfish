@@ -44,6 +44,14 @@ AuthService.getPosition = function (data) {
 }
 
 
+AuthService.postPosition = function (data) {
+	return fetch({
+		url:'/allPositions',
+		method: 'get',
+		data: data
+	})
+}
+
 
 
 AuthService.register = function (data) {

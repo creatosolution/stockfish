@@ -10,19 +10,10 @@ export const initialState = {
 	loadingEquity: false
 }
 
-export const getDealsListWithSearch = createAsyncThunk('/api/dealsListWithSearch ',async (data, { rejectWithValue }) => {
+export const getDealsList = createAsyncThunk('/api/dealsList', async ({ data, withSearch }, { rejectWithValue }) => {
 	try {
-		const response = await AuthService.getAllDeals();
-		return response ? response : {};
-	} catch (err) {
-		return rejectWithValue(err.response?.message || 'Error')
-	}
-})
-
-export const getDealsList = createAsyncThunk('/api/dealsList',async (data, { rejectWithValue }) => {
-	try {
-		let url = '/dealslist_post';
-		const response = await AuthService.postRequest(url,data);
+		let url = '/dealslist_post'
+		let response = withSearch ? await AuthService.postRequest(url, data) : await AuthService.getAllDeals() 
 		return response ? response : {};
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -43,7 +34,11 @@ export const getUserBalanceAndEquity = createAsyncThunk('/api/account_balance',a
 export const dealsSlice = createSlice({
 	name: 'deals',
 	initialState,
-	reducers: {},
+	reducers: { 
+		resetdealsListState: (state, action) => {
+			state.dealsList = []
+		}
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getDealsList.pending, (state, action) => {
@@ -61,21 +56,6 @@ export const dealsSlice = createSlice({
 				state.dealsList = action.payload
 				state.loadingDeals = false
 			})
-			.addCase(getDealsListWithSearch.pending, (state, action) => {
-				state.loadingDeals = true
-			})
-			.addCase(getDealsListWithSearch.fulfilled, (state, action) => {
-				state.dealsListWithSearch = action.payload;
-				state.loadingDeals = false;
-				
-				if(Object.keys(action.payload)?.length === 0){
-					notification.error({message: 'No record found!'})
-				}
-			})
-			.addCase(getDealsListWithSearch.rejected, (state, action) => {
-				state.dealsListWithSearch = action.payload
-				state.loadingDeals = false
-			})
 			.addCase(getUserBalanceAndEquity.pending, (state, action) => {
 				state.loadingEquity = true
 			})
@@ -89,5 +69,5 @@ export const dealsSlice = createSlice({
 			})
 	},
 })
-
+export const {resetdealsListState} =  dealsSlice.actions
 export default dealsSlice.reducer

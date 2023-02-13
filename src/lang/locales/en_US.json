@@ -12,6 +12,8 @@
 	"sidenav.dashboard.dealSearch" : "Search",
 	"sidenav.dashboard.accountsAll": "All Accounts",
 	"sidenav.dashboard.accountSearch": "Accounts by search",
+	"sidenav.dashboard.positionAll" : "All",
+	"sidenav.dashboard.positionBySearch" : "Search",
 
 	"sidenav.apps": "Apps",
 	"sidenav.apps.mail": "Mail",

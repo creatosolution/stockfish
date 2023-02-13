@@ -77,7 +77,24 @@ const dashBoardNavTree = [{
       title: 'sidenav.dashboard.position',
       icon: AlignCenterOutlined,
       breadcrumb: false,
-      submenu: []
+      submenu: [
+        {
+          key: 'dashboards-positionAll',
+          path: `${APP_PREFIX_PATH}/dashboards/position`,
+          title: 'sidenav.dashboard.positionAll',
+          icon: AlignCenterOutlined,
+          breadcrumb: false,
+          submenu: []
+        },
+        {
+          key: 'dashboards-positionBySearch',
+          path: `${APP_PREFIX_PATH}/dashboards/position/search`,
+          title: 'sidenav.dashboard.positionBySearch',
+          icon: AlignCenterOutlined,
+          breadcrumb: false,
+          submenu: []
+        }
+      ]
     }
   ]
 }]

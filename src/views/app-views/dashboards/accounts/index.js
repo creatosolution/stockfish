@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { AntTableSearch } from "../../../../components/shared-components/AntTableSearch";
 import { connect, useDispatch } from "react-redux";
-import { getDealsListWithSearch, getUserBalanceAndEquity } from "store/slices/dealsSlice";
+import { getUserBalanceAndEquity } from "store/slices/dealsSlice";
 import {
   getAccountList,
   getAccountListByClient,

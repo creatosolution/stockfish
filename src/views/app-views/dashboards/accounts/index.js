@@ -63,8 +63,8 @@ export const UserBalanceAndEquity = (props) => {
   const [editableItem, setEditableItem] = useState(null);
   const [accountsEditModal, setAccountEditModal] = useState(false);
   const [accountsDisableModal, setAccountDisableModal] = useState(false);
-  const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.balace ? item.balace.replaceAll(",", "") : "0"), 0) : 0);
-  const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.credit ? item.credit.replaceAll(",", "") : "0"), 0) : 0);
+  const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.credit ? item.credit.replaceAll(",", "") : "0"), 0) : 0);
+  const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.balance ? item.balance.replaceAll(",", "") : "0"), 0) : 0);
   const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.equity ? item.equity.replaceAll(",", "") : "0"), 0) : 0);
   const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.m2m ? item.m2m.replaceAll(",", "") : "0"), 0) : 0)
  
@@ -444,16 +444,13 @@ export const UserBalanceAndEquity = (props) => {
                                 <Table.Summary.Cell
                                   index={1}
                                 ></Table.Summary.Cell>
-                                <Table.Summary.Cell
-                                  index={2}
-                                ></Table.Summary.Cell>
-                                <Table.Summary.Cell index={3}>
+                                <Table.Summary.Cell index={2}>
                                   <Text type="#000000">{totalBalance}</Text>
                                 </Table.Summary.Cell>
-                                <Table.Summary.Cell index={4}>
+                                <Table.Summary.Cell index={3}>
                                   <Text type="#000000">{totalCredit}</Text>
                                 </Table.Summary.Cell>
-                                <Table.Summary.Cell index={5}>
+                                <Table.Summary.Cell index={4}>
                                   <Text type="#000000">{totalEquity}</Text>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={5}>

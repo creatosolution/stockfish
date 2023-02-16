@@ -215,7 +215,7 @@ export const DealsDashboard = props => {
         }
 
         {loadingDeals && <Loading />}
-        {loadingDeals ? "true" : "false"}
+        
         {dealsListState && dealsListState.length > 0 && !loadingDeals &&
           <Card title="Deals">
             <div className="table-responsive">

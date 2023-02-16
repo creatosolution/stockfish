@@ -188,7 +188,8 @@ class Utils {
 			maximumFractionDigits: 0,
 		  });
 		
-		currency.replace("₹", " ");
+		  currency.replace("₹", " ");
+		  currency.replace("₹", " ");
 		
 		return currency
 	}

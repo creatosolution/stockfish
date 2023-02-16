@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import utils from "utils";
+import { PlusCircleOutlined, EditOutlined , StopOutlined } from "@ant-design/icons";
+import AccountEditModal from "./editAccount";
+import DisableAccountModal from "./disableAccount"
 import {
   Button,
   Row,
@@ -22,9 +25,10 @@ import {
   depositWithdrawal,
   updateAccountList,
   resetAccountList,
+  accountUpdate,
+  accountDisable
 } from "store/slices/creditSlice";
 import { LoadingOutlined } from "@ant-design/icons";
-import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 const { Text } = Typography;
 const { Option } = Select;
@@ -47,6 +51,8 @@ export const UserBalanceAndEquity = (props) => {
     loadingEquity,
     userBalanceAndEquity,
     depositWithdrawal,
+    accountUpdate,
+    accountDisable
   } = props;
  
  
@@ -54,6 +60,9 @@ export const UserBalanceAndEquity = (props) => {
   const [accountListIds, setaccountListIds] = useState([]);
   const [balanceAndEquity, setBalanceAndEquity] = useState([]);
   const [submitAmountMap, setSubmitAmountMap] = useState({});
+  const [editableItem, setEditableItem] = useState(null);
+  const [accountsEditModal, setAccountEditModal] = useState(false);
+  const [accountsDisableModal, setAccountDisableModal] = useState(false);
   const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.balace ? item.balace.replaceAll(",", "") : "0"), 0) : 0);
   const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.credit ? item.credit.replaceAll(",", "") : "0"), 0) : 0);
   const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.equity ? item.equity.replaceAll(",", "") : "0"), 0) : 0);
@@ -157,9 +166,56 @@ export const UserBalanceAndEquity = (props) => {
           </Button>
         </div>
       ),
-    },
+    }
+    // {
+    //   key: 'edit',
+    //   title: "Action",
+    //   render: (_, elm) => (
+    //     <>
+        
+    //     <Button
+    //       type=""
+    //       onClick={(e) => {
+    //         handleEditModalVisiblity(true, elm);
+    //       }}
+    //       className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
+    //     >
+    //     </Button>
+
+
+    //     <Button
+    //       size="small"
+    //       onClick={(e) => {
+    //         handleAccountsDisableModal(true, elm);
+    //       }}
+    //       icon={<StopOutlined />}
+    //       className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
+          
+    //     </Button>
+    //     </>
+    //   ),
+    // }
   ];
 
+  const onHide = () => {
+    setAccountEditModal(false);
+    setEditableItem(null)
+}
+
+
+  const handleEditModalVisiblity = (value, item) => {
+    setEditableItem(item)
+    setAccountEditModal(value) 
+  };
+
+
+  const handleAccountsDisableModal = (value, item) => {
+    setEditableItem(item)
+    setAccountDisableModal(value) 
+  };
+
+
+  
   const refresh = () => {
     getAccountList();
   };
@@ -169,6 +225,28 @@ export const UserBalanceAndEquity = (props) => {
     submitAmountMap[accountId] = e.target.value;
     setSubmitAmountMap(submitAmountMap);
   };
+
+  const onAccountUpdate=(accountInfo)=>{
+    accountUpdate(accountInfo).then((response)=>{
+
+      console.log("accountUpdate------<", response);
+      onHide();
+      if (pathSnippets && pathSnippets == "search") {
+        onSubmit()
+      }  else {
+        getAccountList();
+  
+      }
+    })
+  }
+
+  
+  const onDisableAccount=(accountInfo)=>{
+    console.log('disableAccount', accountInfo);
+    accountDisable(accountInfo).then((res)=>{
+      console.log("accountDisable", res);
+    })
+  }
 
   const getM2m = (info) => {
     let equity = info.equity ? info.equity.replaceAll(",", "") : 0;
@@ -393,7 +471,10 @@ export const UserBalanceAndEquity = (props) => {
             )}
           </Col>
         </Row>
-
+        {accountsEditModal && <AccountEditModal  isVisible={accountsEditModal}
+                        onHide={onHide} editableItem={editableItem} updateAccount={onAccountUpdate} ></AccountEditModal>}
+        {accountsDisableModal && <DisableAccountModal  isVisible={accountsDisableModal}
+                                        onHide={handleAccountsDisableModal} editableItem={editableItem} disableAccount={onDisableAccount} ></DisableAccountModal>}
         {/* {!Array.isArray(accountListState) && (
             <Row gutter={16}>
               <Col xs={10} sm={24} md={25}>
@@ -429,6 +510,8 @@ const mapDispatchToProps = {
   getAccountListByClient,
   getUserBalanceAndEquity,
   depositWithdrawal,
+  accountUpdate,
+  accountDisable
 };
 
 export default connect(

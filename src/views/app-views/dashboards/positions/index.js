@@ -15,7 +15,7 @@ export const Positions = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getPosition,getAllPositions, positions } = props;
+  const { getAccountIdList, loading, accountIdList, getPosition,getAllPositions, positions } = props;
   const [accountListState, setAccountListState] = useState([]);
 
   const initialCredential = {
@@ -95,9 +95,9 @@ export const Positions = props => {
         </Card>
       }
 
-      {loadingDeals && <LoadingOutlined />}
+  
 
-      {Array.isArray(positions) && positions.length > 0 && !loadingDeals &&
+      {Array.isArray(positions) && positions.length > 0 && !loading &&
         <Card title="Positions">
           <div className="table-responsive">
             <Table
@@ -115,7 +115,6 @@ export const Positions = props => {
                       <Table.Summary.Cell index={3} />
                       <Table.Summary.Cell index={4} />
                       <Table.Summary.Cell index={5} />
-                      <Table.Summary.Cell index={6} />
                       <Table.Summary.Cell index={7}>{totalProfit}</Table.Summary.Cell >
                     </Table.Summary.Row>
                   </>
@@ -125,15 +124,16 @@ export const Positions = props => {
           </div>
         </Card>
       }
-      {!Array.isArray(positions) && !loadingDeals && <Button type="dashed" block>No data found</Button>}
+      
+      {loading && <div className='text-center'><LoadingOutlined /></div>}
+      {!Array.isArray(positions) && !loading && <Button type="dashed" block>No data found</Button>}
     </div>
   )
 }
 
 const mapStateToProps = ({ credit, deals }) => {
   const { loading, positions, accountIdList} = credit;
-  const { loadingDeals, dealsList } = deals;
-  return { loading, accountIdList, loadingDeals, dealsList, positions }
+  return { loading, accountIdList, positions }
 }
 
 const mapDispatchToProps = {

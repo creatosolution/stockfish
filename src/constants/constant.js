@@ -101,19 +101,28 @@ export const dealsTableColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
         render: (_, elm) => (
             <div className="d-flex">
-              {elm.Volume / 10000}
+                {/* {elm.Action === 0 ? 'Zero': 'else 1'}
+                {elm.Volume / 10000} */}
+              {elm.Action == 0 ?
+                <>
+                    <span className='text-info'>{'+'+elm.Volume / 10000}</span>
+                </>
+                : <>
+                 <span className='text-danger'>{'-'+elm.Volume / 10000}</span>
+                </>
+                }
             </div>
           )
     },
-    {
-        title: 'Type',
-        dataIndex: 'type',
-        render: (_, elm) => (
-            <div className="d-flex">
-              {elm.Action == 0 ? "Buy" : "Sell"}
-            </div>
-          )
-    },
+    // {
+    //     title: 'Type',
+    //     dataIndex: 'type',
+    //     render: (_, elm) => (
+    //         <div className="d-flex">
+    //           {elm.Action == 0 ? "Buy" : "Sell"}
+    //         </div>
+    //       )
+    // },
     
     {
         title: 'Price',
@@ -325,20 +334,29 @@ export const positionTableColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
         render: (_, elm) => (
             <div className="d-flex">
-              {elm.Volume / 10000}
+                {/* {elm.Action === 0 ? 'Zero': 'else 1'}
+                {elm.Volume / 10000} */}
+              {elm.Action == 0 ?
+                <>
+                    <span className='text-info'>{'+'+elm.Volume / 10000}</span>
+                </>
+                : <>
+                 <span className='text-danger'>{'-'+elm.Volume / 10000}</span>
+                </>
+                }
             </div>
           )
     },
-    {
-        title: 'Action',
-        dataIndex: 'Action',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'Action'),
-        render: (_, elm) => (
-            <div className="d-flex">
-              {elm.Action == 0 ? "Buy" : "Sell"}
-            </div>
-          )
-    },
+    // {
+    //     title: 'Action',
+    //     dataIndex: 'Action',
+    //     sorter: (a, b) => utils.antdTableSorter(a, b, 'Action'),
+    //     render: (_, elm) => (
+    //         <div className="d-flex">
+    //           {elm.Action == 0 ? "Buy" : "Sell"}
+    //         </div>
+    //       )
+    // },
     {
         title: 'Open Price',
         dataIndex: 'PriceOpen',

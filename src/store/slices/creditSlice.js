@@ -41,6 +41,25 @@ export const getAccountListByClient = createAsyncThunk('/api/getAccountListByCli
 	}
 })
 
+export const accountUpdate = createAsyncThunk('/api/accountUpdate',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.accountUpdate(data);
+		return response;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
+export const accountDisable = createAsyncThunk('/api/accountDisable',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.accountDisable(data);
+		return response;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
 export const getPosition = createAsyncThunk('/api/position',async (data, { rejectWithValue }) => {
 	try {
 		const response = await AuthService.getPosition(data);
@@ -158,8 +177,6 @@ export const creditSlice = createSlice({
 				state.loading = false
 			})
 			
-
-			
 			.addCase(depositWithdrawal.pending, (state, action) => {
 				state.creditLoading = true
 			})
@@ -175,6 +192,33 @@ export const creditSlice = createSlice({
 				state.creditLoading = false
 				notification.error({message: 'Somthing went wrong!'})
 			})
+
+
+			.addCase(accountUpdate.pending, (state, action) => {
+				state.creditLoading = true
+			})
+			.addCase(accountUpdate.fulfilled, (state, action) => {
+				state.creditLoading = false;
+				
+			})
+			.addCase(accountUpdate.rejected, (state, action) => {
+				state.creditLoading = false
+				notification.error({message: 'Somthing went wrong!'})
+			})
+
+			
+			.addCase(accountDisable.pending, (state, action) => {
+				state.creditLoading = true
+			})
+			.addCase(accountDisable.fulfilled, (state, action) => {
+				state.creditLoading = false;
+				
+			})
+			.addCase(accountDisable.rejected, (state, action) => {
+				state.creditLoading = false
+				notification.error({message: 'Somthing went wrong!'})
+			})
+			
 	},
 })
 export const {updateAccountList,resetAccountList, resetPosition} =  creditSlice.actions

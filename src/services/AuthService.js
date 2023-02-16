@@ -34,6 +34,22 @@ AuthService.getAccountListByClient = function (data) {
 	})
 }
 
+AuthService.accountUpdate  = function (data) {
+	return fetch({
+		url: '/accountUpdate',
+		method: 'post',
+		data: data
+	})
+}
+
+AuthService.accountDisable  = function (data) {
+	return fetch({
+		url: '/accountDisable',
+		method: 'post',
+		data: data
+	})
+}
+
 
 AuthService.getAllDeals = function (data) {
 	return fetch({

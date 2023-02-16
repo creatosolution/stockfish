@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { notification } from 'antd';
-import { getAccountList } from 'store/slices/creditSlice';
-import { getDealsList } from 'store/slices/dealsSlice';
+import { getAccountIdList } from 'store/slices/creditSlice';
+import { getDealsList, getAllDeals, resetdealsListState } from 'store/slices/dealsSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -16,9 +16,10 @@ export const DealsDashboard = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountList, loading, accountList, loadingDeals, dealsList, getDealsList } = props;
+  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getDealsList, getAllDeals } = props;
   const [accountListState, setAccountListState] = useState([]);
   const [dealsListState, setDealsListState] = useState([]);
+  const dispatch = useDispatch();
 
   const initialCredential = {
     account_id: '',
@@ -35,30 +36,60 @@ export const DealsDashboard = props => {
       timefrom: timefrom.toLocaleDateString().replace("/", '-').replace("/", '-'),
       timeto: timeto.toLocaleDateString().replace("/", '-').replace("/", '-')
     }
-    getDealsList({ data: getDealsObj, withSearch: true })
+    getDealsList(getDealsObj)
   };
 
   useEffect(() => {
     if (pathSnippets == "search") { 
-      getAccountList()
+      getAccountIdList()
     }else{
-      getDealsList({ withSearch: false })
+      getAllDeals()
     }
   }, [])
 
+
   useEffect(() => {
-    if (pathSnippets != "search" && accountList?.length > 0) {
-      let accounts = [...accountList]
-      let accountIds = accounts.map((e) => e.clientId)
+    // runs on location, i.e. route, change
+    // console.log('handle route change here', location)\
+    dispatch(resetdealsListState());
+  }, [location])
+
+  useEffect(() => {
+    if (pathSnippets == "search" && accountIdList?.length > 0) {
+      let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
     }
-  }, [accountList])
+  }, [accountIdList])
 
   useEffect(() => {
+    if(Array.isArray(dealsList)){
+      console.log('arrayyyyyy');
+      let dealsArr = [];
+      for(var i=0; i< dealsList.length; i++){
+        let dealObj = dealsList[i];
+        const timestamp = dealObj.Time;
+        const date = new Date(timestamp * 1000);
+        const year = date.getFullYear();
+        const month = `0${date.getMonth() + 1}`.slice(-2);
+        const day = `0${date.getDate()}`.slice(-2);
+        const hours = `0${date.getHours()}`.slice(-2);
+        const minutes = `0${date.getMinutes()}`.slice(-2);
+        const seconds = `0${date.getSeconds()}`.slice(-2);
+        const result = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+
+        // const result = date;
+        console.log(result);
+        dealObj.Time = moment.unix(timestamp).utc().format("MM/DD/YYYY hh:mm:ss");
+        dealsArr.push(dealObj)
+      }
+      setDealsListState(dealsArr)
+
+    } else
     if (dealsList && Object.keys(dealsList)?.length > 0) {
+      console.log('ibhectttttt');
       let dealsArr = [];
       for (let anObject in dealsList) {
         // console.log('dealsList[anObject]', dealsList[anObject].Time);
@@ -119,6 +150,7 @@ export const DealsDashboard = props => {
 
 
     getDealsList(getDealsObj)
+    
   }
 
   return (
@@ -183,7 +215,7 @@ export const DealsDashboard = props => {
         }
 
         {loadingDeals && <Loading />}
-
+        {loadingDeals ? "true" : "false"}
         {dealsListState && dealsListState.length > 0 && !loadingDeals &&
           <Card title="Deals">
             <div className="table-responsive">
@@ -206,14 +238,15 @@ export const DealsDashboard = props => {
 }
 
 const mapStateToProps = ({ credit, deals }) => {
-  const { loading, accountList } = credit;
+  const { loading, accountIdList } = credit;
   const { loadingDeals, dealsList } = deals;
-  return { loading, accountList, loadingDeals, dealsList }
+  return { loading, accountIdList, loadingDeals, dealsList }
 }
 
 const mapDispatchToProps = {
-  getAccountList,
-  getDealsList
+  getAccountIdList,
+  getDealsList,
+  getAllDeals
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(DealsDashboard))

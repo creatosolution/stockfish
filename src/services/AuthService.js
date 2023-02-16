@@ -17,6 +17,15 @@ AuthService.getAccountList = function () {
 	})
 }
 
+AuthService.getAccountIdList = function () {
+	return fetch({
+		url: '/accountListIDs',
+		method: 'get'
+	})
+}
+
+
+
 AuthService.getAccountListByClient = function (data) {
 	return fetch({
 		url: '/accountInfo',
@@ -44,11 +53,10 @@ AuthService.getPosition = function (data) {
 }
 
 
-AuthService.postPosition = function (data) {
+AuthService.getAllPositions = function (data) {
 	return fetch({
-		url:'/allPositions',
-		method: 'get',
-		data: data
+		url: '/allPositions',
+		method: 'get'
 	})
 }
 

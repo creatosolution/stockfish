@@ -17,6 +17,7 @@ import { connect, useDispatch } from "react-redux";
 import { getUserBalanceAndEquity } from "store/slices/dealsSlice";
 import {
   getAccountList,
+  getAccountIdList,
   getAccountListByClient,
   depositWithdrawal,
   updateAccountList,
@@ -26,6 +27,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 const { Text } = Typography;
+const { Option } = Select;
 
 let allAccountList = [];
 
@@ -37,8 +39,10 @@ export const UserBalanceAndEquity = (props) => {
   const {
     getAccountList,
     getAccountListByClient,
+    getAccountIdList,
     loading,
     accountList,
+    accountIdList,
     getUserBalanceAndEquity,
     loadingEquity,
     userBalanceAndEquity,
@@ -47,6 +51,7 @@ export const UserBalanceAndEquity = (props) => {
  
  
   const [accountListState, setAccountListState] = useState([]);
+  const [accountListIds, setaccountListIds] = useState([]);
   const [balanceAndEquity, setBalanceAndEquity] = useState([]);
   const [submitAmountMap, setSubmitAmountMap] = useState({});
   const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.balace ? item.balace.replaceAll(",", "") : "0"), 0) : 0);
@@ -60,6 +65,17 @@ export const UserBalanceAndEquity = (props) => {
   const initialCredential = {
     account_id: ''
   }
+
+  useEffect(() => {
+    if (pathSnippets == "search" && accountIdList?.length > 0) {
+      let accountIds = [...accountIdList]
+      accountIds.sort(function (a, b) {
+        return a - b;
+      });
+      setaccountListIds(accountIds)
+    }
+  }, [accountIdList])
+
 
   const handleTableSearch = (searchText) => {
     if (!allAccountList || !allAccountList.length) {
@@ -217,8 +233,11 @@ export const UserBalanceAndEquity = (props) => {
 
   useEffect(() => {
     if (pathSnippets && pathSnippets == "search") {
+      getAccountIdList()
+    }  else {
       getAccountList();
-    } 
+
+    }
   }, []);
 
 
@@ -229,9 +248,26 @@ export const UserBalanceAndEquity = (props) => {
   }, [location])
 
   const onSubmit = values => {
-    console.log('values', values);
-    getAccountListByClient(values)
+   
+    getAccountListByClient({
+      "account_id":values
+    })
   };
+
+
+
+    
+  const SelectWithMemo = React.useMemo(() => (
+    <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
+      onChange={onSubmit}
+    >
+      {
+        accountListIds && accountListIds.length > 0 && accountListIds.map(elm => (
+          <Option key={elm} value={elm}>{elm}</Option>
+        ))
+      }
+    </Select>
+  ), [accountIdList]);
 
   useEffect(() => {
     allAccountList = accountList;
@@ -260,20 +296,16 @@ export const UserBalanceAndEquity = (props) => {
              
                 <Form layout="inline" name="deals-form"
                   initialValues={initialCredential}
-                  onFinish={onSubmit}
+               
                 >
-                  <Form.Item
-                    name="account_id"
-                    label="Select Login Id"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your Login Id",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Search by account id" />
-                  </Form.Item>
+              <Form.Item name="account_id" label="Select Account" rules={[
+              {
+                required: true,
+                message: 'Please input your Login Id',
+              }
+            ]}>
+              {SelectWithMemo}
+            </Form.Item>
                   <Form.Item>
                     <Button
                       type="primary"
@@ -377,12 +409,13 @@ export const UserBalanceAndEquity = (props) => {
 };
 
 const mapStateToProps = ({ credit, deals }) => {
-  const { loading, accountList } = credit;
+  const { loading, accountList, accountIdList } = credit;
   const { getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity } =
     deals;
   return {
     loading,
     accountList,
+    accountIdList,
     getAccountListByClient,
     getUserBalanceAndEquity,
     loadingEquity,
@@ -392,6 +425,7 @@ const mapStateToProps = ({ credit, deals }) => {
 
 const mapDispatchToProps = {
   getAccountList,
+  getAccountIdList,
   getAccountListByClient,
   getUserBalanceAndEquity,
   depositWithdrawal,

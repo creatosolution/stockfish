@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { notification } from 'antd';
-import { getAccountList, getPosition ,resetPosition} from 'store/slices/creditSlice';
+import { getAccountIdList, getPosition, getAllPositions, resetPosition } from 'store/slices/creditSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { positionTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -15,7 +15,7 @@ export const Positions = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountList, loading, accountList, loadingDeals, dealsList, getPosition, positions } = props;
+  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getPosition,getAllPositions, positions } = props;
   const [accountListState, setAccountListState] = useState([]);
 
   const initialCredential = {
@@ -27,33 +27,34 @@ export const Positions = props => {
     return () => {
       dispatch(resetPosition());
     };
-  }, [dispatch]);
+  }, [location]);
 
 
   useEffect(() => {
-    if (pathSnippets == "search" && accountList?.length === 0) {
-      getAccountList()
+    if (pathSnippets == "search") {
+      getAccountIdList()
     } else {
-      getPosition({ withSearch: false })
+      getAllPositions()
     }
   }, [])
 
   useEffect(() => {
-    if (accountList?.length > 0) {
-      let accounts = [...accountList]
-      let accountIds = accounts.map((e) => e.clientId)
+    if (pathSnippets == "search" && accountIdList?.length > 0) {
+      let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
     }
-  }, [accountList])
+  }, [accountIdList])
+
+
   const handleChange = (value) => {
     let account_id = form.getFieldValue('account_id')
     let getDealsObj = {
       account_id: account_id,
     }
-    getPosition({ data: getDealsObj, withSearch: true })
+    getPosition(getDealsObj)
   }
 
   const SelectWithMemo = React.useMemo(() => (
@@ -130,14 +131,15 @@ export const Positions = props => {
 }
 
 const mapStateToProps = ({ credit, deals }) => {
-  const { loading, accountList, positions } = credit;
+  const { loading, positions, accountIdList} = credit;
   const { loadingDeals, dealsList } = deals;
-  return { loading, accountList, loadingDeals, dealsList, positions }
+  return { loading, accountIdList, loadingDeals, dealsList, positions }
 }
 
 const mapDispatchToProps = {
-  getAccountList,
+  getAccountIdList,
   getPosition,
+  getAllPositions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Positions))

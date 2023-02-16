@@ -10,15 +10,26 @@ export const initialState = {
 	loadingEquity: false
 }
 
-export const getDealsList = createAsyncThunk('/api/dealsList', async ({ data, withSearch }, { rejectWithValue }) => {
+export const getDealsList = createAsyncThunk('/api/dealsList', async (data, { rejectWithValue }) => {
 	try {
 		let url = '/dealslist_post'
-		let response = withSearch ? await AuthService.postRequest(url, data) : await AuthService.getAllDeals() 
-		return response ? response : {};
+		let response = await AuthService.postRequest(url, data) 
+		return response;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
 	}
 })
+
+
+export const getAllDeals = createAsyncThunk('/api/getAllDeals', async (data, { rejectWithValue }) => {
+	try {
+		let response = AuthService.getAllDeals(data)
+		return response.deal_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
 
 export const getUserBalanceAndEquity = createAsyncThunk('/api/account_balance',async (data, { rejectWithValue }) => {
 	try {
@@ -56,6 +67,22 @@ export const dealsSlice = createSlice({
 				state.dealsList = action.payload
 				state.loadingDeals = false
 			})
+
+			
+			.addCase(getAllDeals.pending, (state, action) => {
+				state.loadingDeals = true
+			})
+			.addCase(getAllDeals.fulfilled, (state, action) => {
+				state.dealsList = action.payload;
+				state.loadingDeals = false;
+				
+			})
+			.addCase(getAllDeals.rejected, (state, action) => {
+				state.dealsList = action.payload
+				state.loadingDeals = false
+			})
+
+			
 			.addCase(getUserBalanceAndEquity.pending, (state, action) => {
 				state.loadingEquity = true
 			})

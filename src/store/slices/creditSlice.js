@@ -9,8 +9,18 @@ export const initialState = {
 	loading: false,
 	creditLoading: false,
 	accountList: [],
+	accountIdList: [],
 	positions: []
 }
+
+export const getAccountIdList = createAsyncThunk('/api/getAccountIdList',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAccountIdList();
+		return response.account_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
 
 export const getAccountList = createAsyncThunk('/api/accountList',async (data, { rejectWithValue }) => {
 	try {
@@ -40,6 +50,18 @@ export const getPosition = createAsyncThunk('/api/position',async (data, { rejec
 	}
 })
 
+
+export const getAllPositions = createAsyncThunk('/api/getAllPositions',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAllPositions(data);
+		return response.position_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
+
 export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async (data, { rejectWithValue }) => {
 	try {
 		let url = '/dep_wth'
@@ -61,25 +83,43 @@ export const creditSlice = createSlice({
 
 		resetAccountList: (state,action)=>{
 			state.accountList = []
+		},
+
+		resetPosition: (state,action)=>{
+			state.positions = []
 		}
 
+		
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getAccountList.pending, (state, action) => {
-				state.accountList = []
-				state.loading = true
-			})
-			.addCase(getAccountList.fulfilled, (state, action) => {
-				state.accountList = action.payload
-				state.loading = false
-			})
+		.addCase(getAccountList.pending, (state, action) => {
+			state.accountList = []
+			state.loading = true
+		})
+		.addCase(getAccountList.fulfilled, (state, action) => {
+			state.accountList = action.payload
+			state.loading = false
+		})
 
-			.addCase(getAccountList.rejected, (state, action) => {
-				state.accountList = action.payload
-				state.loading = false
-			})
+		.addCase(getAccountList.rejected, (state, action) => {
+			state.accountList = action.payload
+			state.loading = false
+		})
+		.addCase(getAccountIdList.pending, (state, action) => {
+			state.accountIdList = []
+			state.loading = true
+		})
+		.addCase(getAccountIdList.fulfilled, (state, action) => {
+			state.accountIdList = action.payload
+			state.loading = false
+		})
 
+		.addCase(getAccountIdList.rejected, (state, action) => {
+			state.accountIdList = action.payload
+			state.loading = false
+		})
+			
 			.addCase(getAccountListByClient.pending, (state, action) => {
 				state.loading = true
 				state.accountList = []
@@ -106,6 +146,20 @@ export const creditSlice = createSlice({
 				state.loading = false
 			})
 			
+			.addCase(getAllPositions.pending, (state, action) => {
+				state.loading = true
+			})
+			.addCase(getAllPositions.fulfilled, (state, action) => {
+				state.positions = action.payload
+				state.loading = false
+			})
+			.addCase(getAllPositions.rejected, (state, action) => {
+				state.positions = action.payload
+				state.loading = false
+			})
+			
+
+			
 			.addCase(depositWithdrawal.pending, (state, action) => {
 				state.creditLoading = true
 			})
@@ -123,5 +177,5 @@ export const creditSlice = createSlice({
 			})
 	},
 })
-export const {updateAccountList,resetAccountList} =  creditSlice.actions
+export const {updateAccountList,resetAccountList, resetPosition} =  creditSlice.actions
 export default creditSlice.reducer

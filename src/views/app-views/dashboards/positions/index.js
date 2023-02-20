@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { notification } from 'antd';
 import { getAccountIdList, getPosition, getAllPositions, resetPosition } from 'store/slices/creditSlice';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -48,6 +49,10 @@ export const Positions = props => {
     }
   }, [accountIdList])
 
+  const viewAllPositions = ()=>{
+    let path = `/app/dashboards/position/`;
+    props.navigate(path)
+  }
 
   const handleChange = (value) => {
     let account_id = form.getFieldValue('account_id')
@@ -91,6 +96,15 @@ export const Positions = props => {
             ]}>
               {SelectWithMemo}
             </Form.Item>
+
+            
+            <Button
+                    type="link"
+                    onClick={viewAllPositions}
+                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                >
+                    View All Positions
+                </Button>
           </Form>
         </Card>
       }
@@ -142,4 +156,12 @@ const mapDispatchToProps = {
   getAllPositions
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Positions))
+// export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Positions))
+
+
+function WithNavigate(props) {
+  let navigate = useNavigate()
+  let params = useParams()
+  return <Positions {...props} navigate={navigate} params={params} />
+}
+export default connect(mapStateToProps, mapDispatchToProps)(WithNavigate)

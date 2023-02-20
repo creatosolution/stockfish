@@ -54,7 +54,8 @@ AuthService.accountDisable  = function (data) {
 AuthService.getAllDeals = function (data) {
 	return fetch({
 		url: '/allDeals',
-		method: 'get'
+		method: 'post',
+		data: data
 	})
 }
 

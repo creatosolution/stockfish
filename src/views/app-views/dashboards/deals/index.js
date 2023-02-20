@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from "react-router-dom";
+
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { notification } from 'antd';
@@ -27,6 +29,11 @@ export const DealsDashboard = props => {
     timeto: moment().add(1, 'd')
   }
 
+  // useEffect(() => {
+  //   // runs on location, i.e. route, change
+  //   // console.log('handle route change here', location)\
+  //   dispatch(resetdealsListState());
+  // }, [location])
   const onSubmit = values => {
     console.log(values);
     let timefrom = new Date(values.timefrom)
@@ -39,20 +46,26 @@ export const DealsDashboard = props => {
     getDealsList(getDealsObj)
   };
 
+
+  const viewAllDeals = ()=>{
+    let path = `/app/dashboards/deals/`;
+    props.navigate(path)
+  }
+
   useEffect(() => {
     if (pathSnippets == "search") { 
       getAccountIdList()
     }else{
-      getAllDeals()
+      console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
+       const allDealsObj = {
+        timefrom: moment().format('DD-MM-YYYY'),
+        timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+      }
+      getAllDeals(allDealsObj)
     }
   }, [])
 
 
-  useEffect(() => {
-    // runs on location, i.e. route, change
-    // console.log('handle route change here', location)\
-    dispatch(resetdealsListState());
-  }, [location])
 
   useEffect(() => {
     if (pathSnippets == "search" && accountIdList?.length > 0) {
@@ -65,11 +78,14 @@ export const DealsDashboard = props => {
   }, [accountIdList])
 
   useEffect(() => {
+    if(!dealsList){
+      return;
+    }
     if(Array.isArray(dealsList)){
       console.log('arrayyyyyy');
       let dealsArr = [];
       for(var i=0; i< dealsList.length; i++){
-        let dealObj = dealsList[i];
+        let dealObj = {...dealsList[i]};
         const timestamp = dealObj.Time;
         const date = new Date(timestamp * 1000);
         const year = date.getFullYear();
@@ -137,11 +153,6 @@ export const DealsDashboard = props => {
       return;
     }
 
-
-    console.log("timefrom", timefrom, form.getFieldValue('timefrom'));
-    console.log("timefrom", timeto, form.getFieldValue('timeto'));
-
-
     let getDealsObj = {
       account_id: account_id,
       timefrom: moment(timefrom, 'DD/MM/YYYY').format("DD-MM-YYYY"),
@@ -204,12 +215,15 @@ export const DealsDashboard = props => {
 
               {/* <LoadingOutlined/> */}
 
+              <Button
+                    type="link"
+                    onClick={viewAllDeals}
+                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                >
+                    View All Deals
+                </Button>
 
-              {/* <Form.Item>
-              <Button type="primary" className='mt-4' htmlType="submit" block loading={loadingDeals}>
-                Submit
-              </Button>
-            </Form.Item> */}
+
             </Form>
           </Card>
         }
@@ -228,7 +242,8 @@ export const DealsDashboard = props => {
             </div>
           </Card>
         }
-        {!Array.isArray(dealsListState) && !loadingDeals && <Button type="dashed" block>No data found</Button>}
+        
+        {(!dealsListState || !dealsListState.length ) && !loadingDeals && <Button type="dashed" block>No data found</Button>}
 
 
       </div> : <LoadingOutlined />}
@@ -249,4 +264,13 @@ const mapDispatchToProps = {
   getAllDeals
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(DealsDashboard))
+// export default connect(mapStateToProps, mapDispatchToProps)(React.memo(DealsDashboard))
+
+
+
+function WithNavigate(props) {
+  let navigate = useNavigate()
+  let params = useParams()
+  return <DealsDashboard {...props} navigate={navigate} params={params} />
+}
+export default connect(mapStateToProps, mapDispatchToProps)(WithNavigate)

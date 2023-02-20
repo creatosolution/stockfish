@@ -3,6 +3,8 @@ import utils from "utils";
 import { PlusCircleOutlined, EditOutlined , StopOutlined } from "@ant-design/icons";
 import AccountEditModal from "./editAccount";
 import DisableAccountModal from "./disableAccount"
+import { Link, useNavigate, useParams } from "react-router-dom";
+
 import {
   Button,
   Row,
@@ -86,6 +88,10 @@ export const UserBalanceAndEquity = (props) => {
   }, [accountIdList])
 
 
+  const viewAllAccount = ()=>{
+    let path = `/app/dashboards/equityAndBalance/`;
+    props.navigate(path)
+  }
   const handleTableSearch = (searchText) => {
     if (!allAccountList || !allAccountList.length) {
       return;
@@ -389,11 +395,21 @@ export const UserBalanceAndEquity = (props) => {
                       type="primary"
                       className="mt-4"
                       htmlType="submit"
-                      block
+                      
                       loading={loadingEquity}
                     >
-                      Submit
+                      Search
                     </Button>
+                    
+                    <Button
+                    type="link"
+                    onClick={viewAllAccount}
+                    className="ant-btn-theme text-white rounded-6px ml-4 ml-auto"
+                >
+                    View All Accounts
+                </Button>
+
+
                   </Form.Item>
                 </Form>
               </Card>
@@ -511,7 +527,17 @@ const mapDispatchToProps = {
   accountDisable
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(React.memo(UserBalanceAndEquity));
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(React.memo(UserBalanceAndEquity));
+
+
+
+
+function WithNavigate(props) {
+  let navigate = useNavigate()
+  let params = useParams()
+  return <UserBalanceAndEquity {...props} navigate={navigate} params={params} />
+}
+export default connect(mapStateToProps, mapDispatchToProps)(WithNavigate)

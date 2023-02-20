@@ -15,27 +15,27 @@ const dashBoardNavTree = [{
     
     {
       key: 'dashboards-equityAndBalance',
-      path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
+      path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance/search`,
       title: 'sidenav.dashboard.equityAndBalance',
       icon: SnippetsOutlined,
       breadcrumb: false,
       submenu: [
-        {
-          key: 'dashboards-accountall',
-          path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
-          title: 'sidenav.dashboard.accountsAll',
-          icon: SnippetsOutlined,
-          breadcrumb: false,
-          submenu: []
-        },
-        {
-          key: 'dashboards-accountSearch',
-          path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance/search`,
-          title: 'sidenav.dashboard.accountSearch',
-          icon: SnippetsOutlined,
-          breadcrumb: false,
-          submenu: []
-        }
+        // {
+        //   key: 'dashboards-accountall',
+        //   path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
+        //   title: 'sidenav.dashboard.accountsAll',
+        //   icon: SnippetsOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // },
+        // {
+        //   key: 'dashboards-accountSearch',
+        //   path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance/search`,
+        //   title: 'sidenav.dashboard.accountSearch',
+        //   icon: SnippetsOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // }
       ]
     },
     // {
@@ -48,52 +48,52 @@ const dashBoardNavTree = [{
     // },
     {
       key: 'dashboards-deals',
-      // path: `${APP_PREFIX_PATH}/dashboards/deals`,
+      path: `${APP_PREFIX_PATH}/dashboards/deals/search`,
       title: 'sidenav.dashboard.deals',
       icon: RetweetOutlined,
       breadcrumb: false,
       submenu: [
-        {
-          key: 'dashboards-dealAll',
-          path: `${APP_PREFIX_PATH}/dashboards/deals`,
-          title: 'sidenav.dashboard.dealAll',
-          icon: RetweetOutlined,
-          breadcrumb: false,
-          submenu: []
-        },
-        {
-          key: 'dashboards-dealSearch',
-          path: `${APP_PREFIX_PATH}/dashboards/deals/search`,
-          title: 'sidenav.dashboard.dealSearch',
-          icon: RetweetOutlined,
-          breadcrumb: false,
-          submenu: []
-        }
+        // {
+        //   key: 'dashboards-dealAll',
+        //   path: `${APP_PREFIX_PATH}/dashboards/deals`,
+        //   title: 'sidenav.dashboard.dealAll',
+        //   icon: RetweetOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // },
+        // {
+        //   key: 'dashboards-dealSearch',
+        //   path: `${APP_PREFIX_PATH}/dashboards/deals/search`,
+        //   title: 'sidenav.dashboard.dealSearch',
+        //   icon: RetweetOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // }
       ]
     },
     {
       key: 'dashboards-position',
-      path: `${APP_PREFIX_PATH}/dashboards/position`,
+      path: `${APP_PREFIX_PATH}/dashboards/position/search`,
       title: 'sidenav.dashboard.position',
       icon: AlignCenterOutlined,
       breadcrumb: false,
       submenu: [
-        {
-          key: 'dashboards-positionAll',
-          path: `${APP_PREFIX_PATH}/dashboards/position`,
-          title: 'sidenav.dashboard.positionAll',
-          icon: AlignCenterOutlined,
-          breadcrumb: false,
-          submenu: []
-        },
-        {
-          key: 'dashboards-positionBySearch',
-          path: `${APP_PREFIX_PATH}/dashboards/position/search`,
-          title: 'sidenav.dashboard.positionBySearch',
-          icon: AlignCenterOutlined,
-          breadcrumb: false,
-          submenu: []
-        }
+        // {
+        //   key: 'dashboards-positionAll',
+        //   path: `${APP_PREFIX_PATH}/dashboards/position`,
+        //   title: 'sidenav.dashboard.positionAll',
+        //   icon: AlignCenterOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // },
+        // {
+        //   key: 'dashboards-positionBySearch',
+        //   path: `${APP_PREFIX_PATH}/dashboards/position/search`,
+        //   title: 'sidenav.dashboard.positionBySearch',
+        //   icon: AlignCenterOutlined,
+        //   breadcrumb: false,
+        //   submenu: []
+        // }
       ]
     }
   ]

@@ -169,7 +169,13 @@ export const creditSlice = createSlice({
 				state.loading = true
 			})
 			.addCase(getAllPositions.fulfilled, (state, action) => {
-				state.positions = action.payload
+			
+				let positions = [];
+				for(var k=0; k<action.payload.length; k++){
+					positions = [...positions, ...action.payload[k]]
+				}
+				console.log("actoppositions", positions);
+				state.positions = positions
 				state.loading = false
 			})
 			.addCase(getAllPositions.rejected, (state, action) => {

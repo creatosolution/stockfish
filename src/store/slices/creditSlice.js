@@ -174,7 +174,7 @@ export const creditSlice = createSlice({
 				for(var k=0; k<action.payload.length; k++){
 					positions = [...positions, ...action.payload[k]]
 				}
-				console.log("actoppositions", positions);
+				// console.log("actoppositions", positions);
 				state.positions = positions
 				state.loading = false
 			})

@@ -35,9 +35,23 @@ export const Positions = props => {
     if (pathSnippets == "search") {
       getAccountIdList()
     } else {
-      getAllPositions()
+
+      
+      // getAllPositions()
     }
   }, [])
+
+
+  useEffect(() => {
+    if (pathSnippets != "search") {
+      const interval = setInterval(() => { getAllPositions()}, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    } 
+  
+  }, []);
+
 
   useEffect(() => {
     if (pathSnippets == "search" && accountIdList?.length > 0) {

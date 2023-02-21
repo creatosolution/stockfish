@@ -44,7 +44,7 @@ export const Positions = props => {
 
   useEffect(() => {
     if (pathSnippets != "search") {
-      const interval = setInterval(() => { getAllPositions()}, 5000);
+      const interval = setInterval(() => { getAllPositions()}, 15000);
       return () => {
         clearInterval(interval);
       };

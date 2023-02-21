@@ -44,7 +44,7 @@ export const Positions = props => {
 
   useEffect(() => {
     if (pathSnippets != "search") {
-      const interval = setInterval(() => { getAllPositions()}, 1000);
+      const interval = setInterval(() => { getAllPositions()}, 5000);
       return () => {
         clearInterval(interval);
       };
@@ -125,7 +125,7 @@ export const Positions = props => {
 
   
 
-      {Array.isArray(positions) && positions.length > 0 && !loading &&
+      {Array.isArray(positions) && positions.length > 0 && 
         <Card title="Positions">
           <div className="table-responsive">
             <Table

@@ -37,20 +37,20 @@ export const Positions = props => {
     } else {
 
       
-      // getAllPositions()
+      getAllPositions()
     }
   }, [])
 
 
-  useEffect(() => {
-    if (pathSnippets != "search") {
-      const interval = setInterval(() => { getAllPositions()}, 15000);
-      return () => {
-        clearInterval(interval);
-      };
-    } 
+  // useEffect(() => {
+  //   if (pathSnippets != "search") {
+  //     const interval = setInterval(() => { getAllPositions()}, 15000);
+  //     return () => {
+  //       clearInterval(interval);
+  //     };
+  //   } 
   
-  }, []);
+  // }, []);
 
 
   useEffect(() => {

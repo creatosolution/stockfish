@@ -57,7 +57,13 @@ export const dealsSlice = createSlice({
 				state.loadingDeals = true
 			})
 			.addCase(getAllDeals.fulfilled, (state, action) => {
-				state.dealsList = action.payload
+				let dealsList = []
+
+				for(var k=0; k<action.payload.length; k++){
+					dealsList = [...dealsList, ...action.payload[k]]
+				}
+				state.dealsList = dealsList
+
 				state.loadingDeals = false
 			})
 			.addCase(getAllDeals.rejected, (state, action) => {

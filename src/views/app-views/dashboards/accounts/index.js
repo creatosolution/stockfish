@@ -23,6 +23,7 @@ import { getUserBalanceAndEquity } from "store/slices/dealsSlice";
 import {
   getAccountList,
   getAccountIdList,
+  referesAccountList,
   getAccountListByClient,
   depositWithdrawal,
   updateAccountList,
@@ -54,6 +55,7 @@ export const UserBalanceAndEquity = (props) => {
     userBalanceAndEquity,
     depositWithdrawal,
     accountUpdate,
+    referesAccountList,
     accountDisable
   } = props;
  
@@ -65,10 +67,10 @@ export const UserBalanceAndEquity = (props) => {
   const [editableItem, setEditableItem] = useState(null);
   const [accountsEditModal, setAccountEditModal] = useState(false);
   const [accountsDisableModal, setAccountDisableModal] = useState(false);
-  const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.credit ? item.credit.replaceAll(",", "") : "0"), 0) : 0);
-  const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.balance ? item.balance.replaceAll(",", "") : "0"), 0) : 0);
-  const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.equity ? item.equity.replaceAll(",", "") : "0"), 0) : 0);
-  const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.m2m ? item.m2m.replaceAll(",", "") : "0"), 0) : 0)
+  const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Credit), 0) : 0);
+  const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Balance), 0) : 0);
+  const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Equity), 0) : 0);
+  const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.m2m), 0) : 0)
  
 
   console.log("pathSnippets", pathSnippets);
@@ -87,6 +89,15 @@ export const UserBalanceAndEquity = (props) => {
     }
   }, [accountIdList])
 
+  useEffect(() => {
+    if (pathSnippets != "search") {
+      const interval = setInterval(() => { referesAccountList()}, 7000);
+      return () => {
+        clearInterval(interval);
+      };
+    } 
+  
+  }, []);
 
   const viewAllAccount = ()=>{
     let path = `/app/dashboards/equityAndBalance/`;
@@ -109,11 +120,12 @@ export const UserBalanceAndEquity = (props) => {
     {
       title: "Client id",
       dataIndex: "clientId",
+      defaultSortOrder: 'ascend',
       sorter: (a, b) => utils.antdTableSorter(a, b, "clientId"),
     },
     {
       title: "Client Name",
-      dataIndex: "clientName",
+      dataIndex: "FirstName",
       sorter: (a, b) => utils.antdTableSorter(a, b, "clientName"),
     },
     // {
@@ -123,17 +135,17 @@ export const UserBalanceAndEquity = (props) => {
     // },
     {
       title: "Balance",
-      dataIndex: "balance",
+      dataIndex: "Balance",
       sorter: (a, b) => utils.antdTableSorter(a, b, "balance"),
     },
     {
       title: "Credit",
-      dataIndex: "credit",
+      dataIndex: "Credit",
       sorter: (a, b) => utils.antdTableSorter(a, b, "credit"),
     },
     {
       title: "Equity",
-      dataIndex: "equity",
+      dataIndex: "Equity",
       sorter: (a, b) => utils.antdTableSorter(a, b, "equity"),
     },
     {
@@ -147,7 +159,7 @@ export const UserBalanceAndEquity = (props) => {
     },
     {
       title: "Credit In / Credit Out",
-      dataIndex: "clientIdd",
+      dataIndex: "clientId",
       render: (_, elm) => (
         <div className="d-flex">
           <input
@@ -420,7 +432,7 @@ export const UserBalanceAndEquity = (props) => {
           <Col xs={24} sm={24} md={24}>
             {Array.isArray(accountListState) && accountListState.length > 0 && (
               <Card title="Accounts">
-                {pathSnippets && pathSnippets != "search" && (
+                {/* {pathSnippets && pathSnippets != "search" && (
                   <div className="text-right my-3">
                     <Button
                       default
@@ -432,7 +444,7 @@ export const UserBalanceAndEquity = (props) => {
                       Refresh
                     </Button>
                   </div>
-                )}
+                )} */}
                 <Row gutter={16}>
                   <Col
                     xs={24}
@@ -524,7 +536,8 @@ const mapDispatchToProps = {
   getUserBalanceAndEquity,
   depositWithdrawal,
   accountUpdate,
-  accountDisable
+  accountDisable,
+  referesAccountList
 };
 
 // export default connect(

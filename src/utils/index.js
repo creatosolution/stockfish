@@ -182,14 +182,13 @@ class Utils {
 			return 0
 		}
 		let currency = amount.toLocaleString("en-IN", {
-			style: "currency",
-			currency: "INR",
 			minimumFractionDigits: 0,
 			maximumFractionDigits: 0,
 		  });
 		
-		  currency.replace("₹", " ");
-		  currency.replace("₹", " ");
+		  console.log("currency---->", currency);
+		//   currency.replace("₹", " ");
+		//   currency.replace("₹", " ");
 		
 		return currency
 	}

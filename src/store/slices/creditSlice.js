@@ -32,10 +32,20 @@ export const getAccountList = createAsyncThunk('/api/accountList',async (data, {
 })
 
 
+export const referesAccountList = createAsyncThunk('/api/referesAccountList',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAccountList();
+		return response.account_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
 export const getAccountListByClient = createAsyncThunk('/api/getAccountListByClient',async (data, { rejectWithValue }) => {
 	try {
 		const response = await AuthService.getAccountListByClient(data);
-		return [response];
+		return response.account_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
 	}
@@ -134,6 +144,13 @@ export const creditSlice = createSlice({
 		.addCase(getAccountList.rejected, (state, action) => {
 			state.accountList = action.payload
 			state.loading = false
+		})
+		.addCase(referesAccountList.pending, (state, action) => {
+		})
+		.addCase(referesAccountList.fulfilled, (state, action) => {
+			state.accountList = action.payload
+		})
+		.addCase(referesAccountList.rejected, (state, action) => {
 		})
 		.addCase(getAccountIdList.pending, (state, action) => {
 			state.accountIdList = []

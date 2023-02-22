@@ -5,7 +5,7 @@ import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { getAccountIdList } from 'store/slices/creditSlice';
-import { getDealsList, getAllDeals, resetdealsListState } from 'store/slices/dealsSlice';
+import { getDealsList, getAllDeals, resetdealsListState,refereshDeals } from 'store/slices/dealsSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -18,7 +18,7 @@ export const DealsDashboard = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getDealsList, getAllDeals } = props;
+  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getDealsList, getAllDeals, refereshDeals } = props;
   const [accountListState, setAccountListState] = useState([]);
   const [dealsListState, setDealsListState] = useState([]);
   const dispatch = useDispatch();
@@ -65,7 +65,20 @@ export const DealsDashboard = props => {
     }
   }, [])
 
-
+  useEffect(() => {
+    if (pathSnippets != "search") {
+      console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
+      const allDealsObj = {
+       timefrom: moment().format('DD-MM-YYYY'),
+       timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+     }
+      const interval = setInterval(() => { refereshDeals(allDealsObj)}, 7000);
+      return () => {
+        clearInterval(interval);
+      };
+    } 
+  
+  }, []);
 
   useEffect(() => {
     if (pathSnippets == "search" && accountIdList?.length > 0) {
@@ -86,21 +99,21 @@ export const DealsDashboard = props => {
       let dealsArr = [];
       for(var i=0; i< dealsList.length; i++){
         let dealObj = {...dealsList[i]};
-        if (pathSnippets == "search") { 
-          const timestamp = dealObj.Time;
-          const date = new Date(timestamp * 1000);
-          const year = date.getFullYear();
-          const month = `0${date.getMonth() + 1}`.slice(-2);
-          const day = `0${date.getDate()}`.slice(-2);
-          const hours = `0${date.getHours()}`.slice(-2);
-          const minutes = `0${date.getMinutes()}`.slice(-2);
-          const seconds = `0${date.getSeconds()}`.slice(-2);
-          const result = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+        // if (pathSnippets == "search") { 
+        //   const timestamp = dealObj.Time;
+        //   const date = new Date(timestamp * 1000);
+        //   const year = date.getFullYear();
+        //   const month = `0${date.getMonth() + 1}`.slice(-2);
+        //   const day = `0${date.getDate()}`.slice(-2);
+        //   const hours = `0${date.getHours()}`.slice(-2);
+        //   const minutes = `0${date.getMinutes()}`.slice(-2);
+        //   const seconds = `0${date.getSeconds()}`.slice(-2);
+        //   const result = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
   
-          // const result = date;
-          console.log(result);
-          dealObj.Time = moment.unix(timestamp).utc().format("MM/DD/YYYY hh:mm:ss");
-        }
+        //   // const result = date;
+        //   console.log(result);
+        //   dealObj.Time = moment.unix(timestamp).utc().format("MM/DD/YYYY hh:mm:ss");
+        // }
       
         dealsArr.push(dealObj)
       }
@@ -264,7 +277,8 @@ const mapStateToProps = ({ credit, deals }) => {
 const mapDispatchToProps = {
   getAccountIdList,
   getDealsList,
-  getAllDeals
+  getAllDeals,
+  refereshDeals
 }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(React.memo(DealsDashboard))

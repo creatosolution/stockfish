@@ -80,6 +80,16 @@ export const getAllPositions = createAsyncThunk('/api/getAllPositions',async (da
 })
 
 
+export const refereshPositions = createAsyncThunk('/api/refereshPositions',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAllPositions(data);
+		return response.position_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
 
 export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async (data, { rejectWithValue }) => {
 	try {
@@ -169,19 +179,26 @@ export const creditSlice = createSlice({
 				state.loading = true
 			})
 			.addCase(getAllPositions.fulfilled, (state, action) => {
-			
-				let positions = [];
-				for(var k=0; k<action.payload.length; k++){
-					positions = [...positions, ...action.payload[k]]
-				}
-				// console.log("actoppositions", positions);
-				state.positions = positions
+				state.positions = action.payload
 				state.loading = false
 			})
 			.addCase(getAllPositions.rejected, (state, action) => {
 				state.positions = action.payload
 				state.loading = false
 			})
+			
+
+				
+			.addCase(refereshPositions.pending, (state, action) => {
+			})
+			.addCase(refereshPositions.fulfilled, (state, action) => {
+				state.positions = action.payload
+			})
+			.addCase(refereshPositions.rejected, (state, action) => {
+				// state.positions = action.payload
+			})
+			
+
 			
 			.addCase(depositWithdrawal.pending, (state, action) => {
 				state.creditLoading = true

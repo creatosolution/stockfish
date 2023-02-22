@@ -14,7 +14,7 @@ export const getDealsList = createAsyncThunk('/api/dealsList', async (data, { re
 	try {
 		let url = '/dealslist_post'
 		let response = await AuthService.postRequest(url, data) 
-		return response;
+		return response.deal_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
 	}
@@ -22,6 +22,15 @@ export const getDealsList = createAsyncThunk('/api/dealsList', async (data, { re
 
 
 export const getAllDeals = createAsyncThunk('/api/getAllDeals', async (data, { rejectWithValue }) => {
+	try {
+		let response = await AuthService.getAllDeals(data)
+		return response.deal_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+export const refereshDeals = createAsyncThunk('/api/refereshDeals', async (data, { rejectWithValue }) => {
 	try {
 		let response = await AuthService.getAllDeals(data)
 		return response.deal_list;
@@ -57,19 +66,28 @@ export const dealsSlice = createSlice({
 				state.loadingDeals = true
 			})
 			.addCase(getAllDeals.fulfilled, (state, action) => {
-				let dealsList = []
-
-				for(var k=0; k<action.payload.length; k++){
-					dealsList = [...dealsList, ...action.payload[k]]
-				}
-				state.dealsList = dealsList
-
+				state.dealsList = action.payload
 				state.loadingDeals = false
 			})
 			.addCase(getAllDeals.rejected, (state, action) => {
 				state.dealsList = []
 				state.loadingDeals = false
 			})
+
+			.addCase(refereshDeals.pending, (state, action) => {
+				// state.loadingDeals = true
+			})
+			.addCase(refereshDeals.fulfilled, (state, action) => {
+				state.dealsList = action.payload
+				state.loadingDeals = false
+			})
+			.addCase(refereshDeals.rejected, (state, action) => {
+				// state.dealsList = []
+				state.loadingDeals = false
+			})
+
+
+			
 			.addCase(getDealsList.pending, (state, action) => {
 				state.loadingDeals = true
 			})

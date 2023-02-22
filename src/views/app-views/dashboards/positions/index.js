@@ -3,7 +3,7 @@ import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { notification } from 'antd';
-import { getAccountIdList, getPosition, getAllPositions, resetPosition } from 'store/slices/creditSlice';
+import { getAccountIdList, getPosition, getAllPositions, resetPosition, refereshPositions } from 'store/slices/creditSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { positionTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -16,7 +16,7 @@ export const Positions = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, getPosition,getAllPositions, positions } = props;
+  const { getAccountIdList, loading, accountIdList, getPosition,getAllPositions, positions, refereshPositions } = props;
   const [accountListState, setAccountListState] = useState([]);
 
   const initialCredential = {
@@ -42,15 +42,15 @@ export const Positions = props => {
   }, [])
 
 
-  // useEffect(() => {
-  //   if (pathSnippets != "search") {
-  //     const interval = setInterval(() => { getAllPositions()}, 15000);
-  //     return () => {
-  //       clearInterval(interval);
-  //     };
-  //   } 
+  useEffect(() => {
+    if (pathSnippets != "search") {
+      const interval = setInterval(() => { refereshPositions()}, 7000);
+      return () => {
+        clearInterval(interval);
+      };
+    } 
   
-  // }, []);
+  }, []);
 
 
   useEffect(() => {
@@ -167,7 +167,8 @@ const mapStateToProps = ({ credit, deals }) => {
 const mapDispatchToProps = {
   getAccountIdList,
   getPosition,
-  getAllPositions
+  getAllPositions,
+  refereshPositions
 }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Positions))

@@ -70,10 +70,10 @@ export const UserBalanceAndEquity = (props) => {
   const totalCredit = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Credit), 0) : 0);
   const totalBalance = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Balance), 0) : 0);
   const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Equity), 0) : 0);
-  const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.m2m), 0) : 0)
+  const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + (parseInt(item.Equity) - parseInt(item.Credit)), 0) : 0)
  
-
-  console.log("pathSnippets", pathSnippets);
+  // utils.transFormCurrency((parseInt(equity) - parseInt(credit)),   "INR")
+  console.log("totalM2m", totalM2m);
 
   const initialCredential = {
     account_id: ''

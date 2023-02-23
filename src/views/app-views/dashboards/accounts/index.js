@@ -419,7 +419,7 @@ export const UserBalanceAndEquity = (props) => {
     </Select>
             </Form.Item>
                   <Form.Item>
-                    <Button
+                    {/* <Button
                       type="primary"
                       className="mt-4"
                       htmlType="submit"
@@ -427,7 +427,7 @@ export const UserBalanceAndEquity = (props) => {
                       loading={loadingEquity}
                     >
                       Search
-                    </Button>
+                    </Button> */}
                     
                     <Button
                     type="link"

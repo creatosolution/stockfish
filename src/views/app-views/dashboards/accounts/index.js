@@ -432,7 +432,7 @@ export const UserBalanceAndEquity = (props) => {
                     <Button
                     type="link"
                     onClick={viewAllAccount}
-                    className="ant-btn-theme text-white rounded-6px ml-4 ml-auto"
+                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
                 >
                     View All Accounts
                 </Button>

@@ -360,7 +360,13 @@ export const positionTableColumns = [
     {
         title: 'Open Price',
         dataIndex: 'PriceOpen',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOpen')
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOpen'),
+        render: (_, elm) => (
+            <>
+                {elm.PriceOpen.toFixed(2)}
+            
+            </>
+        )
     },
     {
         title: 'Current Price',

@@ -177,7 +177,7 @@ class Utils {
 	/**
 	 * Remove object from array by value
 	*/
-	static transFormCurrency(amount, currencyCode) {
+	static transFormCurrency(amount) {
 		if(!amount) {
 			return 0
 		}

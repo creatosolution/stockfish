@@ -107,10 +107,10 @@ export const UserBalanceAndEquity = (props) => {
     if (!allAccountList || !allAccountList.length) {
       return;
     }
-    const filteredEvents = allAccountList.filter(({ clientName, clientId }) => {
-      clientName = clientName.toLowerCase();
+    const filteredEvents = allAccountList.filter(({ FirstName, clientId }) => {
+      FirstName = FirstName.toLowerCase();
       clientId = clientId.toString();
-      return clientId.includes(searchText) || clientName.includes(searchText);
+      return clientId.includes(searchText) || FirstName.includes(searchText);
     });
 
     setAccountListState(filteredEvents);
@@ -268,10 +268,10 @@ export const UserBalanceAndEquity = (props) => {
 
   const getM2m = (info) => {
     let equity = info.Equity ? info.Equity: 0;
-    let credit = info.credit ? info.Credit :0;
+    let credit = info.Credit ? info.Credit :0;
+    let m2m =  utils.transFormCurrency((equity - credit))
 
-    let m2m =  utils.transFormCurrency((parseInt(equity) - parseInt(credit)),   "INR")
-
+    console.log(equity, credit, m2m);
     // m2m = m2m.replace("₹", "");
     return m2m;
   };
@@ -354,6 +354,10 @@ export const UserBalanceAndEquity = (props) => {
 
     
   const SelectWithMemo = React.useMemo(() => (
+   
+   <>
+   {"Total: "+ accountIdList ? accountIdList.length : 0 + "Accounts"}
+
     <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
       onChange={onSubmit}
     >
@@ -363,6 +367,9 @@ export const UserBalanceAndEquity = (props) => {
         ))
       }
     </Select>
+   </>
+   
+   
   ), [accountIdList]);
 
   useEffect(() => {
@@ -400,7 +407,16 @@ export const UserBalanceAndEquity = (props) => {
                 message: 'Please input your Login Id',
               }
             ]}>
-              {SelectWithMemo}
+              {/* {SelectWithMemo} */}
+              <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
+      onChange={onSubmit}
+    >
+      {
+        accountListIds && accountListIds.length > 0 && accountListIds.map(elm => (
+          <Option key={elm} value={elm}>{elm}</Option>
+        ))
+      }
+    </Select>
             </Form.Item>
                   <Form.Item>
                     <Button

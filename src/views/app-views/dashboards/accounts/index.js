@@ -267,8 +267,8 @@ export const UserBalanceAndEquity = (props) => {
   }
 
   const getM2m = (info) => {
-    let equity = info.equity ? info.equity.replaceAll(",", "") : 0;
-    let credit = info.credit ? info.credit.replaceAll(",", "") :0;
+    let equity = info.Equity ? info.Equity: 0;
+    let credit = info.credit ? info.Credit :0;
 
     let m2m =  utils.transFormCurrency((parseInt(equity) - parseInt(credit)),   "INR")
 

@@ -184,35 +184,35 @@ export const UserBalanceAndEquity = (props) => {
           </Button>
         </div>
       ),
-    }
-    // {
-    //   key: 'edit',
-    //   title: "Action",
-    //   render: (_, elm) => (
-    //     <>
+    },
+    {
+      key: 'edit',
+      title: "Action",
+      render: (_, elm) => (
+        <>
         
-    //     <Button
-    //       type=""
-    //       onClick={(e) => {
-    //         handleEditModalVisiblity(true, elm);
-    //       }}
-    //       className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
-    //     >
-    //     </Button>
+        <Button
+          type=""
+          onClick={(e) => {
+            handleEditModalVisiblity(true, elm);
+          }}
+          className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
+        >
+        </Button>
 
 
-    //     <Button
-    //       size="small"
-    //       onClick={(e) => {
-    //         handleAccountsDisableModal(true, elm);
-    //       }}
-    //       icon={<StopOutlined />}
-    //       className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
+        <Button
+          size="small"
+          onClick={(e) => {
+            handleAccountsDisableModal(true, elm);
+          }}
+          icon={<StopOutlined />}
+          className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
           
-    //     </Button>
-    //     </>
-    //   ),
-    // }
+        </Button>
+        </>
+      ),
+    }
   ];
 
   const onHide = () => {

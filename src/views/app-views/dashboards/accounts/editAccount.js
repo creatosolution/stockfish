@@ -21,7 +21,10 @@ const AccountEditModal = props => {
         for(var key in fieldsValue){
             if(!!fieldsValue[key]){
                 req[key] = fieldsValue[key]
-            }
+            } 
+            // else {
+            //     req[key] =""
+            // }
         }
 
         console.log("fieldsValue", req);

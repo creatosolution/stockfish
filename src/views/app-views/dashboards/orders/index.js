@@ -140,7 +140,7 @@ export const Orders = props => {
       }
       
       {loading && <div className='text-center'><LoadingOutlined /></div>}
-      {!Array.isArray(orders) && !loading && <Button type="dashed" block>No data found</Button>}
+      { (!orders || !orders.length) && !loading && <Button type="dashed" block>No data found</Button>}
     </div>
   )
 }

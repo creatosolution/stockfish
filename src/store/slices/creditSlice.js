@@ -10,7 +10,8 @@ export const initialState = {
 	creditLoading: false,
 	accountList: [],
 	accountIdList: [],
-	positions: []
+	positions: [],
+	orders: []
 }
 
 export const getAccountIdList = createAsyncThunk('/api/getAccountIdList',async (data, { rejectWithValue }) => {
@@ -101,6 +102,38 @@ export const refereshPositions = createAsyncThunk('/api/refereshPositions',async
 
 
 
+
+export const getOrder = createAsyncThunk('/api/getOrder',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getOrder(data);
+		return response.orders;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
+export const getAllOrders = createAsyncThunk('/api/getAllOrders',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAllOrders(data);
+		return response.order_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
+export const refereshOrders = createAsyncThunk('/api/refereshOrders',async (data, { rejectWithValue }) => {
+	try {
+		const response = await AuthService.getAllOrders(data);
+		return response.order_list;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+
+
 export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async (data, { rejectWithValue }) => {
 	try {
 		let url = '/dep_wth'
@@ -126,7 +159,11 @@ export const creditSlice = createSlice({
 
 		resetPosition: (state,action)=>{
 			state.positions = []
+		},
+		resetOrders: (state,action)=>{
+			state.orders = []
 		}
+
 
 		
 	},
@@ -216,7 +253,48 @@ export const creditSlice = createSlice({
 			})
 			
 
+
 			
+
+			
+			.addCase(getOrder.pending, (state, action) => {
+				state.loading = true
+			})
+			.addCase(getOrder.fulfilled, (state, action) => {
+				state.orders = action.payload
+				state.loading = false
+			})
+			.addCase(getOrder.rejected, (state, action) => {
+				state.orders = action.payload
+				state.loading = false
+			})
+			
+			.addCase(getAllOrders.pending, (state, action) => {
+				state.loading = true
+			})
+			.addCase(getAllOrders.fulfilled, (state, action) => {
+				state.orders = action.payload
+				state.loading = false
+			})
+			.addCase(getAllOrders.rejected, (state, action) => {
+				state.orders = action.payload
+				state.loading = false
+			})
+			
+
+				
+			.addCase(refereshOrders.pending, (state, action) => {
+			})
+			.addCase(refereshOrders.fulfilled, (state, action) => {
+				state.orders = action.payload
+			})
+			.addCase(refereshOrders.rejected, (state, action) => {
+				// state.positions = action.payload
+			})
+			
+
+
+
 			.addCase(depositWithdrawal.pending, (state, action) => {
 				state.creditLoading = true
 			})
@@ -261,5 +339,5 @@ export const creditSlice = createSlice({
 			
 	},
 })
-export const {updateAccountList,resetAccountList, resetPosition} =  creditSlice.actions
+export const {updateAccountList,resetAccountList, resetPosition, resetOrders} =  creditSlice.actions
 export default creditSlice.reducer

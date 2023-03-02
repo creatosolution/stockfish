@@ -78,22 +78,15 @@ const dashBoardNavTree = [{
       icon: AlignCenterOutlined,
       breadcrumb: false,
       submenu: [
-        // {
-        //   key: 'dashboards-positionAll',
-        //   path: `${APP_PREFIX_PATH}/dashboards/position`,
-        //   title: 'sidenav.dashboard.positionAll',
-        //   icon: AlignCenterOutlined,
-        //   breadcrumb: false,
-        //   submenu: []
-        // },
-        // {
-        //   key: 'dashboards-positionBySearch',
-        //   path: `${APP_PREFIX_PATH}/dashboards/position/search`,
-        //   title: 'sidenav.dashboard.positionBySearch',
-        //   icon: AlignCenterOutlined,
-        //   breadcrumb: false,
-        //   submenu: []
-        // }
+      ]
+    },
+    {
+      key: 'dashboards-orders',
+      path: `${APP_PREFIX_PATH}/dashboards/orders/search`,
+      title: 'sidenav.dashboard.orders',
+      icon: AlignCenterOutlined,
+      breadcrumb: false,
+      submenu: [
       ]
     }
   ]

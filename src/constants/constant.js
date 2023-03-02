@@ -379,3 +379,60 @@ export const positionTableColumns = [
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Profit')
     }
 ];
+
+
+
+export const ordersTableColumns = [
+    
+    {
+        title: 'Login',
+        dataIndex: 'Login',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Login')
+    },
+   
+    {
+        title: 'Time',
+        dataIndex: 'TimeSetup',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'TimeSetup')
+    },
+   
+    
+    {
+        title: 'Symbol',
+        dataIndex: 'Symbol',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Symbol')
+    },
+    {
+        title: 'Type',
+        dataIndex: 'Type',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Type'),
+        render: (_, elm) => (
+            <div className="d-flex">
+            {elm.Type == 2 && <> Buy Limit</>}
+              {elm.Type == 3 && <> Sell Limit</>}
+              {elm.Type == 4 && <> Buy Stop</>}
+              {elm.Type == 5 && <> Sell Stop</>}
+            </div>
+          )
+    },
+    {
+        title: 'Volume',
+        dataIndex: 'VolumeCurrent',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
+        render: (_, elm) => (
+            <div className="d-flex">
+                {elm.VolumeCurrent / 10000}
+            </div>
+          )
+    },
+    {
+        title: 'Price',
+        dataIndex: 'PriceTP',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
+        render: (_, elm) => (
+            <div className="d-flex">
+                {elm.PriceTP / 10000}
+            </div>
+          )
+    }
+];

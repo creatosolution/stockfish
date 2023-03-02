@@ -57,5 +57,15 @@ export const protectedRoutes = [
         key: 'dashboard.position',
         path: `${APP_PREFIX_PATH}/dashboards/position/:search`,
         component: React.lazy(() => import('views/app-views/dashboards/positions')),
+    }    ,
+    {
+        key: 'dashboard.orders',
+        path: `${APP_PREFIX_PATH}/dashboards/orders`,
+        component: React.lazy(() => import('views/app-views/dashboards/orders')),
+    },
+    {
+        key: 'dashboard.orders',
+        path: `${APP_PREFIX_PATH}/dashboards/orders/:search`,
+        component: React.lazy(() => import('views/app-views/dashboards/orders')),
     }    
 ]

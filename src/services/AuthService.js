@@ -79,6 +79,24 @@ AuthService.getAllPositions = function (data) {
 
 
 
+AuthService.getAllOrders = function (data) {
+	return fetch({
+		url: '/allOrders',
+		method: 'get'
+	})
+}
+
+AuthService.getOrder = function (data) {
+	return fetch({
+		url: '/order',
+		method: 'post',
+		data: data
+	})
+}
+
+
+
+
 AuthService.register = function (data) {
 	return fetch({
 		url: '/auth/register',

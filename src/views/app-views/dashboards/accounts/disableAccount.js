@@ -24,7 +24,7 @@ const DisableAccountModal = (props) => {
     }
 
     console.log("fieldsValue", req);
-    disableAccount(req);
+    disableAccount(req)
   };
   useEffect(() => {
     if (editableItem) {

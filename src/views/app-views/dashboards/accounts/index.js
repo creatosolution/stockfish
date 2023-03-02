@@ -262,7 +262,7 @@ export const UserBalanceAndEquity = (props) => {
   const onDisableAccount=(accountInfo)=>{
     console.log('disableAccount', accountInfo);
     accountDisable(accountInfo).then((res)=>{
-      console.log("accountDisable", res);
+      handleAccountsDisableModal()
     })
   }
 
@@ -271,7 +271,7 @@ export const UserBalanceAndEquity = (props) => {
     let credit = info.Credit ? info.Credit :0;
     let m2m =  utils.transFormCurrency((equity - credit))
 
-    console.log(equity, credit, m2m);
+    // console.log(equity, credit, m2m);
     // m2m = m2m.replace("₹", "");
     return m2m;
   };
@@ -514,7 +514,7 @@ export const UserBalanceAndEquity = (props) => {
         </Row>
         {accountsEditModal && <AccountEditModal  isVisible={accountsEditModal}
                         onHide={onHide} editableItem={editableItem} updateAccount={onAccountUpdate} ></AccountEditModal>}
-        {accountsDisableModal && <DisableAccountModal  isVisible={accountsDisableModal}
+        {accountsDisableModal && <DisableAccountModal isVisible={accountsDisableModal}
                                         onHide={handleAccountsDisableModal} editableItem={editableItem} disableAccount={onDisableAccount} ></DisableAccountModal>}
         {/* {!Array.isArray(accountListState) && (
             <Row gutter={16}>

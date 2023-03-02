@@ -22,20 +22,22 @@ const AccountEditModal = props => {
             if(!!fieldsValue[key]){
                 req[key] = fieldsValue[key]
             } 
-            // else {
-            //     req[key] =""
-            // }
+            else {
+                req[key] =""
+            }
         }
 
         console.log("fieldsValue", req);
-        updateAccount(req)
+        updateAccount(req).then((res)=>{
+            onHide()
+        })
     }
     useEffect(() => {
         if (editableItem) {
             console.log(editableItem);
           form.setFieldsValue({
-            name: editableItem["clientName"],
-            group: editableItem["groupName"],
+            name: editableItem["FirstName"],
+            group: editableItem["Group"],
           });
         }
       }, [editableItem]);

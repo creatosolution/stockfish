@@ -425,14 +425,49 @@ export const ordersTableColumns = [
             </div>
           )
     },
+   
     {
-        title: 'Price',
-        dataIndex: 'PriceTP',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
+        title: 'Price Current',
+        dataIndex: 'PriceCurrent',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceCurrent'),
         render: (_, elm) => (
             <div className="d-flex">
-                {elm.PriceTP / 10000}
+                {elm.PriceCurrent}
             </div>
           )
-    }
+    },
+    {
+        title: 'Price Order',
+        dataIndex: 'PriceOrder',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOrder'),
+        render: (_, elm) => (
+            <div className="d-flex">
+                {elm.PriceOrder}
+            </div>
+          )
+    },
+    {
+        title: 'PriceTP',
+        dataIndex: 'PriceTP',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceTP'),
+        render: (_, elm) => (
+            <div className="d-flex">
+                {elm.PriceTP}
+            </div>
+          )
+    },
+    {
+        title: 'Price SL',
+        dataIndex: 'PriceOrder',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceSL'),
+        render: (_, elm) => (
+            <div className="d-flex">
+                {elm.PriceSL}
+            </div>
+          )
+    },
+
+
+
+
 ];

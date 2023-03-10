@@ -48,31 +48,45 @@ export const DealsDashboard = props => {
 
 
   const viewAllDeals = ()=>{
-    let path = `/app/dashboards/deals/`;
-    props.navigate(path)
+    // let path = `/app/dashboards/deals/`;
+    // props.navigate(path)
+    form.resetFields();
+    console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
+     const allDealsObj = {
+      timefrom: moment().format('DD-MM-YYYY'),
+      timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+    }
+    getAllDeals(allDealsObj)
   }
 
   useEffect(() => {
-    if (pathSnippets == "search") { 
-      getAccountIdList()
-    }else{
-      console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
-       const allDealsObj = {
-        timefrom: moment().format('DD-MM-YYYY'),
-        timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
-      }
-      getAllDeals(allDealsObj)
+    getAccountIdList()
+    console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
+     const allDealsObj = {
+      timefrom: moment().format('DD-MM-YYYY'),
+      timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
     }
+    getAllDeals(allDealsObj)
   }, [])
 
   useEffect(() => {
     if (pathSnippets != "search") {
-      console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
-      const allDealsObj = {
-       timefrom: moment().format('DD-MM-YYYY'),
-       timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
-     }
-      const interval = setInterval(() => { refereshDeals(allDealsObj)}, 7000);
+
+       
+      const interval = setInterval(() => { 
+        
+        let account_id = form.getFieldValue('account_id')
+        if(!account_id || !account_id.length){
+          console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
+          const allDealsObj = {
+           timefrom: moment().format('DD-MM-YYYY'),
+           timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+         }
+             
+             
+        refereshDeals(allDealsObj)
+        }
+   }, 7000);
       return () => {
         clearInterval(interval);
       };
@@ -81,7 +95,7 @@ export const DealsDashboard = props => {
   }, []);
 
   useEffect(() => {
-    if (pathSnippets == "search" && accountIdList?.length > 0) {
+    if (accountIdList?.length > 0) {
       let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
@@ -184,8 +198,7 @@ export const DealsDashboard = props => {
     <>
       {!loading ? <div>
 
-        {pathSnippets == "search" &&
-          <Card title="Search Deals">
+        <Card title="Search Deals">
             <Form
               layout="inline"
               name="deals-form"
@@ -234,7 +247,7 @@ export const DealsDashboard = props => {
               <Button
                     type="link"
                     onClick={viewAllDeals}
-                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                    className="ant-btn-theme text-white rounded-6px mt-40"
                 >
                     View All Deals
                 </Button>
@@ -242,7 +255,6 @@ export const DealsDashboard = props => {
 
             </Form>
           </Card>
-        }
 
         {loadingDeals && <Loading />}
         

@@ -32,19 +32,33 @@ export const Positions = props => {
 
 
   useEffect(() => {
-    if (pathSnippets == "search") {
-      getAccountIdList()
-    } else {
-
-      
-      getAllPositions()
-    }
+    getAccountIdList()
+    getAllPositions()
   }, [])
 
-
+// rowSelection objects indicates the need for row selection
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  onSelect: (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+  },
+  onSelectAll: (selected, selectedRows, changeRows) => {
+    console.log(selected, selectedRows, changeRows);
+  },
+};
   useEffect(() => {
     if (pathSnippets != "search") {
-      const interval = setInterval(() => { refereshPositions()}, 7000);
+      const interval = setInterval(() => { 
+
+        let account_id = form.getFieldValue('account_id')
+        if(!account_id){
+          
+        refereshPositions()
+        }
+        
+        }, 10000);
       return () => {
         clearInterval(interval);
       };
@@ -54,7 +68,7 @@ export const Positions = props => {
 
 
   useEffect(() => {
-    if (pathSnippets == "search" && accountIdList?.length > 0) {
+    if (accountIdList?.length > 0) {
       let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
@@ -64,8 +78,9 @@ export const Positions = props => {
   }, [accountIdList])
 
   const viewAllPositions = ()=>{
-    let path = `/app/dashboards/position/`;
-    props.navigate(path)
+   
+    form.resetFields()
+    getAllPositions()
   }
 
   const handleChange = (value) => {
@@ -91,9 +106,7 @@ export const Positions = props => {
   let totalProfit = positions && positions.length ? positions.reduce((sum, item) => sum + parseInt(item.Profit), 0) : 0;
   return (
     <div>
-
-      {pathSnippets == "search" &&
-        <Card title="Positions" className='abcccc'>
+  <Card title="Positions" className='abcccc'>
           <Form
             layout="inline"
             name="deals-form"
@@ -112,17 +125,16 @@ export const Positions = props => {
             </Form.Item>
 
             
+            { form.getFieldValue('account_id') && 
             <Button
                     type="link"
                     onClick={viewAllPositions}
-                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                    className="ant-btn-theme text-white rounded-6px mt-40"
                 >
                     View All Positions
-                </Button>
+                </Button>}
           </Form>
         </Card>
-      }
-
   
 
       {Array.isArray(positions) && positions.length > 0 && 
@@ -131,19 +143,19 @@ export const Positions = props => {
             <Table
               columns={positionTableColumns}
               dataSource={positions}
-              rowKey='id'
+              rowKey='SymbolIndex'
               scroll={{ x: 1200 }}
               summary={(pageData) => {
                 return (
                   <>
                     <Table.Summary.Row>
                       <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
-                      <Table.Summary.Cell index={1}></Table.Summary.Cell>
+                      <Table.Summary.Cell index={1}/>
                       <Table.Summary.Cell index={2} />
                       <Table.Summary.Cell index={3} />
                       <Table.Summary.Cell index={4} />
                       <Table.Summary.Cell index={5} />
-                      <Table.Summary.Cell index={7}>{totalProfit}</Table.Summary.Cell >
+                      <Table.Summary.Cell index={6} align="right">{totalProfit}</Table.Summary.Cell >
                     </Table.Summary.Row>
                   </>
                 );

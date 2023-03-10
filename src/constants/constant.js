@@ -98,9 +98,10 @@ export const dealsTableColumns = [
     {
         title: 'Volume',
         dataIndex: 'Volume',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
         render: (_, elm) => (
-            <div className="d-flex">
+            <div className="d-flex justify-content-end">
                 {/* {elm.Action === 0 ? 'Zero': 'else 1'}
                 {elm.Volume / 10000} */}
               {elm.Action == 0 ?
@@ -127,6 +128,7 @@ export const dealsTableColumns = [
     {
         title: 'Price',
         dataIndex: 'Price',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Price')
     },
     // {
@@ -152,7 +154,14 @@ export const dealsTableColumns = [
     {
         title: 'Commission',
         dataIndex: 'Commission',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'Commission')
+        align: 'right',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Commission'),
+        render: (_, elm) => (
+            <>
+                {elm.Commission.toFixed(2)}
+            
+            </>
+        )
     },
    // {
     //     title: 'Rate Profit',
@@ -338,10 +347,10 @@ export const positionTableColumns = [
                 {elm.Volume / 10000} */}
               {elm.Action == 0 ?
                 <>
-                    <span className='text-info'>{'+'+elm.Volume / 10000}</span>
+                    <span className='text-info'>{elm.Volume / 10000}</span>
                 </>
                 : <>
-                 <span className='text-danger'>{'-'+elm.Volume / 10000}</span>
+                 <span className='text-danger'>{elm.Volume / 10000}</span>
                 </>
                 }
             </div>
@@ -360,6 +369,7 @@ export const positionTableColumns = [
     {
         title: 'Open Price',
         dataIndex: 'PriceOpen',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOpen'),
         render: (_, elm) => (
             <>
@@ -371,12 +381,19 @@ export const positionTableColumns = [
     {
         title: 'Current Price',
         dataIndex: 'PriceCurrent',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceCurrent')
     },
     {
         title: 'Profit',
         dataIndex: 'Profit',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'Profit')
+        align: 'right',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'Profit'),
+        render:(_, elm)=>(
+            <>
+            { elm.Profit.toFixed(2)}
+            </>
+        )
     }
 ];
 
@@ -418,9 +435,10 @@ export const ordersTableColumns = [
     {
         title: 'Volume',
         dataIndex: 'VolumeCurrent',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'Volume'),
         render: (_, elm) => (
-            <div className="d-flex">
+            <div className="d-flex justify-content-end text-right">
                 {elm.VolumeCurrent / 10000}
             </div>
           )
@@ -429,9 +447,10 @@ export const ordersTableColumns = [
     {
         title: 'Price Current',
         dataIndex: 'PriceCurrent',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceCurrent'),
         render: (_, elm) => (
-            <div className="d-flex">
+            <div className="d-flex justify-content-end text-right">
                 {elm.PriceCurrent}
             </div>
           )
@@ -439,9 +458,10 @@ export const ordersTableColumns = [
     {
         title: 'Price Order',
         dataIndex: 'PriceOrder',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceOrder'),
         render: (_, elm) => (
-            <div className="d-flex">
+            <div className="d-flex justify-content-end text-right">
                 {elm.PriceOrder}
             </div>
           )
@@ -449,9 +469,10 @@ export const ordersTableColumns = [
     {
         title: 'PriceTP',
         dataIndex: 'PriceTP',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceTP'),
         render: (_, elm) => (
-            <div className="d-flex">
+            <div className="d-flex justify-content-end text-right">
                 {elm.PriceTP}
             </div>
           )
@@ -459,10 +480,11 @@ export const ordersTableColumns = [
     {
         title: 'Price SL',
         dataIndex: 'PriceOrder',
+        align: 'right',
         sorter: (a, b) => utils.antdTableSorter(a, b, 'PriceSL'),
         render: (_, elm) => (
-            <div className="d-flex">
-                {elm.PriceSL}
+            <div className="d-flex justify-content-end text-right">
+                {elm.PriceSL.toFixed(2)}
             </div>
           )
     },

@@ -32,29 +32,35 @@ export const Orders = props => {
 
 
   useEffect(() => {
-    if (pathSnippets == "search") {
-      getAccountIdList()
-    } else {
-
-      
-      getAllOrders()
-    }
+    getAccountIdList()
+    getAllOrders()
   }, [])
 
 
   useEffect(() => {
-    if (pathSnippets != "search") {
-      const interval = setInterval(() => { refereshOrders()}, 7000);
+    const interval = setInterval(() => {
+         let account_id = form.getFieldValue('account_id')
+      
+         if(!account_id || !account_id.length){
+          refereshOrders()
+          //   let getDealsObj = {
+        //     account_id: account_id,
+        //   }
+        //  getOrder(getDealsObj)
+         } else {
+          
+        
+         }
+        
+        }, 7000);
       return () => {
         clearInterval(interval);
       };
-    } 
-  
   }, []);
 
 
   useEffect(() => {
-    if (pathSnippets == "search" && accountIdList?.length > 0) {
+    if (accountIdList?.length > 0) {
       let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
@@ -64,8 +70,10 @@ export const Orders = props => {
   }, [accountIdList])
 
   const viewAllOrders = ()=>{
-    let path = `/app/dashboards/orders/`;
-    props.navigate(path)
+    getAllOrders()
+    // let path = `/app/dashboards/orders/`;
+    // props.navigate(path)
+    form.resetFields();
   }
 
   const handleChange = (value) => {
@@ -91,8 +99,7 @@ export const Orders = props => {
   let totalProfit = orders && orders.length ? orders.reduce((sum, item) => sum + parseInt(item.Profit), 0) : 0;
   return (
     <div>
-
-      {pathSnippets == "search" &&
+      
         <Card title="Orders" className='abcccc'>
           <Form
             layout="inline"
@@ -111,18 +118,17 @@ export const Orders = props => {
               {SelectWithMemo}
             </Form.Item>
 
-            
+            { form.getFieldValue('account_id') && 
             <Button
                     type="link"
                     onClick={viewAllOrders}
-                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                    className="ant-btn-theme text-white rounded-6px mt-40"
                 >
-                    View All Orders
-                </Button>
+                    View All
+                </Button>}
           </Form>
         </Card>
-      }
-
+   
   
 
       {Array.isArray(orders) && orders.length > 0 && 

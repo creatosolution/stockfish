@@ -37,12 +37,46 @@ const { Text } = Typography;
 const { Option } = Select;
 
 let allAccountList = [];
+const colorMap = {
+  "255": {bg:"red", color:"#ffff"},
+  "32768":{bg:"#008000", color:"#ffff"},
+  "65280": {bg: "#00FF00", color: "#fff"},
+  "16711935":{bg: "#FF00FF", color: "#fff"} ,
+  "65535": {bg: "Yellow", color: "#000"},
+  "4278190080": {bg: "#000", color: "#fff"}
+}
+// {
+//   value: "255",
+//   label: "Red",
+// },
+// {
+//   value: "32768",
+//   label: "Green",
+// },
+// {
+//   value: "65280",
+//   label: "Lime",
+// },
+// {
+//   value: "16711935",
+//   label: "Magenta",
+// },
+// {
+//   value: "65535",
+//   label: "Yellow",
+// },
+// {
+//   value: "0",
+//   label: "Black",
+// }
 
 export const UserBalanceAndEquity = (props) => {
   const location = useLocation();
   const paths = location.pathname.split("/").filter((i) => i);
   const pathSnippets = paths[paths.length - 1];
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const nameValue = Form.useWatch('account_id', form);
   const {
     getAccountList,
     getAccountListByClient,
@@ -58,7 +92,8 @@ export const UserBalanceAndEquity = (props) => {
     referesAccountList,
     accountDisable
   } = props;
- 
+
+ console.log("nameValue", nameValue)
  
   const [accountListState, setAccountListState] = useState([]);
   const [accountListIds, setaccountListIds] = useState([]);
@@ -72,15 +107,13 @@ export const UserBalanceAndEquity = (props) => {
   const totalEquity = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + parseInt(item.Equity), 0) : 0);
   const totalM2m = utils.transFormCurrency(accountListState && accountListState.length ? accountListState.reduce((sum, item) => sum + (parseInt(item.Equity) - parseInt(item.Credit)), 0) : 0)
  
-  // utils.transFormCurrency((parseInt(equity) - parseInt(credit)),   "INR")
-  console.log("totalM2m", totalM2m);
 
   const initialCredential = {
     account_id: ''
   }
 
   useEffect(() => {
-    if (pathSnippets == "search" && accountIdList?.length > 0) {
+    if (accountIdList?.length > 0) {
       let accountIds = [...accountIdList]
       accountIds.sort(function (a, b) {
         return a - b;
@@ -90,18 +123,28 @@ export const UserBalanceAndEquity = (props) => {
   }, [accountIdList])
 
   useEffect(() => {
-    if (pathSnippets != "search") {
-      const interval = setInterval(() => { referesAccountList()}, 7000);
-      return () => {
-        clearInterval(interval);
-      };
-    } 
+    const interval = setInterval(() => { 
+      let account_id = form.getFieldValue('account_id')
+      
+      if(!account_id) {
+
+        referesAccountList()
+      }
+    
+    }, 7000);
+    return () => {
+      clearInterval(interval);
+    };
   
   }, []);
 
   const viewAllAccount = ()=>{
-    let path = `/app/dashboards/equityAndBalance/`;
-    props.navigate(path)
+    getAccountList();
+    form.resetFields();
+  }
+
+  const getAccountBg=(color)=>{
+    return  colorMap[color] ? colorMap[color] : {bg:'#ffff', color:'#000'}
   }
   const handleTableSearch = (searchText) => {
     if (!allAccountList || !allAccountList.length) {
@@ -122,11 +165,29 @@ export const UserBalanceAndEquity = (props) => {
       dataIndex: "clientId",
       defaultSortOrder: 'ascend',
       sorter: (a, b) => utils.antdTableSorter(a, b, "clientId"),
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{elm.clientId}</div>
+
+        }
+      }
     },
     {
       title: "Client Name",
       dataIndex: "FirstName",
       sorter: (a, b) => utils.antdTableSorter(a, b, "clientName"),
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{elm.FirstName}</div>
+
+        }
+      }
     },
     // {
     //     title: 'Group Name',
@@ -136,32 +197,74 @@ export const UserBalanceAndEquity = (props) => {
     {
       title: "Balance",
       dataIndex: "Balance",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "balance"),
+      align:'right',
+      sorter: (a, b) => utils.antdTableSorter(a, b, "balance"), 
+       render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{elm.Balance}</div>
+
+        }
+      }
     },
     {
       title: "Credit",
       dataIndex: "Credit",
+      align:'right',
       sorter: (a, b) => utils.antdTableSorter(a, b, "credit"),
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{elm.Credit}</div>
+
+        }
+      }
     },
     {
       title: "Equity",
       dataIndex: "Equity",
+      align:'right',
       sorter: (a, b) => utils.antdTableSorter(a, b, "equity"),
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{elm.Equity}</div>
+
+        }
+      }
     },
     {
       title: "M2M",
       dataIndex: "m2m",
-      className: "bg-gray-lighter",
-      render: (_, elm) => (
-        <div className="table-padding-cover">{getM2m(elm)}</div>
-      ),
+      align:'right',
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>{getM2m(elm)}</div>
+
+        }
+      },
       sorter: (a, b) => utils.antdTableSorter(a, b, "m2m"),
     },
     {
       title: "Credit In / Credit Out",
       dataIndex: "clientId",
-      render: (_, elm) => (
-        <div className="d-flex">
+
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:  <div className="table-padding-cover" style={{"color": getAccountBg(elm.Color).color}}>
+               <div className="d-flex">
           <input
             placeholder="Amount"
             type="number"
@@ -183,35 +286,45 @@ export const UserBalanceAndEquity = (props) => {
             Submit
           </Button>
         </div>
-      ),
+            
+            </div>
+
+        }
+      }
+
     },
     {
       key: 'edit',
       title: "Action",
-      render: (_, elm) => (
-        <>
+      render: (_, elm) => {
+        return {
+          props: {
+            style: { background: getAccountBg(elm.Color).bg },
+          },
+          children:   <>
         
-        <Button
-          type=""
-          onClick={(e) => {
-            handleEditModalVisiblity(true, elm);
-          }}
-          className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
-        >
-        </Button>
-
-
-        <Button
-          size="small"
-          onClick={(e) => {
-            handleAccountsDisableModal(true, elm);
-          }}
-          icon={<StopOutlined />}
-          className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
-          
-        </Button>
-        </>
-      ),
+          <Button
+            type=""
+            onClick={(e) => {
+              handleEditModalVisiblity(true, elm);
+            }}
+            className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
+          >
+          </Button>
+  
+  
+          <Button
+            size="small"
+            onClick={(e) => {
+              handleAccountsDisableModal(true, elm);
+            }}
+            icon={<StopOutlined />}
+            className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
+            
+          </Button>
+          </> 
+        }
+      }
     }
   ];
 
@@ -328,12 +441,8 @@ export const UserBalanceAndEquity = (props) => {
   };
 
   useEffect(() => {
-    if (pathSnippets && pathSnippets == "search") {
-      getAccountIdList()
-    }  else {
-      getAccountList();
-
-    }
+    getAccountIdList()
+    getAccountList();
   }, []);
 
 
@@ -343,6 +452,8 @@ export const UserBalanceAndEquity = (props) => {
     dispatch(resetAccountList());
   }, [location])
 
+
+
   const onSubmit = values => {
    
     getAccountListByClient({
@@ -351,13 +462,7 @@ export const UserBalanceAndEquity = (props) => {
   };
 
 
-
-    
   const SelectWithMemo = React.useMemo(() => (
-   
-   <>
-   {"Total: "+ accountIdList ? accountIdList.length : 0 + "Accounts"}
-
     <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
       onChange={onSubmit}
     >
@@ -367,10 +472,8 @@ export const UserBalanceAndEquity = (props) => {
         ))
       }
     </Select>
-   </>
-   
-   
-  ), [accountIdList]);
+  ), [accountListIds]);
+
 
   useEffect(() => {
     allAccountList = accountList;
@@ -392,14 +495,15 @@ export const UserBalanceAndEquity = (props) => {
       <div className="text-right">
                   {loading && <LoadingOutlined />}
                 </div>
-        {pathSnippets && pathSnippets == "search" && (
-          <Row gutter={16}>
+                <Row gutter={16}>
             <Col xs={24} sm={24} md={24}>
               <Card title="Accounts">
              
-                <Form layout="inline" name="deals-form"
+                <Form 
+                  layout="inline"
+                  name="deals-form"
+                  form={form}
                   initialValues={initialCredential}
-               
                 >
               <Form.Item name="account_id" label="Select Account" rules={[
               {
@@ -407,16 +511,16 @@ export const UserBalanceAndEquity = (props) => {
                 message: 'Please input your Login Id',
               }
             ]}>
-              {/* {SelectWithMemo} */}
-              <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
-      onChange={onSubmit}
-    >
-      {
-        accountListIds && accountListIds.length > 0 && accountListIds.map(elm => (
-          <Option key={elm} value={elm}>{elm}</Option>
-        ))
-      }
-    </Select>
+              {SelectWithMemo}
+              {/* <Select name="account_id" className="w-250" placeholder="Select Login Id" showSearch
+                onChange={onSubmit}
+              >
+                {
+                  accountListIds && accountListIds.length > 0 && accountListIds.map(elm => (
+                    <Option key={elm} value={elm}>{elm}</Option>
+                  ))
+                }
+              </Select> */}
             </Form.Item>
                   <Form.Item>
                     {/* <Button
@@ -428,22 +532,21 @@ export const UserBalanceAndEquity = (props) => {
                     >
                       Search
                     </Button> */}
-                    
+                       { form.getFieldValue('account_id') && 
                     <Button
                     type="link"
                     onClick={viewAllAccount}
-                    className="ant-btn-theme text-white rounded-6px mt-40 ml-auto"
+                    className="ant-btn-theme text-white rounded-6px mt-40"
                 >
                     View All Accounts
                 </Button>
-
+}
 
                   </Form.Item>
                 </Form>
               </Card>
             </Col>
           </Row>
-        )}
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             {Array.isArray(accountListState) && accountListState.length > 0 && (

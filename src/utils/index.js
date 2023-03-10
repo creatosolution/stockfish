@@ -186,7 +186,6 @@ class Utils {
 			maximumFractionDigits: 0,
 		  });
 		
-		  console.log("currency---->", currency);
 		//   currency.replace("₹", " ");
 		//   currency.replace("₹", " ");
 		

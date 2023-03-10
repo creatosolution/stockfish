@@ -26,13 +26,7 @@ export const protectedRoutes = [
         path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance`,
         component: React.lazy(() => import('views/app-views/dashboards/accounts')),
     },
-    
-    {
-        key: 'dashboard.equityAndBalance',
-        path: `${APP_PREFIX_PATH}/dashboards/equityAndBalance/:search`,
-        component: React.lazy(() => import('views/app-views/dashboards/accounts')),
-    },
-    
+
     {
         key: 'dashboard.credit',
         path: `${APP_PREFIX_PATH}/dashboards/credit`,
@@ -44,28 +38,14 @@ export const protectedRoutes = [
         component: React.lazy(() => import('views/app-views/dashboards/deals')),
     },
     {
-        key: 'dashboard.credit',
-        path: `${APP_PREFIX_PATH}/dashboards/deals/:search`,
-        component: React.lazy(() => import('views/app-views/dashboards/deals')),
-    },
-    {
         key: 'dashboard.position',
         path: `${APP_PREFIX_PATH}/dashboards/position`,
         component: React.lazy(() => import('views/app-views/dashboards/positions')),
     },
-    {
-        key: 'dashboard.position',
-        path: `${APP_PREFIX_PATH}/dashboards/position/:search`,
-        component: React.lazy(() => import('views/app-views/dashboards/positions')),
-    }    ,
+   
     {
         key: 'dashboard.orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders`,
         component: React.lazy(() => import('views/app-views/dashboards/orders')),
-    },
-    {
-        key: 'dashboard.orders',
-        path: `${APP_PREFIX_PATH}/dashboards/orders/:search`,
-        component: React.lazy(() => import('views/app-views/dashboards/orders')),
-    }    
+    }
 ]

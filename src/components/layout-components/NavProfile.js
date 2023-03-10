@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import { Menu, Dropdown, Avatar } from 'antd';
 import { useDispatch } from 'react-redux'
 import { 
@@ -14,7 +14,7 @@ const MenuItemSignOut = (props) => (
 )
 
 export const NavProfile = () => {
-
+	// setupBeforeUnloadListener
 	const dispatch = useDispatch();
 	const loggedIn = localStorage.getItem("userId")
 
@@ -27,7 +27,8 @@ export const NavProfile = () => {
 	const handleSignOut = () => {
 		dispatch(signOut())
 	}
-
+   
+	
 	const menu = (
 		<Menu
 			onClick={handleClick}

@@ -38,12 +38,15 @@ const { Option } = Select;
 
 let allAccountList = [];
 const colorMap = {
-  "255": {bg:"red", color:"#ffff"},
-  "32768":{bg:"#008000", color:"#ffff"},
+  "255": {bg:"red", color:"#ffff"}, // red
+  "32768":{bg:"#008000", color:"#ffff"}, // Green
   "65280": {bg: "#00FF00", color: "#fff"},
   "16711935":{bg: "#FF00FF", color: "#fff"} ,
   "65535": {bg: "Yellow", color: "#000"},
-  "4278190080": {bg: "#000", color: "#fff"}
+  "4278190080": {bg: "#000", color: "#fff"},
+  "2763429": {bg: "brown", color: "#fff"},
+  "42495": {bg: "orange", color: "#fff"},
+  "dda0dd": {bg: "orange", color: "#fff"}  
 }
 // {
 //   value: "255",

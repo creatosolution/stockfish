@@ -29,7 +29,8 @@ function createSummary(positions){
 			"PriceOpen": posObj['PriceOpen'],
 			"PriceCurrent": posObj['PriceCurrent'],
 			"Profit": posObj['Profit'],
-			"Volume": 0
+			"Volume": 0,
+			"Action": 0
 		  }
 	
 		summaryObj.Volume = posObj['Action'] == 0 ? summaryObj['Volume'] + posObj['Volume'] :  summaryObj['Volume'] - posObj['Volume']
@@ -62,6 +63,8 @@ function createSummary(positions){
 	}
 
 	for(var key in dataMap) {
+		dataMap[key].Action = dataMap[key].Volume > -1 ? 0 : 1
+		console.log("dsd", dataMap[key]);
 		positionsSummary.push(dataMap[key])
 
 	}

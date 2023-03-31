@@ -1,17 +1,20 @@
 import React from 'react';
 import { Routes as RouterRoutes, Route, Navigate } from 'react-router-dom';
-import { AUTHENTICATED_ENTRY } from 'configs/AppConfig';
+import { AUTHENTICATED_ENTRY, ADMIN_AUTHENTICATED_ENTRY } from 'configs/AppConfig';
 import { protectedRoutes, publicRoutes } from 'configs/RoutesConfig';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import AppRoute from './AppRoute';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const Routes = () => {
+	const  {user} = useSelector(state => state.auth);
 
 	return (
 		<RouterRoutes>
 			<Route path="/" element={<ProtectedRoute />}>
-				<Route path="/" element={<Navigate replace to={AUTHENTICATED_ENTRY} />} />
+				<Route path="/" element={<Navigate replace to={(user && user.role_id ==1) ? ADMIN_AUTHENTICATED_ENTRY : AUTHENTICATED_ENTRY} />} />
 				{protectedRoutes.map((route, index) => {
 					return (
 						<Route 

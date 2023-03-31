@@ -3,11 +3,11 @@ import { UsergroupAddOutlined , AlignCenterOutlined,RetweetOutlined, SnippetsOut
 
 import { APP_PREFIX_PATH } from 'configs/AppConfig'
 
-
 const dashBoardNavTree = [{
   key: 'dashboards',
   path: `${APP_PREFIX_PATH}/dashboards`,
   title: 'sidenav.dashboard',
+  activeRoleId: "2",
   icon: DashboardOutlined,
   breadcrumb: false,
   isGroupTitle: true,
@@ -93,8 +93,31 @@ const dashBoardNavTree = [{
   ]
 }]
 
+
+const adminNavTree = [{
+  key: 'admin',
+  path: `${APP_PREFIX_PATH}/admin`,
+  activeRoleId: "1",
+  title: 'sidenav.dashboard',
+  icon: DashboardOutlined,
+  breadcrumb: false,
+  isGroupTitle: true,
+  submenu: [
+   
+    {
+      key: 'admin-users',
+      path: `${APP_PREFIX_PATH}/admin/users`,
+      title: 'sidenav.admin.users',
+      icon: AlignCenterOutlined,
+      breadcrumb: false,
+      submenu: [
+      ]
+    }
+  ]
+}]
 const navigationConfig = [
-  ...dashBoardNavTree
+ ...adminNavTree,
+ ...dashBoardNavTree
 ]
 
 export default navigationConfig;

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import AuthService from 'services/AuthService';
+import ApiService from 'services/ApiService';
 import { notification } from 'antd';
 
 export const initialState = {
@@ -13,7 +13,7 @@ export const initialState = {
 export const getDealsList = createAsyncThunk('/api/dealsList', async (data, { rejectWithValue }) => {
 	try {
 		let url = '/dealslist_post'
-		let response = await AuthService.postRequest(url, data) 
+		let response = await ApiService.postRequest(url, data) 
 		return response.deal_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -23,7 +23,7 @@ export const getDealsList = createAsyncThunk('/api/dealsList', async (data, { re
 
 export const getAllDeals = createAsyncThunk('/api/getAllDeals', async (data, { rejectWithValue }) => {
 	try {
-		let response = await AuthService.getAllDeals(data)
+		let response = await ApiService.getAllDeals(data)
 		return response.deal_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -32,7 +32,7 @@ export const getAllDeals = createAsyncThunk('/api/getAllDeals', async (data, { r
 
 export const refereshDeals = createAsyncThunk('/api/refereshDeals', async (data, { rejectWithValue }) => {
 	try {
-		let response = await AuthService.getAllDeals(data)
+		let response = await ApiService.getAllDeals(data)
 		return response.deal_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -43,7 +43,7 @@ export const refereshDeals = createAsyncThunk('/api/refereshDeals', async (data,
 export const getUserBalanceAndEquity = createAsyncThunk('/api/account_balance',async (data, { rejectWithValue }) => {
 	try {
 		let url = '/account_balance'
-		const response = await AuthService.postRequest(url,data);
+		const response = await ApiService.postRequest(url,data);
 		return response;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')

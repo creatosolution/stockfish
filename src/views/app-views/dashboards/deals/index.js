@@ -60,11 +60,12 @@ export const DealsDashboard = props => {
   }
 
   useEffect(() => {
-    getAccountIdList()
+    // getAccountIdList()
     console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
      const allDealsObj = {
       timefrom: moment().format('DD-MM-YYYY'),
-      timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+      timeto:  moment().add(1, 'd').format('DD-MM-YYYY'),
+      account_id:localStorage.getItem("userId")
     }
     getAllDeals(allDealsObj)
   }, [])
@@ -80,7 +81,8 @@ export const DealsDashboard = props => {
           console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
           const allDealsObj = {
            timefrom: moment().format('DD-MM-YYYY'),
-           timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+           timeto:  moment().add(1, 'd').format('DD-MM-YYYY'),
+           account_id: localStorage.getItem("userId")
          }
              
              
@@ -184,7 +186,7 @@ export const DealsDashboard = props => {
     }
 
     let getDealsObj = {
-      account_id: account_id,
+      account_id: localStorage.getItem("userId"),
       timefrom: moment(timefrom, 'DD/MM/YYYY').format("DD-MM-YYYY"),
       timeto: moment(timeto, 'DD/MM/YYYY').format("DD-MM-YYYY"),
     }

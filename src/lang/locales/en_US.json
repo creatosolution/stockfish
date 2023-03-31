@@ -15,7 +15,7 @@
 	"sidenav.dashboard.positionAll" : "All",
 	"sidenav.dashboard.orders" : "Orders",
 	"sidenav.dashboard.positionBySearch" : "Search",
-
+	"sidenav.admin.users": "Users",
 	"sidenav.apps": "Apps",
 	"sidenav.apps.mail": "Mail",
 	"sidenav.apps.chat": "Chat",

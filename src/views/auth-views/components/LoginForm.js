@@ -40,7 +40,7 @@ export const LoginForm = props => {
 
 	const initialCredential = {
 		username: '',
-		pwd: ''
+		password: ''
 	}
 
 	const onLogin = values => {
@@ -128,7 +128,7 @@ export const LoginForm = props => {
 					<Input prefix={<UserOutlined className="text-primary" />}/>
 				</Form.Item>
 				<Form.Item 
-					name="pwd" 
+					name="password" 
 					label={
 						<div className={`${showForgetPassword? 'd-flex justify-content-between w-100 align-items-center' : ''}`}>
 							<span>Password</span>

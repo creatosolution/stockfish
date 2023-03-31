@@ -28,9 +28,15 @@ import {
   depositWithdrawal,
   updateAccountList,
   resetAccountList,
+} from "store/slices/creditSlice";
+
+
+import {
   accountUpdate,
   accountDisable
-} from "store/slices/creditSlice";
+} from "store/slices/usersSlice";
+
+
 import { LoadingOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 const { Text } = Typography;

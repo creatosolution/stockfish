@@ -1,24 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AUTH_TOKEN } from 'constants/AuthConstant';
 import FirebaseService from 'services/FirebaseService';
-import AuthService from 'services/AuthService';
+import ApiService from 'services/ApiService';
 
 export const initialState = {
 	loading: false,
 	message: '',
 	showMessage: false,
 	redirect: '',
-	token: localStorage.getItem(AUTH_TOKEN) || null
+	token: localStorage.getItem(AUTH_TOKEN) || null,
+	user: null
 }
 
-export const signIn = createAsyncThunk('managerLogin',async (data, { rejectWithValue }) => {
-	const { username, pwd } = data
+export const signIn = createAsyncThunk('login',async (data, { rejectWithValue }) => {
+	const { username, password } = data
 	try {
-		const response = await AuthService.login({username, pwd});
-		const token = response.token;
+		const response = await ApiService.login({username, password});
+		const token = response.role_id ==1 ? response.adminToken : response.token;
 		localStorage.setItem(AUTH_TOKEN, token);
 		localStorage.setItem("userId", username);
-		return token;
+		localStorage.setItem("userRole",  response.role_id);
+		return response;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
 	}
@@ -27,7 +29,7 @@ export const signIn = createAsyncThunk('managerLogin',async (data, { rejectWithV
 export const signUp = createAsyncThunk('auth/register',async (data, { rejectWithValue }) => {
 	const { email, password } = data
 	try {
-		const response = await AuthService.register({email, password})
+		const response = await ApiService.register({email, password})
 		const token = response.data.token;
 		localStorage.setItem(AUTH_TOKEN, token);
 		return token;
@@ -38,7 +40,7 @@ export const signUp = createAsyncThunk('auth/register',async (data, { rejectWith
 
 export const signOut = createAsyncThunk('auth/logout',async () => {
 	
-    const response = await AuthService.logout()
+    const response = await ApiService.logout()
 	
 
     return response.data
@@ -46,7 +48,7 @@ export const signOut = createAsyncThunk('auth/logout',async () => {
 
 export const signInWithGoogle = createAsyncThunk('auth/signInWithGoogle', async (_, { rejectWithValue }) => {
     try {
-		const response = await AuthService.loginInOAuth()
+		const response = await ApiService.loginInOAuth()
 		const token = response.data.token;
 		localStorage.setItem(AUTH_TOKEN, token);
 		return token;
@@ -57,7 +59,7 @@ export const signInWithGoogle = createAsyncThunk('auth/signInWithGoogle', async 
 
 export const signInWithFacebook = createAsyncThunk('auth/signInWithFacebook', async (_, { rejectWithValue }) => {
     try {
-		const response = await AuthService.loginInOAuth()
+		const response = await ApiService.loginInOAuth()
 		const token = response.data.token;
 		localStorage.setItem(AUTH_TOKEN, token);
 		return token;
@@ -105,8 +107,9 @@ export const authSlice = createSlice({
 			})
 			.addCase(signIn.fulfilled, (state, action) => {
 				state.loading = false
-				state.redirect = '/'
-				state.token = action.payload
+				state.redirect = "/"
+				state.token = action.payload.role_id ==1 ? action.payload.adminToken : action.payload.token; //action.payload.token
+				state.user = action.payload
 			})
 			.addCase(signIn.rejected, (state, action) => {
 				state.message = action.payload

@@ -49,12 +49,27 @@ const MenuItem = ({title, icon, path}) => {
 	)
 }
 
-const getSideNavMenuItem = (navItem) => navItem.map(nav => {
-	return {
-		key: nav.key,
-		label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
-		...(nav.isGroupTitle ? {type: 'group'} : {}),
-		...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
+const getSideNavMenuItem = (navItem, userRoleId) => navItem.map(nav => {
+	// return {
+	// 	key: nav.key,
+	// 	label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
+	// 	...(nav.isGroupTitle ? {type: 'group'} : {}),
+	// 	...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
+	// }
+	if(userRoleId == "1"){
+		return nav.activeRoleId === userRoleId ? {
+			key: nav.key,
+			label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
+			...(nav.isGroupTitle ? {type: 'group'} : {}),
+			...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
+		} : ''
+	}	 else {
+		return nav.activeRoleId != "1" ?  {
+			key: nav.key,
+			label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
+			...(nav.isGroupTitle ? {type: 'group'} : {}),
+			...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
+		} :''
 	}
 })
 
@@ -71,8 +86,9 @@ const SideNavContent = (props) => {
 	const { routeInfo, hideGroupTitle } = props;
 
 	const sideNavTheme = useSelector(state => state.theme.sideNavTheme);
+	const userRole = localStorage.getItem("userRole");
 
-	const menuItems = useMemo(() => getSideNavMenuItem(navigationConfig), []);
+	const menuItems = useMemo(() => getSideNavMenuItem(navigationConfig, userRole), []);
 
 	return (
 		<Menu

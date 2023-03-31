@@ -32,8 +32,8 @@ export const Orders = props => {
 
 
   useEffect(() => {
-    getAccountIdList()
-    getAllOrders()
+    // getAccountIdList()
+    getAllOrders({account_id: localStorage.getItem("userId")})
   }, [])
 
 
@@ -42,7 +42,7 @@ export const Orders = props => {
          let account_id = form.getFieldValue('account_id')
       
          if(!account_id || !account_id.length){
-          refereshOrders()
+          refereshOrders({account_id: localStorage.getItem("userId")})
           //   let getDealsObj = {
         //     account_id: account_id,
         //   }
@@ -78,9 +78,7 @@ export const Orders = props => {
 
   const handleChange = (value) => {
     let account_id = form.getFieldValue('account_id')
-    let getDealsObj = {
-      account_id: account_id,
-    }
+    let getDealsObj ={account_id: localStorage.getItem("userId")}
     getOrder(getDealsObj)
   }
 

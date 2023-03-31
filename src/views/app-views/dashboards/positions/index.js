@@ -32,8 +32,8 @@ export const Positions = props => {
 
 
   useEffect(() => {
-    getAccountIdList()
-    getAllPositions()
+    // getAccountIdList()
+    getAllPositions({account_id: localStorage.getItem("userId")})
   }, [])
 
 // rowSelection objects indicates the need for row selection
@@ -55,7 +55,7 @@ const rowSelection = {
         let account_id = form.getFieldValue('account_id')
         if(!account_id){
           
-        refereshPositions()
+        refereshPositions({account_id: localStorage.getItem("userId")})
         }
         
         }, 10000);

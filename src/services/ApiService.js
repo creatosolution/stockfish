@@ -10,10 +10,11 @@ ApiService.login = function (data) {
 	})
 }
 
-ApiService.getAccountList = function () {
+ApiService.getAccountList = function (data) {
 	return fetch({
-		url: '/accountListV2',
-		method: 'get'
+		url: '/accountBalanceV2',
+		method: 'post',
+		data: data
 	})
 }
 
@@ -21,6 +22,14 @@ ApiService.getAccountIdList = function () {
 	return fetch({
 		url: '/accountListIDsV2',
 		method: 'get'
+	})
+}
+
+ApiService.getAccountListByUserId = function (data) {
+	return fetch({
+		url: '/clientListV2',
+		method: 'post',
+		data: data
 	})
 }
 
@@ -52,7 +61,7 @@ ApiService.createUser  = function (data) {
 
 ApiService.accountDisable  = function (data) {
 	return fetch({
-		url: '/accountDisable',
+		url: '/accountDisableV2',
 		method: 'post',
 		data: data
 	})

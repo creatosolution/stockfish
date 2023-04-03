@@ -13,9 +13,10 @@ import {
   Form,
   Select,
   Table,
-  Typography,
+  Typography,Tooltip, Switch, 
   Badge
 } from "antd";
+
 import { AntTableSearch } from "../../../../components/shared-components/AntTableSearch";
 import { connect, useDispatch } from "react-redux";
 import { getUserBalanceAndEquity } from "store/slices/dealsSlice";
@@ -104,9 +105,9 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
-          children:  <div className="table-padding-cover" style={{"color": "#fff"}}>{elm.meta_id}</div>
+          children:  <div className="table-padding-cover">{elm.meta_id}</div>
 
         }
       }
@@ -119,9 +120,9 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
-          children:  <div className="table-padding-cover" style={{"color":"#fff"}}>{elm.name}</div>
+          children:  <div className="table-padding-cover">{elm.name}</div>
 
         }
       }
@@ -134,9 +135,9 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
-          children:  <div className="table-padding-cover" style={{"color":"#fff"}}>
+          children:  <div className="table-padding-cover">
               {elm.client_list.split(",").map(function(item, i){
                   return  <span className="custom-badge border px-2 py-1  rounded-pill mr-1"> {item} </span>  
                 })}
@@ -153,9 +154,9 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
-          children:  <div className="table-padding-cover" style={{"color": "#fff"}}>{elm.email}</div>
+          children:  <div className="table-padding-cover">{elm.email}</div>
 
         }
       }
@@ -168,9 +169,9 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
-          children:  <div className="table-padding-cover" style={{"color": "#fff"}}>{elm.user_group}</div>
+          children:  <div className="table-padding-cover">{elm.user_group}</div>
 
         }
       }
@@ -181,7 +182,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color},
+            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
           },
           children:   <>
         
@@ -190,12 +191,12 @@ export const Users = (props) => {
             onClick={(e) => {
               handleEditModalVisiblity(true, elm);
             }}
-            className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
+            className="ant-btn-theme text-white rounded-6px rounded-pill mr-3" icon={<EditOutlined />}
           >
           </Button>
   
   
-          <Button
+          {/* <Button
             size="small"
             onClick={(e) => {
               handleAccountsDisableModal(true, elm);
@@ -203,7 +204,13 @@ export const Users = (props) => {
             icon={<StopOutlined />}
             className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
             
-          </Button>
+          </Button> */}
+
+<Tooltip title="Status">
+            <Switch checkedChildren="Active" unCheckedChildren="DeActive" checked={elm.status == 1} onClick={() => {
+             handleAccountsDisableModal(true, elm)
+            }} />
+          </Tooltip>
           </> 
         }
       }
@@ -270,7 +277,31 @@ export const Users = (props) => {
 
   const handleAccountsDisableModal = (value, item) => {
     setEditableItem(item)
-    setAccountDisableModal(value) 
+
+    if(window.confirm("do you really want to disable the account")){
+      console.log('disableAccount', item);
+      const req = {
+        "user_id": item.meta_id,
+        "status": item.status == 1? 0: 1
+    }
+       accountDisable(req).then((res)=>{
+               
+        let usersListToUpdate = JSON.parse(JSON.stringify(usersList))
+      
+        for(let i=0; i < usersListToUpdate.length;i++){
+            if(usersListToUpdate[i].email == item.email){
+              usersListToUpdate[i].status = req.status
+            }
+        }
+
+        dispatch(updateUserInState(usersListToUpdate))
+
+
+    })
+    }
+  
+ 
+    // setAccountDisableModal(value) 
   };
   
   const onAccountUpdate=(req, editEmail)=>{
@@ -283,11 +314,8 @@ export const Users = (props) => {
     data.append('name', req.name);
     data.append('group', req.group);
     data.append('color', req.color);
-    if(!editEmail){
-
-      data.append('pwd', req.password);
-      data.append('conf_pwd', req.password);
-    } 
+    data.append('pwd', req.password);
+    data.append('conf_pwd', req.password);
     data.append('client_list', req.assignedAccount.toString());
     
     if(editEmail){
@@ -324,6 +352,7 @@ export const Users = (props) => {
   
   const onDisableAccount=(accountInfo)=>{
     console.log('disableAccount', accountInfo);
+
     accountDisable(accountInfo).then((res)=>{
       handleAccountsDisableModal()
     })

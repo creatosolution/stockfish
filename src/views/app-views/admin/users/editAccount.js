@@ -16,7 +16,7 @@ const colorMap = {
     "42495": {bg: "orange", color: "#fff"},
     "dda0dd": {bg: "orange", color: "#fff"}  
   }
-  const colorMapArr = ['Red' ,'Green' ,'Brown' ,'Orange' 
+  const colorMapArr = ['Red' ,'Green' ,'Brown' ,'Orange' , 'white'
      
   ]
   const rules = {
@@ -205,8 +205,7 @@ const AccountEditModal = props => {
             </Select>
           </Form.Item>
 
-        {!editableItem && 
-        <>
+     
         	<Form.Item 
 					name="confirm" 
 					label="ConfirmPassword" 
@@ -225,7 +224,6 @@ const AccountEditModal = props => {
 					<Input.Password />
 				</Form.Item>
       
-        </>}
 			    <Button
             className="ant-btn-theme text-white mt-2"
             htmlType="button"

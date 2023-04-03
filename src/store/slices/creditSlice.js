@@ -81,9 +81,10 @@ export const getAccountIdList = createAsyncThunk('/api/getAccountIdList',async (
 	}
 })
 
+
 export const getAccountList = createAsyncThunk('/api/accountList',async (data, { rejectWithValue }) => {
 	try {
-		const response = await ApiService.getAccountList();
+		const response = await ApiService.getAccountList(data);
 		return response.account_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')

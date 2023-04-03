@@ -22,13 +22,14 @@ import { connect, useDispatch } from "react-redux";
 import { getUserBalanceAndEquity } from "store/slices/dealsSlice";
 import {
   getAccountList,
-  getAccountIdList,
   referesAccountList,
   getAccountListByClient,
   depositWithdrawal,
   updateAccountList,
   resetAccountList,
 } from "store/slices/creditSlice";
+
+import { getAccountListByUserId } from 'store/slices/usersSlice';
 
 
 import {
@@ -89,10 +90,10 @@ export const UserBalanceAndEquity = (props) => {
   const {
     getAccountList,
     getAccountListByClient,
-    getAccountIdList,
+    getAccountListByUserId,
     loading,
     accountList,
-    accountIdList,
+    usersClientList,
     getUserBalanceAndEquity,
     loadingEquity,
     userBalanceAndEquity,
@@ -122,14 +123,14 @@ export const UserBalanceAndEquity = (props) => {
   }
 
   useEffect(() => {
-    if (accountIdList?.length > 0) {
-      let accountIds = [...accountIdList]
+    if (usersClientList?.length > 0) {
+      let accountIds = [...usersClientList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setaccountListIds(accountIds)
     }
-  }, [accountIdList])
+  }, [usersClientList])
 
   useEffect(() => {
     const interval = setInterval(() => { 
@@ -450,8 +451,8 @@ export const UserBalanceAndEquity = (props) => {
   };
 
   useEffect(() => {
-    getAccountIdList()
-    getAccountList();
+   getAccountListByUserId({user_id: localStorage.getItem("userId")})
+    getAccountList({user_id: localStorage.getItem("userId")});
   }, []);
 
 
@@ -642,14 +643,15 @@ export const UserBalanceAndEquity = (props) => {
   );
 };
 
-const mapStateToProps = ({ credit, deals }) => {
-  const { loading, accountList, accountIdList } = credit;
+const mapStateToProps = ({ credit, deals,  users}) => {
+  const { loading, accountList } = credit;
+  const { usersClientList} = users;
   const { getUserBalanceAndEquity, loadingEquity, userBalanceAndEquity } =
     deals;
   return {
     loading,
     accountList,
-    accountIdList,
+    usersClientList,
     getAccountListByClient,
     getUserBalanceAndEquity,
     loadingEquity,
@@ -659,7 +661,7 @@ const mapStateToProps = ({ credit, deals }) => {
 
 const mapDispatchToProps = {
   getAccountList,
-  getAccountIdList,
+  getAccountListByUserId,
   getAccountListByClient,
   getUserBalanceAndEquity,
   depositWithdrawal,

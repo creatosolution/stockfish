@@ -2,12 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { notification } from 'antd';
-import { getAccountIdList, getOrder, getAllOrders, resetOrders, refereshOrders } from 'store/slices/creditSlice';
+import {getAllOrders, resetOrders, refereshOrders } from 'store/slices/creditSlice';
+import { getAccountListByUserId } from 'store/slices/usersSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { ordersTableColumns } from 'constants/constant';
-import Loading from 'components/shared-components/Loading';
-import moment from "moment";
 import { useLocation } from 'react-router-dom';
 const { Option } = Select;
 
@@ -16,7 +14,7 @@ export const Orders = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, getOrder,getAllOrders, orders, refereshOrders } = props;
+  const { getAccountListByUserId, loading, usersClientList, getAllOrders, orders, refereshOrders } = props;
   const [accountListState, setAccountListState] = useState([]);
 
   const initialCredential = {
@@ -32,8 +30,8 @@ export const Orders = props => {
 
 
   useEffect(() => {
-    // getAccountIdList()
-    getAllOrders({account_id: localStorage.getItem("userId")})
+    getAccountListByUserId({user_id: localStorage.getItem("userId")})
+    getAllOrders({user_id: localStorage.getItem("userId")})
   }, [])
 
 
@@ -42,11 +40,7 @@ export const Orders = props => {
          let account_id = form.getFieldValue('account_id')
       
          if(!account_id || !account_id.length){
-          refereshOrders({account_id: localStorage.getItem("userId")})
-          //   let getDealsObj = {
-        //     account_id: account_id,
-        //   }
-        //  getOrder(getDealsObj)
+          refereshOrders({user_id: localStorage.getItem("userId")})
          } else {
           
         
@@ -60,17 +54,17 @@ export const Orders = props => {
 
 
   useEffect(() => {
-    if (accountIdList?.length > 0) {
-      let accountIds = [...accountIdList]
+    if (usersClientList?.length > 0) {
+      let accountIds = [...usersClientList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
     }
-  }, [accountIdList])
+  }, [usersClientList])
 
   const viewAllOrders = ()=>{
-    getAllOrders()
+    getAllOrders({user_id: localStorage.getItem("userId")})
     // let path = `/app/dashboards/orders/`;
     // props.navigate(path)
     form.resetFields();
@@ -78,8 +72,8 @@ export const Orders = props => {
 
   const handleChange = (value) => {
     let account_id = form.getFieldValue('account_id')
-    let getDealsObj ={account_id: localStorage.getItem("userId")}
-    getOrder(getDealsObj)
+    let getOrderreq ={user_id: localStorage.getItem("userId"), account_id: account_id}
+    getAllOrders(getOrderreq)
   }
 
   const SelectWithMemo = React.useMemo(() => (
@@ -94,7 +88,8 @@ export const Orders = props => {
     </Select>
   ), [accountListState]);
 
-  let totalProfit = orders && orders.length ? orders.reduce((sum, item) => sum + parseInt(item.Profit), 0) : 0;
+  // let totalProfit = orders && orders.length ? orders.reduce((sum, item) => sum + parseInt(item.Profit), 0) : 0;
+  
   return (
     <div>
       
@@ -149,14 +144,14 @@ export const Orders = props => {
   )
 }
 
-const mapStateToProps = ({ credit, deals }) => {
-  const { loading, orders, accountIdList} = credit;
-  return { loading, accountIdList, orders }
+const mapStateToProps = ({ credit, deals, users }) => {
+  const { loading, orders} = credit;
+  const { usersClientList} = users;
+  return { loading, usersClientList, orders }
 }
 
 const mapDispatchToProps = {
-  getAccountIdList,
-  getOrder,
+  getAccountListByUserId,
   getAllOrders,
   refereshOrders
 }

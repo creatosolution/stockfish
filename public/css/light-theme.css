@@ -24406,6 +24406,8 @@ span.ant-radio+* {
     user-select: none;
     border: solid 1px #4caf50;
     color: red;
+    background: #fff !important;
+    min-width: 76px;
 }
 
 .ant-switch:focus {
@@ -24440,7 +24442,7 @@ span.ant-radio+* {
     margin: 0 7px 0 25px;
     color: #4caf50;
     font-size: 12px;
-    transition: margin .2s
+    transition: margin .2s;
 }
 
 .ant-switch-checked .ant-switch-inner {

@@ -3,7 +3,9 @@ import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { notification } from 'antd';
-import { getAccountIdList, getPosition, getAllPositions, resetPosition, refereshPositions } from 'store/slices/creditSlice';
+import {getPosition, getAllPositions, resetPosition, refereshPositions } from 'store/slices/creditSlice';
+
+import { getAccountListByUserId } from 'store/slices/usersSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { positionTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -16,7 +18,7 @@ export const Positions = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, getPosition,getAllPositions, positions, refereshPositions } = props;
+  const { getAccountListByUserId, loading, usersClientList, getPosition,getAllPositions, positions, refereshPositions } = props;
   const [accountListState, setAccountListState] = useState([]);
 
   const initialCredential = {
@@ -32,8 +34,8 @@ export const Positions = props => {
 
 
   useEffect(() => {
-    // getAccountIdList()
-    getAllPositions({account_id: localStorage.getItem("userId")})
+    getAccountListByUserId({user_id: localStorage.getItem("userId")})
+    getAllPositions({user_id: localStorage.getItem("userId")})
   }, [])
 
 // rowSelection objects indicates the need for row selection
@@ -55,7 +57,7 @@ const rowSelection = {
         let account_id = form.getFieldValue('account_id')
         if(!account_id){
           
-        refereshPositions({account_id: localStorage.getItem("userId")})
+        refereshPositions({user_id: localStorage.getItem("userId")})
         }
         
         }, 10000);
@@ -68,14 +70,14 @@ const rowSelection = {
 
 
   useEffect(() => {
-    if (accountIdList?.length > 0) {
-      let accountIds = [...accountIdList]
+    if (usersClientList?.length > 0) {
+      let accountIds = [...usersClientList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
     }
-  }, [accountIdList])
+  }, [usersClientList])
 
   const viewAllPositions = ()=>{
    
@@ -87,8 +89,9 @@ const rowSelection = {
     let account_id = form.getFieldValue('account_id')
     let getDealsObj = {
       account_id: account_id,
+      user_id: localStorage.getItem("userId")
     }
-    getPosition(getDealsObj)
+    getAllPositions(getDealsObj)
   }
 
   const SelectWithMemo = React.useMemo(() => (
@@ -171,13 +174,14 @@ const rowSelection = {
   )
 }
 
-const mapStateToProps = ({ credit, deals }) => {
-  const { loading, positions, accountIdList} = credit;
-  return { loading, accountIdList, positions }
+const mapStateToProps = ({ credit, deals, users }) => {
+  const { loading, positions} = credit;
+  const { usersClientList} = users;
+  return { loading, positions, usersClientList }
 }
 
 const mapDispatchToProps = {
-  getAccountIdList,
+  getAccountListByUserId,
   getPosition,
   getAllPositions,
   refereshPositions

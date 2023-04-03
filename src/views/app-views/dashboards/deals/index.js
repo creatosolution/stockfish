@@ -4,8 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Row, Col, Card, Form, DatePicker, Select, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import { notification } from 'antd';
-import { getAccountIdList } from 'store/slices/creditSlice';
 import { getDealsList, getAllDeals, resetdealsListState,refereshDeals } from 'store/slices/dealsSlice';
+import { getAccountListByUserId } from 'store/slices/usersSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { dealsTableColumns } from 'constants/constant';
 import Loading from 'components/shared-components/Loading';
@@ -18,7 +18,7 @@ export const DealsDashboard = props => {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').pop();
   const [form] = Form.useForm();
-  const { getAccountIdList, loading, accountIdList, loadingDeals, dealsList, getDealsList, getAllDeals, refereshDeals } = props;
+  const { getAccountListByUserId, loading, usersClientList, loadingDeals, dealsList, getDealsList, getAllDeals, refereshDeals } = props;
   const [accountListState, setAccountListState] = useState([]);
   const [dealsListState, setDealsListState] = useState([]);
   const dispatch = useDispatch();
@@ -38,10 +38,13 @@ export const DealsDashboard = props => {
     console.log(values);
     let timefrom = new Date(values.timefrom)
     let timeto = new Date(values.timeto)
+    
+    let account_id = form.getFieldValue('account_id')
     let getDealsObj = {
-      account_id: values.account_id,
+      user_id: values.user_id,
       timefrom: timefrom.toLocaleDateString().replace("/", '-').replace("/", '-'),
-      timeto: timeto.toLocaleDateString().replace("/", '-').replace("/", '-')
+      timeto: timeto.toLocaleDateString().replace("/", '-').replace("/", '-'),
+      account_id: account_id
     }
     getDealsList(getDealsObj)
   };
@@ -60,12 +63,12 @@ export const DealsDashboard = props => {
   }
 
   useEffect(() => {
-    // getAccountIdList()
+    getAccountListByUserId({user_id: localStorage.getItem("userId")})
     console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
      const allDealsObj = {
       timefrom: moment().format('DD-MM-YYYY'),
       timeto:  moment().add(1, 'd').format('DD-MM-YYYY'),
-      account_id:localStorage.getItem("userId")
+      user_id:localStorage.getItem("userId")
     }
     getAllDeals(allDealsObj)
   }, [])
@@ -82,13 +85,13 @@ export const DealsDashboard = props => {
           const allDealsObj = {
            timefrom: moment().format('DD-MM-YYYY'),
            timeto:  moment().add(1, 'd').format('DD-MM-YYYY'),
-           account_id: localStorage.getItem("userId")
+           user_id: localStorage.getItem("userId")
          }
              
              
         refereshDeals(allDealsObj)
         }
-   }, 7000);
+   }, 17000);
       return () => {
         clearInterval(interval);
       };
@@ -97,14 +100,14 @@ export const DealsDashboard = props => {
   }, []);
 
   useEffect(() => {
-    if (accountIdList?.length > 0) {
-      let accountIds = [...accountIdList]
+    if (usersClientList?.length > 0) {
+      let accountIds = [...usersClientList]
       accountIds.sort(function (a, b) {
         return a - b;
       });
       setAccountListState(accountIds)
     }
-  }, [accountIdList])
+  }, [usersClientList])
 
   useEffect(() => {
     if(!dealsList){
@@ -186,13 +189,14 @@ export const DealsDashboard = props => {
     }
 
     let getDealsObj = {
-      account_id: localStorage.getItem("userId"),
+      user_id: localStorage.getItem("userId"),
       timefrom: moment(timefrom, 'DD/MM/YYYY').format("DD-MM-YYYY"),
       timeto: moment(timeto, 'DD/MM/YYYY').format("DD-MM-YYYY"),
+      account_id: account_id
     }
 
 
-    getDealsList(getDealsObj)
+    getAllDeals(getDealsObj)
     
   }
 
@@ -282,14 +286,15 @@ export const DealsDashboard = props => {
   )
 }
 
-const mapStateToProps = ({ credit, deals }) => {
-  const { loading, accountIdList } = credit;
+const mapStateToProps = ({ credit, deals, users }) => {
+  const { loading } = credit;
+  const { usersClientList} = users;
   const { loadingDeals, dealsList } = deals;
-  return { loading, accountIdList, loadingDeals, dealsList }
+  return { loading, usersClientList, loadingDeals, dealsList }
 }
 
 const mapDispatchToProps = {
-  getAccountIdList,
+  getAccountListByUserId,
   getDealsList,
   getAllDeals,
   refereshDeals

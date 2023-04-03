@@ -16,7 +16,11 @@ export const signIn = createAsyncThunk('login',async (data, { rejectWithValue })
 	const { username, password } = data
 	try {
 		const response = await ApiService.login({username, password});
+	
 		const token = response.role_id ==1 ? response.adminToken : response.token;
+		if(!token){
+			  return rejectWithValue(response)
+		}
 		localStorage.setItem(AUTH_TOKEN, token);
 		localStorage.setItem("userId", username);
 		localStorage.setItem("userRole",  response.role_id);
@@ -112,7 +116,7 @@ export const authSlice = createSlice({
 				state.user = action.payload
 			})
 			.addCase(signIn.rejected, (state, action) => {
-				state.message = action.payload
+				// state.message = action.payload
 				state.showMessage = true
 				state.loading = false
 			})

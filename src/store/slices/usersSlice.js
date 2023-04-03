@@ -8,7 +8,8 @@ import Utils from 'utils';
 export const initialState = {
 	loading: false, 
 	creditLoading: false,
-	usersList: []
+	usersList: [],
+	usersClientList: []
 }
 
  
@@ -48,6 +49,17 @@ export const accountUpdate = createAsyncThunk('/api/accountUpdate',async (data, 
 	}
 })
 
+
+export const getAccountListByUserId = createAsyncThunk('/api/getAccountListByUserId',async (data, { rejectWithValue }) => {
+	try {
+		const response = await ApiService.getAccountListByUserId(data);
+		const ids =  response.client_list
+		return ids;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
 export const usersSlice = createSlice({
 	name: 'users',
 	initialState,
@@ -72,6 +84,22 @@ export const usersSlice = createSlice({
 				state.usersList = action.payload;
 				state.loading = false;
 			})
+			
+
+			.addCase(getAccountListByUserId.pending, (state, action) => {
+				state.usersClientList = [];
+				state.loading = true;
+			})
+			.addCase(getAccountListByUserId.fulfilled, (state, action) => {
+				state.usersClientList = action.payload;
+				state.loading = false;
+			})
+
+			.addCase(getAccountListByUserId.rejected, (state, action) => {
+				state.usersClientList = action.payload;
+				state.loading = false;
+			})
+			
 			
 			.addCase(accountCreate.pending, (state, action) => {
 				state.creditLoading = true;

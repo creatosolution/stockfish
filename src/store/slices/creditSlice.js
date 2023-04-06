@@ -94,7 +94,7 @@ export const getAccountList = createAsyncThunk('/api/accountList',async (data, {
 
 export const referesAccountList = createAsyncThunk('/api/referesAccountList',async (data, { rejectWithValue }) => {
 	try {
-		const response = await ApiService.getAccountList();
+		const response = await ApiService.getAccountList(data);
 		return response.account_list;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
@@ -178,7 +178,7 @@ export const refereshOrders = createAsyncThunk('/api/refereshOrders',async (data
 
 export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async (data, { rejectWithValue }) => {
 	try {
-		let url = '/dep_wth'
+		let url = '/creditInOut'
 		const response = await ApiService.postRequest(url, data);
 		return response;
 	} catch (err) {
@@ -186,6 +186,15 @@ export const depositWithdrawal = createAsyncThunk('/api/depositWithdrawal',async
 	}
 })
 
+export const creditActivity = createAsyncThunk('auth/creditActivity',async (data, { rejectWithValue }) => {
+	
+	try {
+		const response = await ApiService.creditActivity(data) 
+		return response;
+	} catch (err) {
+		return rejectWithValue(err.response?.data?.message || 'Error')
+	}
+})
 
 export const creditSlice = createSlice({
 	name: 'credit',
@@ -354,6 +363,17 @@ export const creditSlice = createSlice({
 				notification.error({ message: 'Somthing went wrong!' });
 			})
 
+
+			.addCase(creditActivity.pending, (state, action) => {
+				state.creditLoading = false;
+			})
+			.addCase(creditActivity.fulfilled, (state, action) => {
+				state.creditActivity = false;
+				 
+			})
+			.addCase(creditActivity.rejected, (state, action) => {
+				state.creditLoading = false;
+			})
 
 
 			},

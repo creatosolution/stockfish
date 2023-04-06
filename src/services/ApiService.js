@@ -123,6 +123,24 @@ ApiService.register = function (data) {
 	})
 }
 
+
+ApiService.saveLoginActivity = function (data) {
+	return fetch({
+		url: '/saveLoginActivity',
+		method: 'post',
+		data: data
+	})
+}
+ApiService.creditActivity = function (data) {
+	return fetch({
+		url: '/creditActivity',
+		method: 'post',
+		data: data
+	})
+}
+
+
+
 ApiService.postRequest = function (url,data) {
 	return fetch({
 		url: url,
@@ -131,10 +149,11 @@ ApiService.postRequest = function (url,data) {
 	})
 }
 
-ApiService.logout = function () {
+ApiService.logout = function (data) {
 	return fetch({
 		url: '/logout',
-		method: 'get'
+		method: 'post',
+		data: data
 	})
 }
 
@@ -148,6 +167,21 @@ ApiService.loginInOAuth = function () {
 ApiService.clientsUserList = function () {
 	return fetch({
 		url: '/clientsUserList',
+		method: 'get'
+	})
+}
+
+
+ApiService.getLoginActivity = function () {
+	return fetch({
+		url: '/getLoginActivity',
+		method: 'get'
+	})
+}
+
+ApiService.getCreditActivity = function () {
+	return fetch({
+		url: '/getCreditActivity',
 		method: 'get'
 	})
 }

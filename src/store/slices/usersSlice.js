@@ -9,7 +9,9 @@ export const initialState = {
 	loading: false, 
 	creditLoading: false,
 	usersList: [],
-	usersClientList: []
+	usersClientList: [],
+	login_logs: [],
+	credit_activity_logs:[]
 }
 
  
@@ -17,6 +19,23 @@ export const getAllUsers = createAsyncThunk('/api/getAllUsers',async (data, { re
 	try {
 		const response = await ApiService.clientsUserList(); 
 		return response.users;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
+export const getLoginActivity = createAsyncThunk('/api/getLoginActivity',async (data, { rejectWithValue }) => {
+	try {
+		const response = await ApiService.getLoginActivity(); 
+		return response.login_logs;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+export const getCreditActivity = createAsyncThunk('/api/getCreditActivity',async (data, { rejectWithValue }) => {
+	try {
+		const response = await ApiService.getCreditActivity(); 
+		return response.credit_activity_logs;
 	} catch (err) {
 		return rejectWithValue(err.response?.message || 'Error')
 	}
@@ -84,6 +103,33 @@ export const usersSlice = createSlice({
 				state.usersList = action.payload;
 				state.loading = false;
 			})
+			.addCase(getLoginActivity.pending, (state, action) => {
+				state.login_logs = [];
+				state.loading = true;
+			})
+			.addCase(getLoginActivity.fulfilled, (state, action) => {
+				state.login_logs = action.payload;
+				state.loading = false;
+			})
+
+			.addCase(getLoginActivity.rejected, (state, action) => {
+				state.login_logs = action.payload;
+				state.loading = false;
+			})
+			.addCase(getCreditActivity.pending, (state, action) => {
+				state.credit_activity_logs = [];
+				state.loading = true;
+			})
+			.addCase(getCreditActivity.fulfilled, (state, action) => {
+				state.credit_activity_logs = action.payload;
+				state.loading = false;
+			})
+
+			.addCase(getCreditActivity.rejected, (state, action) => {
+				state.credit_activity_logs = action.payload;
+				state.loading = false;
+			})
+			
 			
 
 			.addCase(getAccountListByUserId.pending, (state, action) => {

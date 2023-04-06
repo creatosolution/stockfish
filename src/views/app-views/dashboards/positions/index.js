@@ -82,7 +82,7 @@ const rowSelection = {
   const viewAllPositions = ()=>{
    
     form.resetFields()
-    getAllPositions()
+    getAllPositions({user_id: localStorage.getItem("userId")})
   }
 
   const handleChange = (value) => {

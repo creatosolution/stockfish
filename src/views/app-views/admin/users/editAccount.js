@@ -19,34 +19,34 @@ const colorMap = {
   const colorMapArr = ['Red' ,'Green' ,'Brown' ,'Orange' , 'white'
      
   ]
-  const rules = {
 
-	password: [
-		{ 
-			required: true,
-			message: 'Please enter your password'
-		}
-	],
-	confirm: [
-		{ 
-			required: true,
-			message: 'Please confirm your password!'
-		},
-		({ getFieldValue }) => ({
-			validator(_, value) {
-				if (!value || getFieldValue('password') === value) {
-					return Promise.resolve();
-				}
-				return Promise.reject('Passwords do not match!');
-			},
-		})
-	]
-}
 
 const AccountEditModal = props => {
     const [form] = Form.useForm();
     const {isVisible, editableItem, onHide, updateAccount, accountListIds } =  props
-  
+    const rules = {
+
+      password: [
+        { 
+          required: editableItem ? false : true,
+          message: 'Please enter your password'
+        }
+      ],
+      confirm: [
+        { 
+          required: editableItem ? false : true,
+          message: 'Please confirm your password!'
+        },
+        ({ getFieldValue }) => ({
+          validator(_, value) {
+            if (!value || getFieldValue('password') === value) {
+              return Promise.resolve();
+            }
+            return Promise.reject('Passwords do not match!');
+          },
+        })
+      ]
+    }
     const handleOk = () => {
         form.submit();
       };
@@ -206,15 +206,6 @@ const AccountEditModal = props => {
           </Form.Item>
 
      
-        	<Form.Item 
-					name="confirm" 
-					label="ConfirmPassword" 
-					rules={rules.confirm}
-					hasFeedback
-				>
-					<Input.Password />
-				</Form.Item>
-
         <Form.Item 
 					name="password" 
 					label="Password" 
@@ -224,6 +215,15 @@ const AccountEditModal = props => {
 					<Input.Password />
 				</Form.Item>
       
+        <Form.Item 
+					name="confirm" 
+					label="ConfirmPassword" 
+					rules={rules.confirm}
+					hasFeedback
+				>
+					<Input.Password />
+				</Form.Item>
+
 			    <Button
             className="ant-btn-theme text-white mt-2"
             htmlType="button"

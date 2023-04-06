@@ -16,6 +16,8 @@
 	"sidenav.dashboard.orders" : "Orders",
 	"sidenav.dashboard.positionBySearch" : "Search",
 	"sidenav.admin.users": "Users",
+	"sidenav.admin.loginActivity": "login Activity",
+	"sidenav.admin.creditActivity": "Credit Activity",
 	"sidenav.apps": "Apps",
 	"sidenav.apps.mail": "Mail",
 	"sidenav.apps.chat": "Chat",

@@ -30,6 +30,17 @@ export const signIn = createAsyncThunk('login',async (data, { rejectWithValue })
 	}
 })
 
+export const saveLoginActivity = createAsyncThunk('auth/saveLoginActivity',async (data, { rejectWithValue }) => {
+	
+	try {
+		const response = await ApiService.saveLoginActivity(data) 
+		return response;
+	} catch (err) {
+		return rejectWithValue(err.response?.data?.message || 'Error')
+	}
+})
+
+
 export const signUp = createAsyncThunk('auth/register',async (data, { rejectWithValue }) => {
 	const { email, password } = data
 	try {
@@ -42,9 +53,9 @@ export const signUp = createAsyncThunk('auth/register',async (data, { rejectWith
 	}
 })
 
-export const signOut = createAsyncThunk('auth/logout',async () => {
+export const signOut = createAsyncThunk('auth/logout',async (data, { rejectWithValue }) => {
 	
-    const response = await ApiService.logout()
+    const response = await ApiService.logout(data)
 	
 
     return response.data
@@ -120,6 +131,21 @@ export const authSlice = createSlice({
 				state.showMessage = true
 				state.loading = false
 			})
+
+			.addCase(saveLoginActivity.pending, (state) => {
+				state.loading = true
+			})
+			.addCase(saveLoginActivity.fulfilled, (state, action) => {
+				state.loading = false
+				
+			})
+			.addCase(saveLoginActivity.rejected, (state, action) => {
+				// state.message = action.payload
+				state.showMessage = true
+				state.loading = false
+			})
+
+			
 			.addCase(signOut.fulfilled, (state) => {
 				state.loading = false
 				state.token = null

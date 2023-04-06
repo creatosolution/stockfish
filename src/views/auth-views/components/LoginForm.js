@@ -7,6 +7,7 @@ import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon'
 import { 
 	signIn, 
+	saveLoginActivity,
 	showLoading, 
 	showAuthMessage, 
 	hideAuthMessage, 
@@ -30,6 +31,7 @@ export const LoginForm = props => {
 		signInWithFacebook,
 		extra, 
 		signIn, 
+		saveLoginActivity,
 		token, 
 		loading,
 		redirect,
@@ -46,8 +48,36 @@ export const LoginForm = props => {
 	const onLogin = values => {
 		// console.log(values,'values<<<')
 		showLoading()
-		signIn(values);
+		signIn(values).then((res)=>{
+
+			const role = localStorage.getItem("userRole");
+			if(role == 2){
+
+				setLogs()
+			}
+
+		});
 	};
+
+
+		const setLogs=()=>{
+			function text(url) {
+				return fetch(url).then(res => res.json());
+			}
+			
+			text('https://api.ipify.org/?format=json').then(data => {
+				 
+				let browser =  navigator.userAgent;
+				const logsReq = {
+					"user_id":localStorage.getItem("userId"),
+					"type":"login",
+					"ip":data.ip,
+					"browser": browser
+				}
+				saveLoginActivity(logsReq)
+
+			});
+		}
 
 	const onGoogleLogin = () => {
 		showLoading()
@@ -187,6 +217,7 @@ const mapStateToProps = ({auth}) => {
 
 const mapDispatchToProps = {
 	signIn,
+	saveLoginActivity,
 	showAuthMessage,
 	showLoading,
 	hideAuthMessage,

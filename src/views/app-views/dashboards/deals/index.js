@@ -57,7 +57,8 @@ export const DealsDashboard = props => {
     console.log("moment.......", moment().add(1, 'd').format('DD-MM-YYYY'));
      const allDealsObj = {
       timefrom: moment().format('DD-MM-YYYY'),
-      timeto:  moment().add(1, 'd').format('DD-MM-YYYY')
+      timeto:  moment().add(1, 'd').format('DD-MM-YYYY'),
+      user_id: localStorage.getItem("userId")
     }
     getAllDeals(allDealsObj)
   }

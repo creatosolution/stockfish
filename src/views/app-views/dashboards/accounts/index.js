@@ -25,6 +25,7 @@ import {
   referesAccountList,
   getAccountListByClient,
   depositWithdrawal,
+  creditActivity,
   updateAccountList,
   resetAccountList,
 } from "store/slices/creditSlice";
@@ -98,6 +99,7 @@ export const UserBalanceAndEquity = (props) => {
     loadingEquity,
     userBalanceAndEquity,
     depositWithdrawal,
+    creditActivity,
     accountUpdate,
     referesAccountList,
     accountDisable
@@ -137,8 +139,8 @@ export const UserBalanceAndEquity = (props) => {
       let account_id = form.getFieldValue('account_id')
       
       if(!account_id) {
-
-        referesAccountList()
+        
+        referesAccountList({user_id: localStorage.getItem("userId")})
       }
     
     }, 7000);
@@ -149,7 +151,7 @@ export const UserBalanceAndEquity = (props) => {
   }, []);
 
   const viewAllAccount = ()=>{
-    getAccountList();
+    getAccountList({user_id: localStorage.getItem("userId")});
     form.resetFields();
   }
 
@@ -303,39 +305,39 @@ export const UserBalanceAndEquity = (props) => {
       }
 
     },
-    {
-      key: 'edit',
-      title: "Action",
-      render: (_, elm) => {
-        return {
-          props: {
-            style: { background: getAccountBg(elm.Color).bg },
-          },
-          children:   <>
+    // {
+    //   key: 'edit',
+    //   title: "Action",
+    //   render: (_, elm) => {
+    //     return {
+    //       props: {
+    //         style: { background: getAccountBg(elm.Color).bg },
+    //       },
+    //       children:   <>
         
-          <Button
-            type=""
-            onClick={(e) => {
-              handleEditModalVisiblity(true, elm);
-            }}
-            className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
-          >
-          </Button>
+    //       <Button
+    //         type=""
+    //         onClick={(e) => {
+    //           handleEditModalVisiblity(true, elm);
+    //         }}
+    //         className="ant-btn-theme text-white rounded-6px rounded-pill" icon={<EditOutlined />}
+    //       >
+    //       </Button>
   
   
-          <Button
-            size="small"
-            onClick={(e) => {
-              handleAccountsDisableModal(true, elm);
-            }}
-            icon={<StopOutlined />}
-            className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
+    //       <Button
+    //         size="small"
+    //         onClick={(e) => {
+    //           handleAccountsDisableModal(true, elm);
+    //         }}
+    //         icon={<StopOutlined />}
+    //         className="ant-btn-theme text-white rounded-6px rounded-pill ml-2" >
             
-          </Button>
-          </> 
-        }
-      }
-    }
+    //       </Button>
+    //       </> 
+    //     }
+    //   }
+    // }
   ];
 
   const onHide = () => {
@@ -358,7 +360,7 @@ export const UserBalanceAndEquity = (props) => {
 
   
   const refresh = () => {
-    getAccountList();
+    getAccountList({user_id: localStorage.getItem("userId")});
   };
 
   const handleChangeAmount = (e, accountId) => {
@@ -375,7 +377,7 @@ export const UserBalanceAndEquity = (props) => {
       if (pathSnippets && pathSnippets == "search") {
         onSubmit()
       }  else {
-        getAccountList();
+        getAccountList({user_id: localStorage.getItem("userId")});
   
       }
     })
@@ -399,11 +401,35 @@ export const UserBalanceAndEquity = (props) => {
     return m2m;
   };
 
+  
+  const setLogs=(req)=>{
+    function text(url) {
+      return fetch(url).then(res => res.json());
+    }
+    
+    text('https://api.ipify.org/?format=json').then(data => {
+       
+      let browser =  navigator.userAgent;
+      const logsReq = {
+        "amount":req.amount,
+        "user_id":localStorage.getItem("userId"),
+        "type": req.type,
+        "ip":data.ip,
+        "account_id":req.account_id
+    }
+
+      
+      creditActivity(logsReq)
+
+    });
+  }
+
   const submitCreditData = (accountId) => {
     let selectedAccountValue = submitAmountMap[accountId].toString();
 
     let req = {
       account_id: accountId,
+      user_id: localStorage.getItem("userId"),
       type:
         submitAmountMap[accountId].toString().indexOf("-") > -1
           ? "withdrawal"
@@ -414,11 +440,19 @@ export const UserBalanceAndEquity = (props) => {
           : submitAmountMap[accountId],
     };
 
+
+
     depositWithdrawal(req).then((res) => {
       let accountListData = JSON.parse(JSON.stringify(accountListState));
       let accountDetailsIndex = accountListState.findIndex(
         (e) => e.clientId == accountId
       );
+      const role = localStorage.getItem("userRole");
+			if(role == 2){
+
+				setLogs(req)
+			}
+
       if (accountDetailsIndex > -1) {
         const val = submitAmountMap[accountId];
         const currentVal = accountListData[accountDetailsIndex].credit
@@ -465,10 +499,7 @@ export const UserBalanceAndEquity = (props) => {
 
 
   const onSubmit = values => {
-   
-    getAccountListByClient({
-      "account_id":values
-    })
+    getAccountList({ "account_id":values, user_id: localStorage.getItem("userId")});
   };
 
 
@@ -665,6 +696,7 @@ const mapDispatchToProps = {
   getAccountListByClient,
   getUserBalanceAndEquity,
   depositWithdrawal,
+  creditActivity,
   accountUpdate,
   accountDisable,
   referesAccountList

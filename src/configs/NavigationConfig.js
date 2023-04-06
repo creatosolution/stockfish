@@ -112,7 +112,29 @@ const adminNavTree = [{
       breadcrumb: false,
       submenu: [
       ]
+    },
+
+    {
+      key: 'dashboard.loginActivity',
+      path: `${APP_PREFIX_PATH}/admin/loginActivity`,
+      title: 'sidenav.admin.loginActivity',
+      icon: AlignCenterOutlined,
+      breadcrumb: false,
+      submenu: [
+      ]
+    },
+
+    {
+      key: 'dashboard.creditActivity',
+      path: `${APP_PREFIX_PATH}/admin/creditActivity`,
+      title: 'sidenav.admin.creditActivity',
+      icon: AlignCenterOutlined,
+      breadcrumb: false,
+      submenu: [
+      ]
     }
+
+
   ]
 }]
 const navigationConfig = [

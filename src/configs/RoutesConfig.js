@@ -49,8 +49,17 @@ export const protectedRoutes = [
         component: React.lazy(() => import('views/app-views/dashboards/orders')),
     },
     {
-        key: 'dashboard.orders',
+        key: 'dashboard.users',
         path: `${APP_PREFIX_PATH}/admin/users`,
         component: React.lazy(() => import('views/app-views/admin/users')),
+    },
+    {
+        key: 'dashboard.loginActivity',
+        path: `${APP_PREFIX_PATH}/admin/loginActivity`,
+        component: React.lazy(() => import('views/app-views/admin/loginActivity')),
+    },  {
+        key: 'dashboard.creditActivity',
+        path: `${APP_PREFIX_PATH}/admin/creditActivity`,
+        component: React.lazy(() => import('views/app-views/admin/creditActivity')),
     }
 ]

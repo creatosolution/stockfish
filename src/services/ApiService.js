@@ -172,6 +172,16 @@ ApiService.clientsUserList = function () {
 }
 
 
+ApiService.importManagers = function (data) {
+	return fetch({
+		url: '/bulkImport',
+		method: 'post',
+		data: data
+	})
+}
+
+
+
 ApiService.getLoginActivity = function () {
 	return fetch({
 		url: '/getLoginActivity',

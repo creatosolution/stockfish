@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import utils from "utils";
 import { PlusCircleOutlined, EditOutlined , StopOutlined } from "@ant-design/icons";
 import AccountEditModal from "./editAccount";
-import DisableAccountModal from "./disableAccount"
+import DisableAccountModal from "./disableAccount";
+import ImportUsers from "./importUsers";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -95,6 +96,8 @@ export const Users = (props) => {
  
   const [editableItem, setEditableItem] = useState(null);
   const [accountsEditModal, setAccountEditModal] = useState(false);
+  const [importUserModal, setImportUserModal] = useState(false);
+  
   const [accountsDisableModal, setAccountDisableModal] = useState(false);
   let accountTableColumns = [
     {
@@ -105,7 +108,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:  <div className="table-padding-cover">{elm.meta_id}</div>
 
@@ -120,7 +123,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:  <div className="table-padding-cover">{elm.name}</div>
 
@@ -135,7 +138,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:  <div className="table-padding-cover">
               {elm.client_list.split(",").map(function(item, i){
@@ -154,7 +157,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+            //////// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:  <div className="table-padding-cover">{elm.email}</div>
 
@@ -169,7 +172,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:  <div className="table-padding-cover">{elm.user_group}</div>
 
@@ -182,7 +185,7 @@ export const Users = (props) => {
       render: (_, elm) => {
         return {
           props: {
-            style: { background: elm.color, color: elm.color == 'white' ? '#000' : '#fff'},
+           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
           },
           children:   <>
         
@@ -269,12 +272,18 @@ export const Users = (props) => {
 }
 
 
-  const handleEditModalVisiblity = (value, item) => {
-    setEditableItem(item)
-    setAccountEditModal(value) 
-  };
+const handleEditModalVisiblity = (value, item) => {
+  setEditableItem(item)
+  setAccountEditModal(value) 
+};
 
 
+const handleImportUser = (value) => {
+  console.log("value", value)
+  setImportUserModal(value) 
+};
+
+  
   const handleAccountsDisableModal = (value, item) => {
     setEditableItem(item)
 
@@ -384,8 +393,18 @@ export const Users = (props) => {
                     }}
                     className="ant-btn-theme text-white rounded-6px"
                 >
-                    <PlusCircleOutlined /> Add Client
+                    <PlusCircleOutlined /> Add Manager
                 </Button>
+                <Button
+                    type=""
+                    onClick={(e) => {
+                      handleImportUser(true);
+                    }}
+                    className="ant-btn-theme text-white rounded-6px"
+                >
+                    <PlusCircleOutlined /> Import Managers
+                </Button>
+                
             </div>
       <div className="text-right">
                   {loading && <LoadingOutlined />}
@@ -435,6 +454,12 @@ export const Users = (props) => {
                         onHide={onHide} editableItem={editableItem} updateAccount={onAccountUpdate}  accountListIds={accountIdList}></AccountEditModal>}
         {accountsDisableModal && <DisableAccountModal isVisible={accountsDisableModal}
                                         onHide={handleAccountsDisableModal} editableItem={editableItem} disableAccount={onDisableAccount} ></DisableAccountModal>}
+       
+       {importUserModal && <ImportUsers isVisible={importUserModal}
+                                        onHide={handleImportUser}></ImportUsers>}
+       
+       
+       
         {/* {!Array.isArray(accountListState) && (
             <Row gutter={16}>
               <Col xs={10} sm={24} md={25}>

@@ -24,6 +24,16 @@ export const getAllUsers = createAsyncThunk('/api/getAllUsers',async (data, { re
 	}
 })
 
+ 
+export const importManagers = createAsyncThunk('/api/importManagers',async (data, { rejectWithValue }) => {
+	try {
+		const response = await ApiService.importManagers(data); 
+		return response;
+	} catch (err) {
+		return rejectWithValue(err.response?.message || 'Error')
+	}
+})
+
 export const getLoginActivity = createAsyncThunk('/api/getLoginActivity',async (data, { rejectWithValue }) => {
 	try {
 		const response = await ApiService.getLoginActivity(); 
@@ -103,6 +113,20 @@ export const usersSlice = createSlice({
 				state.usersList = action.payload;
 				state.loading = false;
 			})
+			.addCase(importManagers.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(importManagers.fulfilled, (state, action) => {
+				 
+				state.loading = false;
+			})
+
+			.addCase(importManagers.rejected, (state, action) => {
+			 
+				state.loading = false;
+			})
+
+			
 			.addCase(getLoginActivity.pending, (state, action) => {
 				state.login_logs = [];
 				state.loading = true;

@@ -1,92 +1,90 @@
+import { Form, Modal, Input, Button, Select, Collapse, Divider } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
 
-import { Form, Modal, Input, Button, DatePicker, Tooltip, Select, AutoComplete } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import React, { useEffect, useRef, useState } from 'react';
-import { connect } from 'react-redux';
+import { PlusOutlined, MinusOutlined} from "@ant-design/icons";
 
 const { Option } = Select;
 const colorMap = {
-    "255": {bg:"red", color:"#ffff"}, // red
-    "32768":{bg:"#008000", color:"#ffff"}, // Green
-    "65280": {bg: "#00FF00", color: "#fff"},
-    "16711935":{bg: "#FF00FF", color: "#fff"} ,
-    "65535": {bg: "Yellow", color: "#000"},
-    "4278190080": {bg: "#fff", color: "#000"},
-    "2763429": {bg: "brown", color: "#fff"},
-    "42495": {bg: "orange", color: "#fff"},
-    "dda0dd": {bg: "orange", color: "#fff"}  
-  }
-  const colorMapArr = ['Red' ,'Green' ,'Brown' ,'Orange' , 'white'
-     
-  ]
+  255: { bg: "red", color: "#ffff" }, // red
+  32768: { bg: "#008000", color: "#ffff" }, // Green
+  65280: { bg: "#00FF00", color: "#fff" },
+  16711935: { bg: "#FF00FF", color: "#fff" },
+  65535: { bg: "Yellow", color: "#000" },
+  4278190080: { bg: "#fff", color: "#000" },
+  2763429: { bg: "brown", color: "#fff" },
+  42495: { bg: "orange", color: "#fff" },
+  dda0dd: { bg: "orange", color: "#fff" },
+};
+const colorMapArr = ["Red", "Green", "Brown", "Orange", "white"];
 
-
-const AccountEditModal = props => {
-    const [form] = Form.useForm();
-    const {isVisible, editableItem, onHide, updateAccount, accountListIds } =  props
-    const rules = {
-
-      password: [
-        { 
-          required: editableItem ? false : true,
-          message: 'Please enter your password'
-        }
-      ],
-      confirm: [
-        { 
-          required: editableItem ? false : true,
-          message: 'Please confirm your password!'
+const { Panel } = Collapse;
+const AccountEditModal = (props) => {
+  const [form] = Form.useForm();
+  const { isVisible, editableItem, onHide, updateAccount, accountListIds } =
+    props;
+  const rules = {
+    password: [
+      {
+        required: editableItem ? false : true,
+        message: "Please enter your password",
+      },
+    ],
+    confirm: [
+      {
+        required: editableItem ? false : true,
+        message: "Please confirm your password!",
+      },
+      ({ getFieldValue }) => ({
+        validator(_, value) {
+          if (!value || getFieldValue("password") === value) {
+            return Promise.resolve();
+          }
+          return Promise.reject("Passwords do not match!");
         },
-        ({ getFieldValue }) => ({
-          validator(_, value) {
-            if (!value || getFieldValue('password') === value) {
-              return Promise.resolve();
-            }
-            return Promise.reject('Passwords do not match!');
-          },
-        })
-      ]
-    }
-    const handleOk = () => {
-        form.submit();
-      };
-    const onClientUpdate =(fieldsValue)=>{
-        console.log("fieldsValue", fieldsValue);
-       
+      }),
+    ],
+  };
+  const handleOk = () => {
+    form.submit();
+  };
+  const onClientUpdate = (fieldsValue) => {
+    console.log("fieldsValue", fieldsValue);
 
-        const req = {}
+    const req = {};
 
-        for(var key in fieldsValue){
-            if(!!fieldsValue[key]){
-                req[key] = fieldsValue[key]
-            } 
-            else {
-                req[key] =""
-            }
-        }
-      
-        updateAccount(req, editableItem?.email)
+    for (var key in fieldsValue) {
+      if (!!fieldsValue[key]) {
+        req[key] = fieldsValue[key];
+      } else {
+        req[key] = "";
+      }
     }
- 
-    useEffect(() => {
-        if (editableItem) {
-            console.log(editableItem);
-          form.setFieldsValue({
-            name: editableItem["name"],
-            group: editableItem["user_group"],
-            meta_id: editableItem["meta_id"],
-            phone: editableItem["phone"],
-            email: editableItem["email"],
-            assignedAccount:  editableItem["client_list"].split(","),
-            color:  editableItem["color"]
-          });
-        }
-      }, [editableItem]);
-      
+
+    updateAccount(req, editableItem?.email);
+  };
+
+  useEffect(() => {
+    if (editableItem) {
+      console.log(editableItem);
+      form.setFieldsValue({
+        name: editableItem["name"],
+        group: editableItem["user_group"],
+        meta_id: editableItem["meta_id"],
+        phone: editableItem["phone"],
+        email: editableItem["email"],
+        assignedAccount: editableItem["client_list"].split(","),
+        color: editableItem["color"],
+      });
+    }
+  }, [editableItem]);
+
   return (
     <>
       <Modal
-        title={`${editableItem ? `Edit ${editableItem.meta_id }`: "Create Client"}`}
+        title={`${
+          editableItem ? `Edit ${editableItem.meta_id}` : "Create Client"
+        }`}
         open={isVisible}
         width={600}
         onCancel={onHide}
@@ -117,7 +115,7 @@ const AccountEditModal = props => {
           <Form.Item
             name="meta_id"
             className="mt-3 mb-3"
-            id="group"
+            id="meta_id"
             label={<span>Meta Id</span>}
             rules={[
               {
@@ -127,10 +125,9 @@ const AccountEditModal = props => {
               },
             ]}
           >
-            <Input 
-            placeholder={"Meta id"}/>
+            <Input placeholder={"Meta id"} />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="group"
             className="mt-3 mb-3"
             id="group"
@@ -144,8 +141,8 @@ const AccountEditModal = props => {
             ]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             name="email"
             id="email"
             label="E-mail"
@@ -157,8 +154,8 @@ const AccountEditModal = props => {
             ]}
           >
             <Input />
-          </Form.Item>
-         
+          </Form.Item> */}
+
           <Form.Item
             name="assignedAccount"
             label="Select Account"
@@ -185,12 +182,9 @@ const AccountEditModal = props => {
                 ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            name="color"
-            label="Select Color"
-          >
+          {/* <Form.Item name="color" label="Select Color">
             <Select
-              name="color" 
+              name="color"
               className="w-250"
               placeholder="Select Color"
               showSearch
@@ -203,28 +197,32 @@ const AccountEditModal = props => {
                   </Option>
                 ))}
             </Select>
-          </Form.Item>
+          </Form.Item> */}
 
-     
-        <Form.Item 
-					name="password" 
-					label="Password" 
-					rules={rules.password}
-					hasFeedback
-				>
-					<Input.Password />
-				</Form.Item>
-      
-        <Form.Item 
-					name="confirm" 
-					label="ConfirmPassword" 
-					rules={rules.confirm}
-					hasFeedback
-				>
-					<Input.Password />
-				</Form.Item>
+          <Collapse size="small" bordered={false}  className="ml-n3" 
+          expandIcon={({ isActive }) => { return isActive ? <MinusOutlined></MinusOutlined> : <PlusOutlined></PlusOutlined>}}>
+            <Panel header="Set Password" key="1">
+              <Form.Item
+                name="password"
+                label="Password"
+                rules={rules.password}
+                hasFeedback
+              >
+                <Input.Password />
+              </Form.Item>
 
-			    <Button
+              <Form.Item
+                name="confirm"
+                label="ConfirmPassword"
+                rules={rules.confirm}
+                hasFeedback
+              >
+                <Input.Password />
+              </Form.Item>
+            </Panel>
+          </Collapse>
+
+          <Button
             className="ant-btn-theme text-white mt-2"
             htmlType="button"
             onClick={handleOk}
@@ -237,10 +235,8 @@ const AccountEditModal = props => {
   );
 };
 const mapStateToProps = () => {
-    return {}
-}
-const mapDispatchToProps = {
-    
-}
+  return {};
+};
+const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AccountEditModal) 
+export default connect(mapStateToProps, mapDispatchToProps)(AccountEditModal);

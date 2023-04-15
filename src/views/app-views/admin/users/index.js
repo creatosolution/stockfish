@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import utils from "utils";
 import { PlusCircleOutlined, EditOutlined , StopOutlined } from "@ant-design/icons";
+
 import AccountEditModal from "./editAccount";
 import DisableAccountModal from "./disableAccount";
 import ImportUsers from "./importUsers";
@@ -149,36 +150,36 @@ export const Users = (props) => {
         }
       }
     },
-    {
-      title: "Email",
-      dataIndex: "email",
-      defaultSortOrder: 'ascend',
-      sorter: (a, b) => utils.antdTableSorter(a, b, "email"),
-      render: (_, elm) => {
-        return {
-          props: {
-            //////// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
-          },
-          children:  <div className="table-padding-cover">{elm.email}</div>
+    // {
+    //   title: "Email",
+    //   dataIndex: "email",
+    //   defaultSortOrder: 'ascend',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, "email"),
+    //   render: (_, elm) => {
+    //     return {
+    //       props: {
+    //         //////// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
+    //       },
+    //       children:  <div className="table-padding-cover">{elm.email}</div>
 
-        }
-      }
-    },
-    {
-      title: "Group",
-      dataIndex: "user_group",
-      defaultSortOrder: 'ascend',
-      sorter: (a, b) => utils.antdTableSorter(a, b, "user_group"),
-      render: (_, elm) => {
-        return {
-          props: {
-           //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
-          },
-          children:  <div className="table-padding-cover">{elm.user_group}</div>
+    //     }
+    //   }
+    // },
+    // {
+    //   title: "Group",
+    //   dataIndex: "user_group",
+    //   defaultSortOrder: 'ascend',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, "user_group"),
+    //   render: (_, elm) => {
+    //     return {
+    //       props: {
+    //        //// style: { background: elm.color, color: elm.color && elm.color == 'white' ? '#000' : elm.color ? '#fff' : "#000"},
+    //       },
+    //       children:  <div className="table-padding-cover">{elm.user_group}</div>
 
-        }
-      }
-    },
+    //     }
+    //   }
+    // },
     {
       key: 'edit',
       title: "Action",
@@ -286,30 +287,25 @@ const handleImportUser = (value) => {
   
   const handleAccountsDisableModal = (value, item) => {
     setEditableItem(item)
+    console.log('disableAccount', item);
+    const req = {
+      "user_id": item.meta_id,
+      "status": item.status == 1? 0: 1
+  }
+     accountDisable(req).then((res)=>{
+             
+      let usersListToUpdate = JSON.parse(JSON.stringify(usersList))
+    
+      for(let i=0; i < usersListToUpdate.length;i++){
+          if(usersListToUpdate[i].email == item.email){
+            usersListToUpdate[i].status = req.status
+          }
+      }
 
-    if(window.confirm("do you really want to disable the account")){
-      console.log('disableAccount', item);
-      const req = {
-        "user_id": item.meta_id,
-        "status": item.status == 1? 0: 1
-    }
-       accountDisable(req).then((res)=>{
-               
-        let usersListToUpdate = JSON.parse(JSON.stringify(usersList))
-      
-        for(let i=0; i < usersListToUpdate.length;i++){
-            if(usersListToUpdate[i].email == item.email){
-              usersListToUpdate[i].status = req.status
-            }
-        }
-
-        dispatch(updateUserInState(usersListToUpdate))
+      dispatch(updateUserInState(usersListToUpdate))
 
 
-    })
-    }
-  
- 
+  })
     // setAccountDisableModal(value) 
   };
   
@@ -317,7 +313,7 @@ const handleImportUser = (value) => {
 
    
     let data = new FormData();
-    data.append('email', req.email);
+    data.append('email', req.email ? req.email : 'demo@mailinator.com');
     data.append('meta_id', req.meta_id);
     data.append('role_id', 2);
     data.append('name', req.name);
@@ -344,9 +340,9 @@ const handleImportUser = (value) => {
             }
         }
 
-        dispatch(updateUserInState(usersListToUpdate))
+        // dispatch(updateUserInState(usersListToUpdate))
+        getAllUsers()
         onHide(); 
-        // getAllUsers()
       })
     }else {
       
